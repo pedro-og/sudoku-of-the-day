@@ -70,3 +70,41 @@ export function MoonIcon({ size = 20, color = 'currentColor' }: IconProps) {
     </svg>
   );
 }
+
+export function UndoIcon({ size = 20, color = 'currentColor' }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={{ display: 'block' }}
+    >
+      <path d="M3 7v6h6" />
+      <path d="M21 17a9 9 0 00-9-9 9 9 0 00-6 2.3L3 13" />
+    </svg>
+  );
+}
+
+export function EraseIcon({ size = 20, color = 'currentColor' }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={{ display: 'block' }}
+    >
+      <path d="M3 3h11l8.414 8.414a2 2 0 0 1 0 2.828l-8.828 8.828a2 2 0 0 1-2.828 0L3 12.172V3z" />
+      <path d="M14 3l7.414 7.414" />
+    </svg>
+  );
+}

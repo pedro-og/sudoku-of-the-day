@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { PencilIcon } from './Icons';
+import { PencilIcon, UndoIcon, EraseIcon } from './Icons';
 
 interface GameToolbarProps {
   pencilMode: boolean;
@@ -66,16 +66,18 @@ export function GameToolbar({ pencilMode, onUndo, onErase, onTogglePencil, disab
       maxWidth: 'min(95vw, 480px)',
     }}>
       <ToolButton
-        icon="↩"
+        icon={<UndoIcon size={18} />}
         label={t('toolbar.undo')}
         onClick={onUndo}
         disabled={disabled}
+        isIconComponent={true}
       />
       <ToolButton
-        icon="⌫"
+        icon={<EraseIcon size={18} />}
         label={t('toolbar.erase')}
         onClick={onErase}
         disabled={disabled}
+        isIconComponent={true}
       />
       <ToolButton
         icon={<PencilIcon size={18} />}

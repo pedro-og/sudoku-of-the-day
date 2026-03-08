@@ -11,14 +11,15 @@ export function ShareResultButton({ shareData }: ShareResultButtonProps) {
   const { t } = useTranslation();
   const [status, setStatus] = useState<'idle' | 'copied' | 'failed'>('idle');
 
+  const labels = {
+    title: t('share.title'),
+    mistake: t('share.mistake'),
+    mistakes: t('share.mistakes'),
+    time: t('share.time'),
+    domain: t('share.domain'),
+  };
+
   async function handleShare() {
-    const labels = {
-      title: t('share.title'),
-      mistake: t('share.mistake'),
-      mistakes: t('share.mistakes'),
-      time: t('share.time'),
-      domain: t('share.domain'),
-    };
     const success = await copyShareText(shareData, labels);
     setStatus(success ? 'copied' : 'failed');
     setTimeout(() => setStatus('idle'), 2500);
