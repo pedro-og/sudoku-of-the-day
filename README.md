@@ -47,7 +47,7 @@ npm run dev
 # Opens http://localhost:5173
 ```
 
-Done! Start solving.
+Done! Start solving. (Auto-deployed to production on every push to main).
 
 ## 📖 How to Play
 
