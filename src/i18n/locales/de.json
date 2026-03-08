@@ -1,6 +1,7 @@
 {
   "app": {
-    "title": "Täglich Sudoku"
+    "title": "Täglich Sudoku",
+    "description": "Löse jeden Tag ein gemeinsames Sudoku-Rätsel. Neues Rätsel um Mitternacht brasilianischer Zeit."
   },
   "header": {
     "puzzle": "Rätsel #{{number}}",

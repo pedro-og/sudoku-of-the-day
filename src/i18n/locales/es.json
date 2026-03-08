@@ -1,6 +1,7 @@
 {
   "app": {
-    "title": "Sudoku Diario"
+    "title": "Sudoku Diario",
+    "description": "Juega un Sudoku compartido cada día. Nuevo puzzle a la medianoche, hora de Brasil."
   },
   "header": {
     "puzzle": "Puzzle #{{number}}",

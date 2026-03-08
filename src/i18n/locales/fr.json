@@ -1,6 +1,7 @@
 {
   "app": {
-    "title": "Sudoku Quotidien"
+    "title": "Sudoku Quotidien",
+    "description": "Jouez chaque jour au même puzzle Sudoku. Nouveau puzzle à minuit, heure du Brésil."
   },
   "header": {
     "puzzle": "Puzzle #{{number}}",

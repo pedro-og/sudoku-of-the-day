@@ -1,6 +1,7 @@
 {
   "app": {
-    "title": "每日数独"
+    "title": "每日数独",
+    "description": "每天一起玩同一道数独谜题。巴西时间午夜更新新谜题。"
   },
   "header": {
     "puzzle": "谜题 #{{number}}",

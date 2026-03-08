@@ -1,6 +1,7 @@
 {
   "app": {
-    "title": "Günlük Sudoku"
+    "title": "Günlük Sudoku",
+    "description": "Her gün ortak bir Sudoku bulmacası çözün. Yeni bulmaca Brezilya saatiyle gece yarısı."
   },
   "header": {
     "puzzle": "Bulmaca #{{number}}",

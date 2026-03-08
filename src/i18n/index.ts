@@ -51,4 +51,16 @@ i18n.use(initReactI18next).init({
   },
 });
 
+/** Update document metadata based on detected language */
+function updateDocumentMetadata() {
+  const lang = i18n.language;
+  document.documentElement.lang = lang;
+  document.title = i18n.t('app.title');
+  document.querySelector('meta[name="description"]')?.setAttribute('content', i18n.t('app.description'));
+}
+
+// Update metadata on initialization and whenever language changes
+updateDocumentMetadata();
+i18n.on('languageChanged', updateDocumentMetadata);
+
 export default i18n;
