@@ -20,7 +20,6 @@ type Action =
 interface HistoryEntry {
   board: GameState['board'];
   notes: GameState['notes'];
-  mistakes: number;
 }
 
 type ReducerState = GameState & { history: HistoryEntry[] };
@@ -66,7 +65,6 @@ function reducer(state: ReducerState, action: Action): ReducerState {
         ...state,
         board: prev.board,
         notes: prev.notes,
-        mistakes: prev.mistakes,
         history: state.history.slice(0, -1),
       };
     }
@@ -82,7 +80,6 @@ function reducer(state: ReducerState, action: Action): ReducerState {
       const snapshot: HistoryEntry = {
         board: cloneBoard(state.board),
         notes: cloneNotes(state.notes),
-        mistakes: state.mistakes,
       };
 
       if (state.pencilMode) {
