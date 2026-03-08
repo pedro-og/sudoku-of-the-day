@@ -30,7 +30,8 @@
     "subtitle": "Glückwunsch!",
     "time": "Zeit",
     "mistakes": "Fehler",
-    "streak": "Serie"
+    "streak": "Serie",
+    "showResults": "Ergebnisse anzeigen"
   },
   "share": {
     "button": "Ergebnis teilen",

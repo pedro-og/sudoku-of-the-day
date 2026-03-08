@@ -51,9 +51,6 @@ function getCompletedBoxes(board: Board): Set<number> {
   return completed;
 }
 
-/**
- * Returns which numbers (1-9) have all 9 instances placed on the board.
- */
 function getCompletedNumbers(board: Board): Set<number> {
   const completed = new Set<number>();
   for (let num = 1; num <= 9; num++) {
@@ -70,9 +67,6 @@ function getCompletedNumbers(board: Board): Set<number> {
   return completed;
 }
 
-/**
- * Detects all completion events on the current board.
- */
 export function detectCompletions(board: Board): CompletionState {
   const completedRows = getCompletedRows(board);
   const completedCols = getCompletedCols(board);
@@ -89,18 +83,13 @@ export function detectCompletions(board: Board): CompletionState {
   };
 }
 
-/**
- * Returns which cells should have completion animation applied.
- * Excludes cells that are already completing (were animated in previous render).
- */
 export function getCellsToAnimate(
   current: CompletionState,
   previous: CompletionState | null,
-  board?: Board // Optional board parameter to find completed numbers
+  board?: Board
 ): Set<string> {
   const toAnimate = new Set<string>();
 
-  // New row completions
   if (current.completedRows) {
     current.completedRows.forEach(row => {
       if (!previous?.completedRows.has(row)) {
@@ -111,7 +100,6 @@ export function getCellsToAnimate(
     });
   }
 
-  // New column completions
   if (current.completedCols) {
     current.completedCols.forEach(col => {
       if (!previous?.completedCols.has(col)) {
@@ -122,7 +110,6 @@ export function getCellsToAnimate(
     });
   }
 
-  // New box completions
   if (current.completedBoxes) {
     current.completedBoxes.forEach(boxIndex => {
       if (!previous?.completedBoxes.has(boxIndex)) {

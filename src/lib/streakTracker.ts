@@ -30,15 +30,12 @@ export function recordCompletion(todayStr: string): StreakData {
   let newStreak: number;
 
   if (data.lastCompletedDate === null) {
-    // First ever completion
     newStreak = 1;
   } else {
     const gap = daysBetween(data.lastCompletedDate, todayStr);
     if (gap === 1) {
-      // Consecutive day
       newStreak = data.currentStreak + 1;
     } else {
-      // Missed one or more days → reset
       newStreak = 1;
     }
   }

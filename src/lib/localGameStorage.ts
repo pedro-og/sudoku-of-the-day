@@ -123,7 +123,6 @@ export function pruneOldGames(currentDate: string): void {
   }
 }
 
-// Theme preference
 const THEME_KEY = 'daily-sudoku:theme';
 
 export function saveTheme(theme: 'light' | 'dark'): void {

@@ -30,7 +30,8 @@
     "subtitle": "Parabéns!",
     "time": "Tempo",
     "mistakes": "Erros",
-    "streak": "Sequência"
+    "streak": "Sequência",
+    "showResults": "Ver Resultados"
   },
   "share": {
     "button": "Compartilhar Resultado",

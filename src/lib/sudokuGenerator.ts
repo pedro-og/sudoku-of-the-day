@@ -24,7 +24,7 @@ function solve(board: Board, random?: Random): boolean {
       if (board[r][c] !== 0) continue;
 
       let candidates = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-      if (random) seededShuffle(candidates, random); // shuffle for random solutions
+      if (random) seededShuffle(candidates, random);
 
       for (const num of candidates) {
         if (isValidPlacement(board, r, c, num)) {
@@ -34,10 +34,10 @@ function solve(board: Board, random?: Random): boolean {
         }
       }
 
-      return false; // no valid candidate found → backtrack
+      return false;
     }
   }
-  return true; // all cells filled
+  return true;
 }
 
 function countSolutions(board: Board, limit = 2): number {

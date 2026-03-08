@@ -27,6 +27,7 @@ interface DailySudokuProps {
 
 export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
   const { t } = useTranslation();
+  const [showOverlay, setShowOverlay] = useState(true);
 
   const initialState = useMemo(() => {
     const { puzzle, solution, dateStr, puzzleNumber } = getDailyPuzzle();
@@ -177,7 +178,30 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
         completedNumbers={(state as any).previousCompletions?.completedNumbers}
       />
 
-      <GameOverlay state={state} streak={streak} />
+      {showOverlay && <GameOverlay state={state} streak={streak} onDismiss={() => setShowOverlay(false)} />}
+
+      {!showOverlay && (state.isComplete || state.isGameOver) && (
+        <button
+          onClick={() => setShowOverlay(true)}
+          style={{
+            position: 'fixed',
+            bottom: '24px',
+            right: '24px',
+            padding: '12px 16px',
+            background: 'var(--accent)',
+            color: 'white',
+            border: 'none',
+            borderRadius: 'var(--radius-sm)',
+            fontSize: '14px',
+            fontWeight: 600,
+            cursor: 'pointer',
+            boxShadow: 'var(--shadow-md)',
+            zIndex: 50,
+          }}
+        >
+          {state.isComplete ? '🎉 ' : '😔 '} {t('complete.showResults')}
+        </button>
+      )}
     </div>
   );
 }

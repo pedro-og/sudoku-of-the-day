@@ -30,7 +30,8 @@
     "subtitle": "おめでとうございます!",
     "time": "時間",
     "mistakes": "ミス",
-    "streak": "連続"
+    "streak": "連続",
+    "showResults": "結果を表示"
   },
   "share": {
     "button": "結果をシェア",

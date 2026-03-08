@@ -55,7 +55,6 @@ export function getConflicts(board: Board): Set<string> {
   return conflicts;
 }
 
-/** Returns true if the board is fully and correctly filled. */
 export function isBoardComplete(board: Board, solution: Board): boolean {
   for (let r = 0; r < 9; r++) {
     for (let c = 0; c < 9; c++) {
@@ -65,7 +64,6 @@ export function isBoardComplete(board: Board, solution: Board): boolean {
   return true;
 }
 
-/** Deep-clone a board. */
 export function cloneBoard(board: Board): Board {
   return board.map(row => [...row]) as Board;
 }

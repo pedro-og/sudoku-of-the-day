@@ -30,7 +30,8 @@
     "subtitle": "恭喜!",
     "time": "时间",
     "mistakes": "错误",
-    "streak": "连续"
+    "streak": "连续",
+    "showResults": "显示结果"
   },
   "share": {
     "button": "分享结果",

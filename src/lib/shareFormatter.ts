@@ -51,14 +51,12 @@ export function buildShareText(data: ShareData, labels: ShareTextLabels): string
   ].join('\n');
 }
 
-/** Copies share text to clipboard. Returns true on success. */
 export async function copyShareText(data: ShareData, labels: ShareTextLabels): Promise<boolean> {
   const text = buildShareText(data, labels);
   try {
     await navigator.clipboard.writeText(text);
     return true;
   } catch {
-    // Fallback for older browsers / non-secure contexts
     try {
       const ta = document.createElement('textarea');
       ta.value = text;

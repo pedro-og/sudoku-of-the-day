@@ -8,7 +8,6 @@ interface NumberPadProps {
   completedNumbers?: Set<number>;
 }
 
-/** Count how many times a number appears on the board (used to show remaining). */
 function countPlaced(board: Board, num: number): number {
   let count = 0;
   for (const row of board) {

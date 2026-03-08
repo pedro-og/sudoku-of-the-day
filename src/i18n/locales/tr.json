@@ -30,7 +30,8 @@
     "subtitle": "Tebrikler!",
     "time": "Zaman",
     "mistakes": "Hatalar",
-    "streak": "Dizi"
+    "streak": "Dizi",
+    "showResults": "Sonuçları Göster"
   },
   "share": {
     "button": "Sonucu Paylaş",

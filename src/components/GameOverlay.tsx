@@ -1,10 +1,3 @@
-/**
- * GameOverlay
- *
- * Renders a modal-style overlay for two end states:
- *  - Game Over (3 mistakes reached)
- *  - Puzzle Complete (all cells correct)
- */
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShareResultButton } from './ShareResultButton';
@@ -14,6 +7,7 @@ import type { GameState, StreakData } from '../types';
 interface GameOverlayProps {
   state: GameState;
   streak: StreakData;
+  onDismiss: () => void;
 }
 
 function formatTime(s: number): string {
@@ -23,11 +17,9 @@ function formatTime(s: number): string {
 }
 
 function calculateNextPuzzleCountdown(): { hours: number; minutes: number; seconds: number } {
-  // Get current time in Brazil timezone
   const now = new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' });
   const brasiliaTime = new Date(now);
 
-  // Get tomorrow at midnight in Brazil timezone
   const tomorrow = new Date(brasiliaTime);
   tomorrow.setDate(tomorrow.getDate() + 1);
   tomorrow.setHours(0, 0, 0, 0);
@@ -42,11 +34,10 @@ function calculateNextPuzzleCountdown(): { hours: number; minutes: number; secon
   };
 }
 
-export function GameOverlay({ state, streak }: GameOverlayProps) {
+export function GameOverlay({ state, streak, onDismiss }: GameOverlayProps) {
   const { t } = useTranslation();
   const [countdown, setCountdown] = useState(calculateNextPuzzleCountdown());
 
-  // Update countdown every second
   useEffect(() => {
     const interval = setInterval(() => {
       setCountdown(calculateNextPuzzleCountdown());
@@ -58,6 +49,12 @@ export function GameOverlay({ state, streak }: GameOverlayProps) {
   if (!state.isComplete && !state.isGameOver) return null;
 
   const isOver = state.isGameOver;
+
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onDismiss();
+    }
+  };
 
   const shareData = {
     puzzleNumber: state.puzzleNumber,
@@ -73,6 +70,7 @@ export function GameOverlay({ state, streak }: GameOverlayProps) {
     <div
       role="dialog"
       aria-modal="true"
+      onClick={handleBackdropClick}
       style={{
         position: 'fixed',
         inset: 0,
@@ -83,6 +81,7 @@ export function GameOverlay({ state, streak }: GameOverlayProps) {
         zIndex: 100,
         padding: '16px',
         backdropFilter: 'blur(4px)',
+        cursor: 'pointer',
       }}
     >
       <div style={{
@@ -96,8 +95,8 @@ export function GameOverlay({ state, streak }: GameOverlayProps) {
         flexDirection: 'column',
         alignItems: 'center',
         gap: '20px',
-      }}>
-        {/* Title */}
+        cursor: 'default',
+      }} onClick={e => e.stopPropagation()}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '40px', marginBottom: '8px' }}>
             {isOver ? '😔' : '🎉'}
@@ -110,7 +109,6 @@ export function GameOverlay({ state, streak }: GameOverlayProps) {
           </p>
         </div>
 
-        {/* Stats row */}
         {!isOver && (
           <div style={{
             display: 'grid',
@@ -143,18 +141,14 @@ export function GameOverlay({ state, streak }: GameOverlayProps) {
           </div>
         )}
 
-        {/* Puzzle number */}
         <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
           {t('gameOver.puzzleNumber', { number: state.puzzleNumber })}
         </p>
 
-        {/* Share button (only on success) */}
         {!isOver && <ShareResultButton shareData={shareData} />}
 
-        {/* Global stats */}
         <DailyStatsPanel puzzleNumber={state.puzzleNumber} />
 
-        {/* Next puzzle countdown */}
         <div style={{
           width: '100%',
           padding: '16px 12px',

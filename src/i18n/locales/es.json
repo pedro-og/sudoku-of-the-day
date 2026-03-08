@@ -30,7 +30,8 @@
     "subtitle": "¡Felicitaciones!",
     "time": "Tiempo",
     "mistakes": "Errores",
-    "streak": "Racha"
+    "streak": "Racha",
+    "showResults": "Ver Resultados"
   },
   "share": {
     "button": "Compartir Resultado",
