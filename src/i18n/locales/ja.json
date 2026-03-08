@@ -1,0 +1,59 @@
+{
+  "app": {
+    "title": "デイリー数独"
+  },
+  "header": {
+    "puzzle": "パズル #{{number}}",
+    "streak": "🔥 {{count}} 日連続",
+    "streakDay": "🔥 {{count}} 日連続"
+  },
+  "toolbar": {
+    "undo": "戻す",
+    "erase": "消去",
+    "notes": "メモ",
+    "notesOn": "メモ ON"
+  },
+  "mistakes": {
+    "label": "ミス",
+    "of": "/"
+  },
+  "number_remaining": "{{count}} 残り",
+  "gameOver": {
+    "title": "ゲームオーバー",
+    "subtitle": "3 つのミスを犯しました。明日頑張ってください!",
+    "puzzleNumber": "パズル #{{number}}",
+    "nextPuzzleIn": "次のパズルまで"
+  },
+  "complete": {
+    "title": "パズル完成!",
+    "subtitle": "おめでとうございます!",
+    "time": "時間",
+    "mistakes": "ミス",
+    "streak": "連続"
+  },
+  "share": {
+    "button": "結果をシェア",
+    "copied": "コピーしました!",
+    "failed": "コピーできませんでした",
+    "title": "毎日の数独",
+    "mistake": "ミス",
+    "mistakes": "ミス",
+    "time": "時間",
+    "domain": "sudoku-of-the-day.com"
+  },
+  "stats": {
+    "title": "本日のグローバル統計",
+    "players": "本日のプレイヤー",
+    "solved": "解決済み",
+    "avgTime": "平均時間",
+    "loading": "統計を読み込み中...",
+    "unavailable": "統計は利用できません"
+  },
+  "theme": {
+    "toggleDark": "ダークモード",
+    "toggleLight": "ライトモード"
+  },
+  "timer": {
+    "label": "時間"
+  }
+}

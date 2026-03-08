@@ -1,0 +1,59 @@
+{
+  "app": {
+    "title": "Sudoku Quotidien"
+  },
+  "header": {
+    "puzzle": "Puzzle #{{number}}",
+    "streak": "🔥 {{count}} jour d'affilée",
+    "streakDay": "🔥 {{count}} jours d'affilée"
+  },
+  "toolbar": {
+    "undo": "Annuler",
+    "erase": "Effacer",
+    "notes": "Notes",
+    "notesOn": "Notes ON"
+  },
+  "mistakes": {
+    "label": "Erreurs",
+    "of": "sur"
+  },
+  "number_remaining": "{{count}} restants",
+  "gameOver": {
+    "title": "Jeu Terminé",
+    "subtitle": "Vous avez commis 3 erreurs. Bonne chance demain!",
+    "puzzleNumber": "Puzzle #{{number}}",
+    "nextPuzzleIn": "Prochain puzzle dans"
+  },
+  "complete": {
+    "title": "Puzzle Complété!",
+    "subtitle": "Félicitations!",
+    "time": "Temps",
+    "mistakes": "Erreurs",
+    "streak": "Série"
+  },
+  "share": {
+    "button": "Partager le Résultat",
+    "copied": "Copié!",
+    "failed": "Impossible de copier",
+    "title": "Sudoku du Jour",
+    "mistake": "Erreur",
+    "mistakes": "Erreurs",
+    "time": "Temps",
+    "domain": "sudoku-of-the-day.com"
+  },
+  "stats": {
+    "title": "Statistiques Mondiales Aujourd'hui",
+    "players": "Joueurs Aujourd'hui",
+    "solved": "Résolus",
+    "avgTime": "Temps Moyen",
+    "loading": "Chargement des statistiques...",
+    "unavailable": "Statistiques indisponibles"
+  },
+  "theme": {
+    "toggleDark": "Mode sombre",
+    "toggleLight": "Mode clair"
+  },
+  "timer": {
+    "label": "Temps"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "app": {
+    "title": "每日数独"
+  },
+  "header": {
+    "puzzle": "谜题 #{{number}}",
+    "streak": "🔥 {{count}} 天连续",
+    "streakDay": "🔥 {{count}} 天连续"
+  },
+  "toolbar": {
+    "undo": "撤销",
+    "erase": "擦除",
+    "notes": "备注",
+    "notesOn": "备注 开启"
+  },
+  "mistakes": {
+    "label": "错误",
+    "of": "/"
+  },
+  "number_remaining": "剩余 {{count}} 个",
+  "gameOver": {
+    "title": "游戏结束",
+    "subtitle": "您犯了 3 个错误。明天祝你好运!",
+    "puzzleNumber": "谜题 #{{number}}",
+    "nextPuzzleIn": "下一个谜题在"
+  },
+  "complete": {
+    "title": "谜题完成!",
+    "subtitle": "恭喜!",
+    "time": "时间",
+    "mistakes": "错误",
+    "streak": "连续"
+  },
+  "share": {
+    "button": "分享结果",
+    "copied": "已复制!",
+    "failed": "无法复制",
+    "title": "每日数独",
+    "mistake": "错误",
+    "mistakes": "错误",
+    "time": "时间",
+    "domain": "sudoku-of-the-day.com"
+  },
+  "stats": {
+    "title": "今日全球统计",
+    "players": "今日玩家",
+    "solved": "已解决",
+    "avgTime": "平均时间",
+    "loading": "加载统计中...",
+    "unavailable": "统计数据不可用"
+  },
+  "theme": {
+    "toggleDark": "深色模式",
+    "toggleLight": "浅色模式"
+  },
+  "timer": {
+    "label": "时间"
+  }
+}

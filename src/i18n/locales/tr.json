@@ -1,0 +1,59 @@
+{
+  "app": {
+    "title": "Günlük Sudoku"
+  },
+  "header": {
+    "puzzle": "Bulmaca #{{number}}",
+    "streak": "🔥 {{count}} gün ardışık",
+    "streakDay": "🔥 {{count}} gün ardışık"
+  },
+  "toolbar": {
+    "undo": "Geri Al",
+    "erase": "Sil",
+    "notes": "Notlar",
+    "notesOn": "Notlar AÇIK"
+  },
+  "mistakes": {
+    "label": "Hatalar",
+    "of": "/"
+  },
+  "number_remaining": "{{count}} kaldı",
+  "gameOver": {
+    "title": "Oyun Bitti",
+    "subtitle": "3 hata yaptınız. Yarın şanslı olun!",
+    "puzzleNumber": "Bulmaca #{{number}}",
+    "nextPuzzleIn": "Sonraki bulmaca içinde"
+  },
+  "complete": {
+    "title": "Bulmaca Tamamlandı!",
+    "subtitle": "Tebrikler!",
+    "time": "Zaman",
+    "mistakes": "Hatalar",
+    "streak": "Dizi"
+  },
+  "share": {
+    "button": "Sonucu Paylaş",
+    "copied": "Kopyalandı!",
+    "failed": "Kopyalanamadı",
+    "title": "Günün Sudoku",
+    "mistake": "Hata",
+    "mistakes": "Hatalar",
+    "time": "Zaman",
+    "domain": "sudoku-of-the-day.com"
+  },
+  "stats": {
+    "title": "Bugünün Küresel İstatistikleri",
+    "players": "Bugün Oyuncular",
+    "solved": "Çözüldü",
+    "avgTime": "Ortalama Zaman",
+    "loading": "İstatistikler yükleniyor...",
+    "unavailable": "İstatistikler kullanılamıyor"
+  },
+  "theme": {
+    "toggleDark": "Koyu mod",
+    "toggleLight": "Açık mod"
+  },
+  "timer": {
+    "label": "Zaman"
+  }
+}

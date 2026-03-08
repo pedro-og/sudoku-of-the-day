@@ -1,0 +1,59 @@
+{
+  "app": {
+    "title": "Daily Sudoku"
+  },
+  "header": {
+    "puzzle": "Puzzle #{{number}}",
+    "streak": "🔥 {{count}} day streak",
+    "streakDay": "🔥 {{count}} day streak"
+  },
+  "toolbar": {
+    "undo": "Undo",
+    "erase": "Erase",
+    "notes": "Notes",
+    "notesOn": "Notes ON"
+  },
+  "mistakes": {
+    "label": "Mistakes",
+    "of": "of"
+  },
+  "number_remaining": "{{count}} left",
+  "gameOver": {
+    "title": "Game Over",
+    "subtitle": "You made 3 mistakes. Better luck tomorrow!",
+    "puzzleNumber": "Puzzle #{{number}}",
+    "nextPuzzleIn": "Next puzzle in"
+  },
+  "complete": {
+    "title": "Puzzle Complete!",
+    "subtitle": "Congratulations!",
+    "time": "Time",
+    "mistakes": "Mistakes",
+    "streak": "Streak"
+  },
+  "share": {
+    "button": "Share Result",
+    "copied": "Copied!",
+    "failed": "Could not copy",
+    "title": "Sudoku of the Day",
+    "mistake": "Mistake",
+    "mistakes": "Mistakes",
+    "time": "Time",
+    "domain": "sudoku-of-the-day.com"
+  },
+  "stats": {
+    "title": "Today's Global Stats",
+    "players": "Players Today",
+    "solved": "Solved",
+    "avgTime": "Average Time",
+    "loading": "Loading stats...",
+    "unavailable": "Stats unavailable"
+  },
+  "theme": {
+    "toggleDark": "Dark mode",
+    "toggleLight": "Light mode"
+  },
+  "timer": {
+    "label": "Time"
+  }
+}

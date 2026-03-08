@@ -1,0 +1,59 @@
+{
+  "app": {
+    "title": "Täglich Sudoku"
+  },
+  "header": {
+    "puzzle": "Rätsel #{{number}}",
+    "streak": "🔥 {{count}} Tage hintereinander",
+    "streakDay": "🔥 {{count}} Tage hintereinander"
+  },
+  "toolbar": {
+    "undo": "Rückgängig",
+    "erase": "Löschen",
+    "notes": "Notizen",
+    "notesOn": "Notizen AN"
+  },
+  "mistakes": {
+    "label": "Fehler",
+    "of": "von"
+  },
+  "number_remaining": "{{count}} verbleibend",
+  "gameOver": {
+    "title": "Spiel vorbei",
+    "subtitle": "Sie haben 3 Fehler gemacht. Viel Glück morgen!",
+    "puzzleNumber": "Rätsel #{{number}}",
+    "nextPuzzleIn": "Nächstes Rätsel in"
+  },
+  "complete": {
+    "title": "Rätsel gelöst!",
+    "subtitle": "Glückwunsch!",
+    "time": "Zeit",
+    "mistakes": "Fehler",
+    "streak": "Serie"
+  },
+  "share": {
+    "button": "Ergebnis teilen",
+    "copied": "Kopiert!",
+    "failed": "Konnte nicht kopiert werden",
+    "title": "Sudoku des Tages",
+    "mistake": "Fehler",
+    "mistakes": "Fehler",
+    "time": "Zeit",
+    "domain": "sudoku-of-the-day.com"
+  },
+  "stats": {
+    "title": "Heutige globale Statistiken",
+    "players": "Spieler heute",
+    "solved": "Gelöst",
+    "avgTime": "Durchschnittliche Zeit",
+    "loading": "Statistiken werden geladen...",
+    "unavailable": "Statistiken nicht verfügbar"
+  },
+  "theme": {
+    "toggleDark": "Dunkelmodus",
+    "toggleLight": "Hellmodus"
+  },
+  "timer": {
+    "label": "Zeit"
+  }
+}
