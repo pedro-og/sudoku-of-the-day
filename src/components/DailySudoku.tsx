@@ -52,6 +52,16 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
     recordPlayerStarted(state.puzzleNumber);
   }, [state.puzzleNumber]);
 
+  const [isHidden, setIsHidden] = useState(false);
+
+  useEffect(() => {
+    function handleVisibility() {
+      setIsHidden(document.hidden);
+    }
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => document.removeEventListener('visibilitychange', handleVisibility);
+  }, []);
+
   const timerRunning = !state.isComplete && !state.isGameOver;
   useGameTimer(timerRunning, tick, state.elapsedSeconds);
 
@@ -161,7 +171,19 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
         <MistakeCounter mistakes={state.mistakes} maxMistakes={state.maxMistakes} />
       </div>
 
-      <SudokuGrid state={state} onSelectCell={selectCell} mistakeCell={state.mistakeCell} mistakeValue={state.mistakeValue} />
+      <div style={{ position: 'relative', width: '100%', maxWidth: 'min(95vw, 480px)' }}>
+        <SudokuGrid state={state} onSelectCell={selectCell} mistakeCell={state.mistakeCell} mistakeValue={state.mistakeValue} />
+        {isHidden && !gameDisabled && (
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            borderRadius: '8px',
+            zIndex: 10,
+          }} />
+        )}
+      </div>
 
       <GameToolbar
         pencilMode={state.pencilMode}
@@ -175,7 +197,7 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
         board={state.board}
         onNumber={enterNumber}
         disabled={gameDisabled}
-        completedNumbers={(state as any).previousCompletions?.completedNumbers}
+        completedNumbers={state.previousCompletions?.completedNumbers}
       />
 
       {showOverlay && <GameOverlay state={state} streak={streak} onDismiss={() => setShowOverlay(false)} />}

@@ -1,4 +1,4 @@
-import { useCallback, useReducer, useEffect } from 'react';
+import { useCallback, useReducer, useEffect, useRef } from 'react';
 import type { GameState, CellValue } from '../types';
 import { isBoardComplete, cloneBoard } from '../lib/sudokuValidator';
 import { saveGameState } from '../lib/localGameStorage';
@@ -23,14 +23,13 @@ interface HistoryEntry {
   mistakes: number;
 }
 
+type ReducerState = GameState & { history: HistoryEntry[] };
+
 function cloneNotes(notes: GameState['notes']): GameState['notes'] {
   return notes.map(row => row.map(cell => new Set(cell)));
 }
 
-function reducer(
-  state: GameState & { history: HistoryEntry[] },
-  action: Action
-): GameState & { history: HistoryEntry[] } {
+function reducer(state: ReducerState, action: Action): ReducerState {
   switch (action.type) {
     case 'RESET':
       return { ...action.state, history: [] };
@@ -129,8 +128,7 @@ function reducer(
       const isComplete = !isGameOver && isBoardComplete(newBoard, state.solution);
 
       const currentCompletions = detectCompletions(newBoard);
-      const previousCompletions = (state as any).previousCompletions;
-      const cellsToAnimate = getCellsToAnimate(currentCompletions, previousCompletions || null, newBoard);
+      const cellsToAnimate = getCellsToAnimate(currentCompletions, state.previousCompletions, newBoard);
 
       return {
         ...state,
@@ -144,7 +142,7 @@ function reducer(
         mistakeValue,
         animatingCells: cellsToAnimate,
         previousCompletions: currentCompletions,
-      } as GameState & { history: HistoryEntry[]; previousCompletions: any };
+      };
     }
 
     case 'CLEAR_MISTAKE': {
@@ -161,7 +159,12 @@ function reducer(
 }
 
 export function useGameState(initialState: GameState) {
-  const [state, dispatch] = useReducer(reducer, { ...initialState, history: [] });
+  const [state, dispatch] = useReducer(reducer, {
+    ...initialState,
+    history: [],
+  });
+  const stateRef = useRef(state);
+  useEffect(() => { stateRef.current = state; });
 
   useEffect(() => {
     saveGameState(state);
@@ -196,8 +199,8 @@ export function useGameState(initialState: GameState) {
 
   const tick = useCallback((elapsed: number) => {
     dispatch({ type: 'TICK', elapsed });
-    if (elapsed % 5 === 0) saveGameState({ ...state, elapsedSeconds: elapsed });
-  }, [state]);
+    saveGameState({ ...stateRef.current, elapsedSeconds: elapsed });
+  }, []);
 
   const reset = useCallback((newState: GameState) => {
     dispatch({ type: 'RESET', state: newState });

@@ -5,6 +5,14 @@ export type Board = CellValue[][];
 export type Notes = Set<number>[][];
 export type FixedCells = boolean[][];
 
+export interface CompletionState {
+  completedRows: Set<number>;
+  completedCols: Set<number>;
+  completedBoxes: Set<number>;
+  completedNumbers: Set<number>;
+  isGridComplete: boolean;
+}
+
 export interface GameState {
   board: Board;
   solution: Board;
@@ -23,6 +31,7 @@ export interface GameState {
   mistakeCell: [number, number] | null;
   mistakeValue: CellValue;
   animatingCells: Set<string>; // "row,col" format for cells being animated
+  previousCompletions: CompletionState;
 }
 
 export interface DailyStats {

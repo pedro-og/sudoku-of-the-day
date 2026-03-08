@@ -2,7 +2,8 @@ import { useEffect, useRef } from 'react';
 
 /**
  * Drives the elapsed time counter.
- * The timer increments every second while the game is active.
+ * The timer increments every second while the game is active AND the tab is visible.
+ * Pauses automatically when the tab loses focus, resumes when it regains it.
  * onTick receives the new elapsed time in seconds.
  */
 export function useGameTimer(
@@ -10,30 +11,53 @@ export function useGameTimer(
   onTick: (elapsed: number) => void,
   initialElapsed: number
 ) {
-  const startRef = useRef<number | null>(null);
   const elapsedRef = useRef(initialElapsed);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const startRef = useRef<number | null>(null);
 
   useEffect(() => {
     elapsedRef.current = initialElapsed;
   }, [initialElapsed]);
 
   useEffect(() => {
-    if (!isRunning) {
-      startRef.current = null;
-      return;
+    function startInterval() {
+      if (intervalRef.current !== null) return;
+      const base = elapsedRef.current;
+      startRef.current = Date.now();
+      intervalRef.current = setInterval(() => {
+        const secondsPassed = Math.floor((Date.now() - startRef.current!) / 1000);
+        const newElapsed = base + secondsPassed;
+        elapsedRef.current = newElapsed;
+        onTick(newElapsed);
+      }, 1000);
     }
 
-    // Record when this run started so we can measure exact elapsed time
-    const base = elapsedRef.current;
-    startRef.current = Date.now();
+    function stopInterval() {
+      if (intervalRef.current !== null) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+        startRef.current = null;
+      }
+    }
 
-    const interval = setInterval(() => {
-      const secondsPassed = Math.floor((Date.now() - startRef.current!) / 1000);
-      const newElapsed = base + secondsPassed;
-      elapsedRef.current = newElapsed;
-      onTick(newElapsed);
-    }, 1000);
+    function handleVisibilityChange() {
+      if (!isRunning) return;
+      if (document.hidden) {
+        stopInterval();
+      } else {
+        startInterval();
+      }
+    }
 
-    return () => clearInterval(interval);
+    if (isRunning && !document.hidden) {
+      startInterval();
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      stopInterval();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, [isRunning]); // eslint-disable-line react-hooks/exhaustive-deps
 }

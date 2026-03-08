@@ -1,12 +1,6 @@
-import type { Board } from '../types';
+import type { Board, CompletionState } from '../types';
 
-export interface CompletionState {
-  completedRows: Set<number>;
-  completedCols: Set<number>;
-  completedBoxes: Set<number>;
-  completedNumbers: Set<number>;
-  isGridComplete: boolean;
-}
+export type { CompletionState };
 
 function getCompletedRows(board: Board): Set<number> {
   const completed = new Set<number>();

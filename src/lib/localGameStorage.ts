@@ -1,4 +1,5 @@
 import type { Board, FixedCells, GameState } from '../types';
+import { detectCompletions } from './completionDetector';
 
 const KEY_PREFIX = 'daily-sudoku:game:';
 
@@ -52,8 +53,9 @@ export function loadGameState(
     if (!raw) return null;
     const parsed: PersistedGame = JSON.parse(raw);
 
+    const board = parsed.board as Board;
     return {
-      board: parsed.board as Board,
+      board,
       solution,
       fixed,
       notes: deserializeNotes(parsed.notes),
@@ -70,6 +72,7 @@ export function loadGameState(
       mistakeCell: null,
       mistakeValue: 0,
       animatingCells: new Set(),
+      previousCompletions: detectCompletions(board),
     };
   } catch {
     return null;
@@ -87,8 +90,9 @@ export function buildInitialState(
     Array.from({ length: 9 }, () => new Set<number>())
   );
 
+  const board = puzzle.map(row => [...row]) as Board;
   return {
-    board: puzzle.map(row => [...row]) as Board,
+    board,
     solution,
     fixed,
     notes,
@@ -105,6 +109,7 @@ export function buildInitialState(
     mistakeCell: null,
     mistakeValue: 0,
     animatingCells: new Set(),
+    previousCompletions: detectCompletions(board),
   };
 }
 
