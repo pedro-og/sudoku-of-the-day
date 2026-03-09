@@ -12,9 +12,7 @@
     "undo": "戻す",
     "erase": "消去",
     "notes": "メモ",
-    "notesOn": "メモ ON",
-    "fastFill": "高速入力",
-    "fastFillOn": "高速入力 ON"
+    "fastFill": "高速入力"
   },
   "mistakes": {
     "label": "ミス",

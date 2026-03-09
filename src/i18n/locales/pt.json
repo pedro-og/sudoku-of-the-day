@@ -12,9 +12,7 @@
     "undo": "Desfazer",
     "erase": "Apagar",
     "notes": "Notas",
-    "notesOn": "Notas ATIVAS",
-    "fastFill": "Preenchimento Rápido",
-    "fastFillOn": "Preenchimento Rápido ATIVO"
+    "fastFill": "Preenchimento Rápido"
   },
   "mistakes": {
     "label": "Erros",

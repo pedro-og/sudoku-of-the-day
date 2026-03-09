@@ -19,7 +19,6 @@ import { GameTimer } from './GameTimer';
 import { GameOverlay } from './GameOverlay';
 
 import type { CellValue, StreakData } from '../types';
-
 interface DailySudokuProps {
   theme: 'light' | 'dark';
   onToggleTheme: () => void;

@@ -12,9 +12,7 @@
     "undo": "Geri Al",
     "erase": "Sil",
     "notes": "Notlar",
-    "notesOn": "Notlar AÇIK",
-    "fastFill": "Hızlı Doldur",
-    "fastFillOn": "Hızlı Doldur AÇIK"
+    "fastFill": "Hızlı Doldur"
   },
   "mistakes": {
     "label": "Hatalar",

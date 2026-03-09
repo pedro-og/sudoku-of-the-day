@@ -12,9 +12,7 @@
     "undo": "Rückgängig",
     "erase": "Löschen",
     "notes": "Notizen",
-    "notesOn": "Notizen AN",
-    "fastFill": "Schnellfüllung",
-    "fastFillOn": "Schnellfüllung AN"
+    "fastFill": "Schnellfüllung"
   },
   "mistakes": {
     "label": "Fehler",

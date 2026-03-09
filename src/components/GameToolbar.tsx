@@ -83,7 +83,7 @@ export function GameToolbar({ pencilMode, fastFillMode, onUndo, onErase, onToggl
       />
       <ToolButton
         icon={<PencilIcon size={18} />}
-        label={pencilMode ? t('toolbar.notesOn') : t('toolbar.notes')}
+        label={t('toolbar.notes')}
         onClick={onTogglePencil}
         active={pencilMode}
         disabled={disabled}
@@ -91,7 +91,7 @@ export function GameToolbar({ pencilMode, fastFillMode, onUndo, onErase, onToggl
       />
       <ToolButton
         icon={<FastFillIcon size={18} />}
-        label={fastFillMode ? t('toolbar.fastFillOn') : t('toolbar.fastFill')}
+        label={t('toolbar.fastFill')}
         onClick={onToggleFastFill}
         active={fastFillMode}
         disabled={disabled}
