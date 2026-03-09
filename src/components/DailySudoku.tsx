@@ -148,6 +148,12 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
           return;
         }
       }
+      for (let nextNum = 1; nextNum < fastFillNumber; nextNum++) {
+        if (counts[nextNum] < 9) {
+          setFastFillNumber(nextNum as CellValue);
+          return;
+        }
+      }
       setFastFillActive(false);
       setFastFillNumber(null);
     }
