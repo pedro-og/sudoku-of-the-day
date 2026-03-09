@@ -12,7 +12,9 @@
     "undo": "撤销",
     "erase": "擦除",
     "notes": "备注",
-    "notesOn": "备注 开启"
+    "notesOn": "备注 开启",
+    "fastFill": "快速填充",
+    "fastFillOn": "快速填充 开启"
   },
   "mistakes": {
     "label": "错误",

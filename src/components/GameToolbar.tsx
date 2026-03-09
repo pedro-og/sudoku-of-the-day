@@ -1,11 +1,13 @@
 import { useTranslation } from 'react-i18next';
-import { PencilIcon, UndoIcon, EraseIcon } from './Icons';
+import { PencilIcon, UndoIcon, EraseIcon, FastFillIcon } from './Icons';
 
 interface GameToolbarProps {
   pencilMode: boolean;
+  fastFillMode: boolean;
   onUndo: () => void;
   onErase: () => void;
   onTogglePencil: () => void;
+  onToggleFastFill: () => void;
   disabled: boolean;
 }
 
@@ -55,7 +57,7 @@ function ToolButton({ label, icon, onClick, active = false, disabled = false, is
   );
 }
 
-export function GameToolbar({ pencilMode, onUndo, onErase, onTogglePencil, disabled }: GameToolbarProps) {
+export function GameToolbar({ pencilMode, fastFillMode, onUndo, onErase, onTogglePencil, onToggleFastFill, disabled }: GameToolbarProps) {
   const { t } = useTranslation();
 
   return (
@@ -84,6 +86,14 @@ export function GameToolbar({ pencilMode, onUndo, onErase, onTogglePencil, disab
         label={pencilMode ? t('toolbar.notesOn') : t('toolbar.notes')}
         onClick={onTogglePencil}
         active={pencilMode}
+        disabled={disabled}
+        isIconComponent={true}
+      />
+      <ToolButton
+        icon={<FastFillIcon size={18} />}
+        label={fastFillMode ? t('toolbar.fastFillOn') : t('toolbar.fastFill')}
+        onClick={onToggleFastFill}
+        active={fastFillMode}
         disabled={disabled}
         isIconComponent={true}
       />

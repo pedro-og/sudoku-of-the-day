@@ -40,11 +40,18 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
 
   const { state, selectCell, enterNumber, erase, togglePencil, undo, tick } = useGameState(initialState);
   const [streak, setStreak] = useState<StreakData>(() => loadStreak());
+  const [fastFillActive, setFastFillActive] = useState(false);
+  const [fastFillNumber, setFastFillNumber] = useState<CellValue | null>(null);
 
   useEffect(() => {
     if (state.isComplete) {
-      const updated = recordCompletion(state.puzzleDate);
-      setStreak(updated);
+      recordCompletion(state.puzzleDate);
+    }
+  }, [state.isComplete, state.puzzleDate]);
+
+  useEffect(() => {
+    if (state.isComplete) {
+      setStreak(loadStreak());
     }
   }, [state.isComplete]);
 
@@ -65,17 +72,116 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
   const timerRunning = !state.isComplete && !state.isGameOver;
   useGameTimer(timerRunning, tick, state.elapsedSeconds);
 
+  const getNumberWithMostPlaced = () => {
+    const counts: Record<number, number> = {};
+    for (let num = 1; num <= 9; num++) {
+      counts[num] = 0;
+    }
+    for (const row of state.board) {
+      for (const cell of row) {
+        if (cell >= 1 && cell <= 9) {
+          counts[cell]++;
+        }
+      }
+    }
+    let maxNum: CellValue | null = null;
+    let maxCount = -1;
+    for (let num = 1; num <= 9; num++) {
+      if (counts[num] < 9 && counts[num] > maxCount) {
+        maxCount = counts[num];
+        maxNum = num as CellValue;
+      }
+    }
+    return maxNum;
+  };
+
+  const handleNumberPad = (num: CellValue) => {
+    if (fastFillActive) {
+      setFastFillNumber(num);
+    } else {
+      enterNumber(num);
+    }
+  };
+
+  const handleToggleFastFill = () => {
+    if (!fastFillActive) {
+      const numToSelect = getNumberWithMostPlaced();
+      if (numToSelect !== null) {
+        setFastFillActive(true);
+        setFastFillNumber(numToSelect);
+      }
+    } else {
+      setFastFillActive(false);
+      setFastFillNumber(null);
+    }
+  };
+
+  const handleFastFill = (row: number, col: number) => {
+    const clickedValue = state.board[row][col];
+
+    if (clickedValue !== 0) {
+      setFastFillNumber(clickedValue as CellValue);
+    } else if (fastFillNumber !== null) {
+      selectCell(row, col);
+      enterNumber(fastFillNumber);
+    }
+  };
+
+  useEffect(() => {
+    if (!fastFillActive || fastFillNumber === null) return;
+
+    const counts: Record<number, number> = {};
+    for (let num = 1; num <= 9; num++) {
+      counts[num] = 0;
+    }
+    for (const row of state.board) {
+      for (const cell of row) {
+        if (cell >= 1 && cell <= 9) {
+          counts[cell]++;
+        }
+      }
+    }
+
+    if (counts[fastFillNumber] === 9) {
+      for (let nextNum = fastFillNumber + 1; nextNum <= 9; nextNum++) {
+        if (counts[nextNum] < 9) {
+          setFastFillNumber(nextNum as CellValue);
+          return;
+        }
+      }
+      setFastFillActive(false);
+      setFastFillNumber(null);
+    }
+  }, [state.board, fastFillActive, fastFillNumber]);
+
+  useEffect(() => {
+    if (state.isComplete || state.isGameOver) {
+      setFastFillActive(false);
+      setFastFillNumber(null);
+    }
+  }, [state.isComplete, state.isGameOver]);
+
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (state.isComplete || state.isGameOver) return;
 
       const num = parseInt(e.key, 10);
       if (num >= 1 && num <= 9) {
-        enterNumber(num as CellValue);
+        if (fastFillActive) {
+          setFastFillNumber(num as CellValue);
+        } else {
+          enterNumber(num as CellValue);
+        }
         return;
       }
 
       switch (e.key) {
+        case 'Escape':
+          if (fastFillActive) {
+            setFastFillActive(false);
+            setFastFillNumber(null);
+          }
+          break;
         case 'Backspace':
         case 'Delete':
         case '0':
@@ -122,9 +228,19 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [state.selectedCell, state.isComplete, state.isGameOver, enterNumber, erase, undo, togglePencil, selectCell]);
+  }, [state.selectedCell, state.isComplete, state.isGameOver, enterNumber, erase, undo, togglePencil, selectCell, fastFillActive, fastFillNumber]);
 
   const gameDisabled = state.isComplete || state.isGameOver;
+  const allNumbersFound = ([1, 2, 3, 4, 5, 6, 7, 8, 9] as CellValue[]).every(num => {
+    let count = 0;
+    for (const row of state.board) {
+      for (const cell of row) {
+        if (cell === num) count++;
+      }
+    }
+    return count === 9;
+  });
+  const numberPadDisabled = gameDisabled || (fastFillActive && allNumbersFound);
 
   return (
     <div style={{
@@ -172,7 +288,7 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
       </div>
 
       <div style={{ position: 'relative', width: '100%', maxWidth: 'min(95vw, 480px)' }}>
-        <SudokuGrid state={state} onSelectCell={selectCell} mistakeCell={state.mistakeCell} mistakeValue={state.mistakeValue} />
+        <SudokuGrid state={state} onSelectCell={selectCell} onFastFill={fastFillActive ? handleFastFill : undefined} fastFillNumber={fastFillActive ? fastFillNumber : null} mistakeCell={state.mistakeCell} mistakeValue={state.mistakeValue} />
         {isHidden && !gameDisabled && (
           <div style={{
             position: 'absolute',
@@ -187,17 +303,20 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
 
       <GameToolbar
         pencilMode={state.pencilMode}
+        fastFillMode={fastFillActive}
         onUndo={undo}
         onErase={erase}
         onTogglePencil={togglePencil}
+        onToggleFastFill={handleToggleFastFill}
         disabled={gameDisabled}
       />
 
       <NumberPad
         board={state.board}
-        onNumber={enterNumber}
-        disabled={gameDisabled}
+        onNumber={handleNumberPad}
+        disabled={numberPadDisabled}
         completedNumbers={state.previousCompletions?.completedNumbers}
+        fastFillNumber={fastFillActive ? fastFillNumber : null}
       />
 
       {showOverlay && <GameOverlay state={state} streak={streak} onDismiss={() => setShowOverlay(false)} />}

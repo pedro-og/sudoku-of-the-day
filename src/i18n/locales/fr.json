@@ -12,7 +12,9 @@
     "undo": "Annuler",
     "erase": "Effacer",
     "notes": "Notes",
-    "notesOn": "Notes ON"
+    "notesOn": "Notes ON",
+    "fastFill": "Remplissage Rapide",
+    "fastFillOn": "Remplissage Rapide ON"
   },
   "mistakes": {
     "label": "Erreurs",

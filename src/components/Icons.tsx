@@ -108,3 +108,21 @@ export function EraseIcon({ size = 20, color = 'currentColor' }: IconProps) {
     </svg>
   );
 }
+
+export function FastFillIcon({ size = 20, color = 'currentColor' }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={{ display: 'block' }}
+    >
+      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+    </svg>
+  );
+}

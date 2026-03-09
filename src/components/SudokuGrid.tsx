@@ -8,9 +8,11 @@ interface SudokuGridProps {
   onSelectCell: (row: number, col: number) => void;
   mistakeCell?: [number, number] | null;
   mistakeValue?: CellValue;
+  onFastFill?: (row: number, col: number) => void;
+  fastFillNumber?: CellValue | null;
 }
 
-export const SudokuGrid = React.memo(function SudokuGrid({ state, onSelectCell, mistakeCell, mistakeValue }: SudokuGridProps) {
+export const SudokuGrid = React.memo(function SudokuGrid({ state, onSelectCell, mistakeCell, mistakeValue, onFastFill, fastFillNumber }: SudokuGridProps) {
   const { board, fixed, notes, selectedCell } = state;
 
   const conflicts = getConflicts(board);
@@ -21,9 +23,16 @@ export const SudokuGrid = React.memo(function SudokuGrid({ state, onSelectCell, 
   const selBoxRow = selRow >= 0 ? Math.floor(selRow / 3) * 3 : -1;
   const selBoxCol = selCol >= 0 ? Math.floor(selCol / 3) * 3 : -1;
 
+  const isFastFilling = onFastFill && fastFillNumber !== null;
+  const highlightVal = isFastFilling ? fastFillNumber : selVal;
+
   const handleSelect = useCallback((r: number, c: number) => {
-    onSelectCell(r, c);
-  }, [onSelectCell]);
+    if (onFastFill) {
+      onFastFill(r, c);
+    } else {
+      onSelectCell(r, c);
+    }
+  }, [onSelectCell, onFastFill]);
 
   return (
     <div
@@ -44,13 +53,14 @@ export const SudokuGrid = React.memo(function SudokuGrid({ state, onSelectCell, 
     >
       {board.map((row, r) =>
         row.map((val, c) => {
-          const isSelected = r === selRow && c === selCol;
+          const isSelected = !isFastFilling && r === selRow && c === selCol;
           const isHighlighted =
+            !isFastFilling &&
             !isSelected &&
             (r === selRow ||
               c === selCol ||
               (r >= selBoxRow && r < selBoxRow + 3 && c >= selBoxCol && c < selBoxCol + 3));
-          const isSameNumber = !isSelected && selVal !== 0 && val === selVal;
+          const isSameNumber = highlightVal !== 0 && val === highlightVal;
           const isConflict = conflicts.has(`${r},${c}`);
 
           const isMistakeCell = !!(mistakeCell && mistakeCell[0] === r && mistakeCell[1] === c);

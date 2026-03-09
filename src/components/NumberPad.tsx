@@ -6,6 +6,7 @@ interface NumberPadProps {
   onNumber: (num: CellValue) => void;
   disabled: boolean;
   completedNumbers?: Set<number>;
+  fastFillNumber?: CellValue | null;
 }
 
 function countPlaced(board: Board, num: number): number {
@@ -18,7 +19,7 @@ function countPlaced(board: Board, num: number): number {
   return count;
 }
 
-export const NumberPad = React.memo(function NumberPad({ board, onNumber, disabled, completedNumbers }: NumberPadProps) {
+export const NumberPad = React.memo(function NumberPad({ board, onNumber, disabled, completedNumbers, fastFillNumber }: NumberPadProps) {
   return (
     <div style={{
       display: 'grid',
@@ -32,6 +33,8 @@ export const NumberPad = React.memo(function NumberPad({ board, onNumber, disabl
         const remaining = 9 - placed;
         const isDepleted = remaining <= 0;
         const isAnimating = completedNumbers?.has(num) ?? false;
+        const isFastFill = fastFillNumber === num;
+        const shouldShowBorder = isFastFill && !isDepleted;
 
         return (
           <button
@@ -44,20 +47,34 @@ export const NumberPad = React.memo(function NumberPad({ board, onNumber, disabl
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              background: isDepleted ? 'transparent' : 'var(--numpad-bg)',
-              color: isDepleted ? 'var(--numpad-text-muted)' : 'var(--numpad-text)',
+              background: isFastFill && isDepleted ? 'var(--numpad-bg)' : isDepleted ? 'transparent' : 'var(--numpad-bg)',
+              color: isDepleted && !isFastFill ? 'var(--numpad-text-muted)' : 'var(--numpad-text)',
               borderRadius: 'var(--radius-sm)',
               padding: '8px 2px',
               gap: '2px',
-              opacity: isDepleted ? 0.35 : 1,
-              transition: 'background var(--transition), opacity var(--transition)',
+              opacity: isDepleted && !isFastFill ? 0.35 : 1,
+              transition: 'background var(--transition), opacity var(--transition), box-shadow var(--transition)',
               minHeight: '52px',
-              cursor: isDepleted || disabled ? 'default' : 'pointer',
+              cursor: isDepleted && !isFastFill ? 'default' : 'pointer',
               animation: isAnimating ? 'numberComplete 1000ms ease-out forwards' : 'none',
+              border: shouldShowBorder ? '2px solid var(--accent)' : '2px solid transparent',
+              boxShadow: shouldShowBorder ? `0 0 12px rgba(var(--accent-rgb), 0.4)` : 'none',
             }}
-            onPointerDown={e => e.currentTarget.style.background = isDepleted ? 'transparent' : 'var(--numpad-bg-hover)'}
-            onPointerUp={e => e.currentTarget.style.background = isDepleted ? 'transparent' : 'var(--numpad-bg)'}
-            onPointerLeave={e => e.currentTarget.style.background = isDepleted ? 'transparent' : 'var(--numpad-bg)'}
+            onPointerDown={e => {
+              if (!isDepleted) {
+                e.currentTarget.style.background = 'var(--numpad-bg-hover)';
+              }
+            }}
+            onPointerUp={e => {
+              if (!isDepleted) {
+                e.currentTarget.style.background = 'var(--numpad-bg)';
+              }
+            }}
+            onPointerLeave={e => {
+              if (!isDepleted) {
+                e.currentTarget.style.background = 'var(--numpad-bg)';
+              }
+            }}
           >
             <span style={{ fontSize: 'clamp(18px, 5vw, 26px)', fontWeight: 700, lineHeight: 1 }}>
               {num}

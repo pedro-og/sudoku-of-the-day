@@ -23,7 +23,7 @@ function solve(board: Board, random?: Random): boolean {
     for (let c = 0; c < 9; c++) {
       if (board[r][c] !== 0) continue;
 
-      let candidates = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      const candidates = [1, 2, 3, 4, 5, 6, 7, 8, 9];
       if (random) seededShuffle(candidates, random);
 
       for (const num of candidates) {
