@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getDailyPuzzle, getPracticePuzzle } from '../lib/dailyPuzzle';
@@ -74,13 +74,15 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
   const dailyState = useMemo(() => createDailyInitialState(), []);
 
   const { state, selectCell, enterNumber, erase, togglePencil, undo, tick, reset } = useGameState(dailyState);
-  const [streak, setStreak] = useState<StreakData>(() => loadStreak());
+  const [streak] = useState<StreakData>(() => loadStreak());
   const [fastFillActive, setFastFillActive] = useState(false);
   const [fastFillNumber, setFastFillNumber] = useState<CellValue | null>(null);
   const [tipActive, setTipActive] = useState(false);
 
   const isPractice = state.gameMode === 'practice';
   const [timerResetKey, setTimerResetKey] = useState(0);
+
+  const gameCompletedRef = useRef(false);
 
   const bumpTimerReset = useCallback(() => {
     setTimerResetKey(k => k + 1);
@@ -115,16 +117,11 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
   }, [reset, bumpTimerReset]);
 
   useEffect(() => {
-    if (state.isComplete && state.gameMode !== 'practice') {
+    if (state.isComplete && state.gameMode !== 'practice' && !gameCompletedRef.current) {
+      gameCompletedRef.current = true;
       recordCompletion(state.puzzleDate);
     }
   }, [state.isComplete, state.puzzleDate, state.gameMode]);
-
-  useEffect(() => {
-    if (state.isComplete && state.gameMode !== 'practice') {
-      setStreak(loadStreak());
-    }
-  }, [state.isComplete, state.gameMode]);
 
   useEffect(() => {
     if (state.gameMode !== 'practice') {
@@ -218,26 +215,30 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
     if (counts[fastFillNumber] === 9) {
       for (let nextNum = fastFillNumber + 1; nextNum <= 9; nextNum++) {
         if (counts[nextNum] < 9) {
-          setFastFillNumber(nextNum as CellValue);
+          requestAnimationFrame(() => setFastFillNumber(nextNum as CellValue));
           return;
         }
       }
       for (let nextNum = 1; nextNum < fastFillNumber; nextNum++) {
         if (counts[nextNum] < 9) {
-          setFastFillNumber(nextNum as CellValue);
+          requestAnimationFrame(() => setFastFillNumber(nextNum as CellValue));
           return;
         }
       }
-      setFastFillActive(false);
-      setFastFillNumber(null);
+      requestAnimationFrame(() => {
+        setFastFillActive(false);
+        setFastFillNumber(null);
+      });
     }
   }, [state.board, fastFillActive, fastFillNumber]);
 
   useEffect(() => {
     if (state.isComplete || state.isGameOver) {
-      setFastFillActive(false);
-      setFastFillNumber(null);
-      setTipActive(false);
+      requestAnimationFrame(() => {
+        setFastFillActive(false);
+        setFastFillNumber(null);
+        setTipActive(false);
+      });
     }
   }, [state.isComplete, state.isGameOver]);
 

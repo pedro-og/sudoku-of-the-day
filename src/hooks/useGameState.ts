@@ -164,15 +164,15 @@ export function useGameState(initialState: GameState) {
   useEffect(() => { stateRef.current = state; });
 
   useEffect(() => {
-    if (state.gameMode !== 'practice') {
-      saveGameState(state);
+    if (stateRef.current.gameMode !== 'practice') {
+      saveGameState(stateRef.current);
     }
   }, [state.board, state.notes, state.mistakes, state.isComplete, state.isGameOver, state.gameMode]);
 
   useEffect(() => {
-    if (state.isComplete && state.gameMode !== 'practice') {
-      recordCompletion(state.puzzleDate);
-      recordPuzzleSolved(state.puzzleNumber, state.elapsedSeconds);
+    if (stateRef.current.isComplete && stateRef.current.gameMode !== 'practice') {
+      recordCompletion(stateRef.current.puzzleDate);
+      recordPuzzleSolved(stateRef.current.puzzleNumber, stateRef.current.elapsedSeconds);
     }
   }, [state.isComplete, state.gameMode]);
 
