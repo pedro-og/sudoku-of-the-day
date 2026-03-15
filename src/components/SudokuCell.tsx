@@ -7,6 +7,8 @@ interface SudokuCellProps {
   isFixed: boolean;
   isSelected: boolean;
   isHighlighted: boolean;      // same row / col / box as selected
+  isTipBlocked?: boolean;      // blocked by same-number cells in tip mode
+  tipMode?: boolean;           // tip mode is globally active
   isSameNumber: boolean;       // same digit as selected cell
   isConflict: boolean;
   row: number;
@@ -60,6 +62,8 @@ export const SudokuCell = React.memo(function SudokuCell({
   isFixed,
   isSelected,
   isHighlighted,
+  isTipBlocked,
+  tipMode,
   isSameNumber,
   isConflict,
   row,
@@ -73,7 +77,8 @@ export const SudokuCell = React.memo(function SudokuCell({
   if (isConflict) bg = 'var(--cell-bg-conflict)';
   else if (isSelected) bg = 'var(--cell-bg-selected-vivid)';
   else if (isSameNumber && value !== 0) bg = 'var(--cell-bg-same-num)';
-  else if (isHighlighted) bg = 'var(--cell-bg-highlight)';
+  else if (isHighlighted) bg = tipMode ? 'var(--cell-bg-highlight-strong)' : 'var(--cell-bg-highlight)';
+  else if (isTipBlocked) bg = 'var(--cell-bg-highlight)';
 
   let textColor = isFixed ? 'var(--cell-text-fixed)' : 'var(--cell-text-user)';
   if (isSelected) textColor = 'var(--cell-text-selected-vivid)';

@@ -12,7 +12,8 @@
     "undo": "撤销",
     "erase": "擦除",
     "notes": "备注",
-    "fastFill": "快速填充"
+    "fastMode": "快速模式",
+    "tip": "提示"
   },
   "mistakes": {
     "label": "错误",
@@ -57,5 +58,20 @@
   },
   "timer": {
     "label": "时间"
+  },
+  "practice": {
+    "button": "练习!",
+    "overlayTitle": "练习模式",
+    "overlayDescription": "用更简单的谜题提升技能 — 更多数字已填入，游戏更快。没有错误限制，尽情尝试!",
+    "start": "开始练习",
+    "cancel": "不了",
+    "completeTitle": "练习完成!",
+    "completeSubtitle": "做得好! 准备好接受每日挑战了吗?",
+    "backToChallenge": "回到挑战",
+    "newPractice": "新练习",
+    "leaveTitle": "离开练习?",
+    "leaveDescription": "如果返回每日挑战，此练习谜题的进度将会丢失。",
+    "leaveConfirm": "是的，回到挑战",
+    "leaveCancel": "继续游戏"
   }
 }

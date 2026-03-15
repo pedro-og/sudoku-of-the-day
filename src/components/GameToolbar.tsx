@@ -1,13 +1,15 @@
 import { useTranslation } from 'react-i18next';
-import { PencilIcon, UndoIcon, EraseIcon, FastFillIcon } from './Icons';
+import { PencilIcon, UndoIcon, EraseIcon, FastFillIcon, TipIcon } from './Icons';
 
 interface GameToolbarProps {
   pencilMode: boolean;
   fastFillMode: boolean;
+  tipMode?: boolean;
   onUndo: () => void;
   onErase: () => void;
   onTogglePencil: () => void;
   onToggleFastFill: () => void;
+  onToggleTip?: () => void;
   disabled: boolean;
 }
 
@@ -57,7 +59,7 @@ function ToolButton({ label, icon, onClick, active = false, disabled = false, is
   );
 }
 
-export function GameToolbar({ pencilMode, fastFillMode, onUndo, onErase, onTogglePencil, onToggleFastFill, disabled }: GameToolbarProps) {
+export function GameToolbar({ pencilMode, fastFillMode, tipMode, onUndo, onErase, onTogglePencil, onToggleFastFill, onToggleTip, disabled }: GameToolbarProps) {
   const { t } = useTranslation();
 
   return (
@@ -91,12 +93,22 @@ export function GameToolbar({ pencilMode, fastFillMode, onUndo, onErase, onToggl
       />
       <ToolButton
         icon={<FastFillIcon size={18} />}
-        label={t('toolbar.fastFill')}
+        label={t('toolbar.fastMode')}
         onClick={onToggleFastFill}
         active={fastFillMode}
         disabled={disabled}
         isIconComponent={true}
       />
+      {onToggleTip && (
+        <ToolButton
+          icon={<TipIcon size={18} />}
+          label={t('toolbar.tip')}
+          onClick={onToggleTip}
+          active={tipMode}
+          disabled={disabled}
+          isIconComponent={true}
+        />
+      )}
     </div>
   );
 }

@@ -12,7 +12,8 @@
     "undo": "Undo",
     "erase": "Erase",
     "notes": "Notes",
-    "fastFill": "Fast Fill"
+    "fastMode": "Fast Mode",
+    "tip": "Tip"
   },
   "mistakes": {
     "label": "Mistakes",
@@ -57,5 +58,20 @@
   },
   "timer": {
     "label": "Time"
+  },
+  "practice": {
+    "button": "Practice!",
+    "overlayTitle": "Practice Mode",
+    "overlayDescription": "Sharpen your skills with an easier puzzle — more numbers are filled in so games are quicker. No mistake limit, so you can experiment freely!",
+    "start": "Let's practice",
+    "cancel": "Nope",
+    "completeTitle": "Practice Complete!",
+    "completeSubtitle": "Great job! Ready for the daily challenge?",
+    "backToChallenge": "Back to Challenge",
+    "newPractice": "New Practice",
+    "leaveTitle": "Leave Practice?",
+    "leaveDescription": "Your progress on this practice puzzle will be lost if you go back to the daily challenge.",
+    "leaveConfirm": "Yes, back to challenge",
+    "leaveCancel": "Keep playing"
   }
 }

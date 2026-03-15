@@ -121,7 +121,7 @@ function reducer(state: ReducerState, action: Action): ReducerState {
         }
       }
 
-      const isGameOver = newMistakes >= 3;
+      const isGameOver = state.gameMode !== 'practice' && newMistakes >= 3;
       const isComplete = !isGameOver && isBoardComplete(newBoard, state.solution);
 
       const currentCompletions = detectCompletions(newBoard);
@@ -164,15 +164,17 @@ export function useGameState(initialState: GameState) {
   useEffect(() => { stateRef.current = state; });
 
   useEffect(() => {
-    saveGameState(state);
-  }, [state.board, state.notes, state.mistakes, state.isComplete, state.isGameOver]);
+    if (state.gameMode !== 'practice') {
+      saveGameState(state);
+    }
+  }, [state.board, state.notes, state.mistakes, state.isComplete, state.isGameOver, state.gameMode]);
 
   useEffect(() => {
-    if (state.isComplete) {
+    if (state.isComplete && state.gameMode !== 'practice') {
       recordCompletion(state.puzzleDate);
       recordPuzzleSolved(state.puzzleNumber, state.elapsedSeconds);
     }
-  }, [state.isComplete]);
+  }, [state.isComplete, state.gameMode]);
 
   const selectCell = useCallback((row: number, col: number) => {
     dispatch({ type: 'SELECT_CELL', row, col });
@@ -196,7 +198,9 @@ export function useGameState(initialState: GameState) {
 
   const tick = useCallback((elapsed: number) => {
     dispatch({ type: 'TICK', elapsed });
-    saveGameState({ ...stateRef.current, elapsedSeconds: elapsed });
+    if (stateRef.current.gameMode !== 'practice') {
+      saveGameState({ ...stateRef.current, elapsedSeconds: elapsed });
+    }
   }, []);
 
   const reset = useCallback((newState: GameState) => {

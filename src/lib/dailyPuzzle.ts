@@ -27,3 +27,9 @@ export function getDailyPuzzle(): GeneratedPuzzle & { dateStr: string; puzzleNum
   const puzzleNumber = getPuzzleNumber(dateStr);
   return { ...puzzle, dateStr, puzzleNumber };
 }
+
+export function getPracticePuzzle(): GeneratedPuzzle {
+  const seed = `practice-${Date.now()}-${Math.random()}`;
+  const random = createSeededRandom(seed);
+  return generatePuzzle(random, 40);
+}

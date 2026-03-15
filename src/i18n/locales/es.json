@@ -12,7 +12,8 @@
     "undo": "Deshacer",
     "erase": "Borrar",
     "notes": "Notas",
-    "fastFill": "Rellenado Rápido"
+    "fastMode": "Modo Rápido",
+    "tip": "Pista"
   },
   "mistakes": {
     "label": "Errores",
@@ -57,5 +58,20 @@
   },
   "timer": {
     "label": "Tiempo"
+  },
+  "practice": {
+    "button": "¡Practicar!",
+    "overlayTitle": "Modo Práctica",
+    "overlayDescription": "Mejora tus habilidades con un puzzle más fácil — más números rellenados para partidas más rápidas. ¡Sin límite de errores, así que experimenta libremente!",
+    "start": "Vamos a practicar",
+    "cancel": "No",
+    "completeTitle": "¡Práctica Completa!",
+    "completeSubtitle": "¡Buen trabajo! ¿Listo para el desafío diario?",
+    "backToChallenge": "Volver al Desafío",
+    "newPractice": "Nueva Práctica",
+    "leaveTitle": "¿Salir de la Práctica?",
+    "leaveDescription": "Tu progreso en este puzzle de práctica se perderá si vuelves al desafío diario.",
+    "leaveConfirm": "Sí, volver al desafío",
+    "leaveCancel": "Seguir jugando"
   }
 }

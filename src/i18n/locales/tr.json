@@ -12,7 +12,8 @@
     "undo": "Geri Al",
     "erase": "Sil",
     "notes": "Notlar",
-    "fastFill": "Hızlı Doldur"
+    "fastMode": "Hızlı Mod",
+    "tip": "İpucu"
   },
   "mistakes": {
     "label": "Hatalar",
@@ -57,5 +58,20 @@
   },
   "timer": {
     "label": "Zaman"
+  },
+  "practice": {
+    "button": "Pratik!",
+    "overlayTitle": "Pratik Modu",
+    "overlayDescription": "Daha kolay bir bulmaca ile becerilerinizi geliştirin — daha fazla sayı doldurulmuş, oyunlar daha hızlı. Hata sınırı yok, özgürce deneyin!",
+    "start": "Hadi pratik yapalım",
+    "cancel": "Hayır",
+    "completeTitle": "Pratik Tamamlandı!",
+    "completeSubtitle": "Harika iş! Günlük meydan okuma için hazır mısınız?",
+    "backToChallenge": "Meydan Okumaya Dön",
+    "newPractice": "Yeni Pratik",
+    "leaveTitle": "Pratikten Çık?",
+    "leaveDescription": "Günlük meydan okumaya dönerseniz bu pratik bulmacadaki ilerlemeniz kaybolacak.",
+    "leaveConfirm": "Evet, meydan okumaya dön",
+    "leaveCancel": "Oynamaya devam et"
   }
 }

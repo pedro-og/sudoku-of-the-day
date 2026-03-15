@@ -73,6 +73,7 @@ export function loadGameState(
       mistakeValue: 0,
       animatingCells: new Set(),
       previousCompletions: detectCompletions(board),
+      gameMode: 'daily',
     };
   } catch {
     return null;
@@ -110,6 +111,7 @@ export function buildInitialState(
     mistakeValue: 0,
     animatingCells: new Set(),
     previousCompletions: detectCompletions(board),
+    gameMode: 'daily',
   };
 }
 

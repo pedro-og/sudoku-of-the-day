@@ -67,6 +67,13 @@
 - **Unique solution guarantee** — Every puzzle has exactly one valid solution
 - **Seeded generation** — Reproducible across all users
 
+### Practice Mode ✅
+- **Unlimited puzzles** — Generate infinite practice puzzles with deterministic seeding
+- **No mistake limit** — Play at your own pace without game over conditions
+- **Separate progression** — Practice puzzles don't affect streak tracking
+- **Full feature parity** — Pencil mode, undo, highlights, all features available
+- **Immediate access** — No time restrictions (unlike daily puzzles)
+
 ### Performance ✅
 - **Bundle size** — 268 kB (85 kB gzip)
 - **Fast load** — First paint < 1 second
@@ -96,6 +103,7 @@
 - [ ] Medium (30 clues) — Current default
 - [ ] Hard (20 clues) — For experienced players
 - [ ] Persist selected difficulty in localStorage
+- [ ] **Practice mode difficulty selector** — Allow users to choose difficulty when playing practice puzzles
 
 ### Analytics 📊
 - [ ] Track average completion times by difficulty

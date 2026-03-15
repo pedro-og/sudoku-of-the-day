@@ -12,7 +12,8 @@
     "undo": "Rückgängig",
     "erase": "Löschen",
     "notes": "Notizen",
-    "fastFill": "Schnellfüllung"
+    "fastMode": "Schnellmodus",
+    "tip": "Tipp"
   },
   "mistakes": {
     "label": "Fehler",
@@ -57,5 +58,20 @@
   },
   "timer": {
     "label": "Zeit"
+  },
+  "practice": {
+    "button": "Üben!",
+    "overlayTitle": "Übungsmodus",
+    "overlayDescription": "Verbessere deine Fähigkeiten mit einem einfacheren Rätsel — mehr Zahlen sind ausgefüllt für schnellere Spiele. Kein Fehlerlimit, experimentiere frei!",
+    "start": "Los geht's",
+    "cancel": "Nein",
+    "completeTitle": "Übung Abgeschlossen!",
+    "completeSubtitle": "Gut gemacht! Bereit für die tägliche Herausforderung?",
+    "backToChallenge": "Zurück zur Herausforderung",
+    "newPractice": "Neue Übung",
+    "leaveTitle": "Übung verlassen?",
+    "leaveDescription": "Dein Fortschritt bei diesem Übungspuzzle geht verloren, wenn du zur täglichen Herausforderung zurückkehrst.",
+    "leaveConfirm": "Ja, zurück zur Herausforderung",
+    "leaveCancel": "Weiterspielen"
   }
 }

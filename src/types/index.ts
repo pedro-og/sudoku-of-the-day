@@ -13,6 +13,8 @@ export interface CompletionState {
   isGridComplete: boolean;
 }
 
+export type GameMode = 'daily' | 'practice';
+
 export interface GameState {
   board: Board;
   solution: Board;
@@ -32,6 +34,7 @@ export interface GameState {
   mistakeValue: CellValue;
   animatingCells: Set<string>; // "row,col" format for cells being animated
   previousCompletions: CompletionState;
+  gameMode: GameMode;
 }
 
 export interface DailyStats {

@@ -8,6 +8,8 @@ interface GameOverlayProps {
   state: GameState;
   streak: StreakData;
   onDismiss: () => void;
+  onBackToDaily?: () => void;
+  onNewPractice?: () => void;
 }
 
 function formatTime(s: number): string {
@@ -34,7 +36,7 @@ function calculateNextPuzzleCountdown(): { hours: number; minutes: number; secon
   };
 }
 
-export function GameOverlay({ state, streak, onDismiss }: GameOverlayProps) {
+export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPractice }: GameOverlayProps) {
   const { t } = useTranslation();
   const [countdown, setCountdown] = useState(calculateNextPuzzleCountdown());
 
@@ -48,6 +50,7 @@ export function GameOverlay({ state, streak, onDismiss }: GameOverlayProps) {
 
   if (!state.isComplete && !state.isGameOver) return null;
 
+  const isPractice = state.gameMode === 'practice';
   const isOver = state.isGameOver;
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -99,17 +102,90 @@ export function GameOverlay({ state, streak, onDismiss }: GameOverlayProps) {
       }} onClick={e => e.stopPropagation()}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '40px', marginBottom: '8px' }}>
-            {isOver ? '😔' : '🎉'}
+            {isPractice ? '🏋️' : isOver ? '😔' : '🎉'}
           </div>
           <h2 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '6px' }}>
-            {isOver ? t('gameOver.title') : t('complete.title')}
+            {isPractice ? t('practice.completeTitle') : isOver ? t('gameOver.title') : t('complete.title')}
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
-            {isOver ? t('gameOver.subtitle') : t('complete.subtitle')}
+            {isPractice ? t('practice.completeSubtitle') : isOver ? t('gameOver.subtitle') : t('complete.subtitle')}
           </p>
         </div>
 
-        {!isOver && (
+        {isPractice && state.isComplete && (
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '12px',
+            width: '100%',
+          }}>
+            {[
+              { label: t('complete.time'), value: formatTime(state.elapsedSeconds) },
+              { label: t('complete.mistakes'), value: `${state.mistakes}` },
+            ].map(({ label, value }) => (
+              <div key={label} style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '4px',
+                background: 'var(--bg-surface-alt)',
+                borderRadius: 'var(--radius-sm)',
+                padding: '10px 4px',
+              }}>
+                <span style={{ fontSize: '18px', fontWeight: 700, color: 'var(--accent)' }}>
+                  {value}
+                </span>
+                <span style={{ fontSize: '10px', color: 'var(--text-muted)', textAlign: 'center' }}>
+                  {label}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {isPractice && state.isComplete && (
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px',
+            width: '100%',
+          }}>
+            <button
+              onClick={onBackToDaily}
+              style={{
+                width: '100%',
+                padding: '14px',
+                background: 'var(--accent)',
+                color: 'white',
+                border: 'none',
+                borderRadius: 'var(--radius-sm)',
+                fontSize: '16px',
+                fontWeight: 700,
+                cursor: 'pointer',
+              }}
+            >
+              {t('practice.backToChallenge')}
+            </button>
+            <button
+              onClick={onNewPractice}
+              style={{
+                width: '100%',
+                padding: '12px',
+                background: 'transparent',
+                color: 'var(--text-secondary)',
+                border: '1px solid var(--cell-border)',
+                borderRadius: 'var(--radius-sm)',
+                fontSize: '14px',
+                fontWeight: 600,
+                cursor: 'pointer',
+              }}
+            >
+              {t('practice.newPractice')}
+            </button>
+          </div>
+        )}
+
+        {!isPractice && !isOver && (
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
@@ -141,35 +217,39 @@ export function GameOverlay({ state, streak, onDismiss }: GameOverlayProps) {
           </div>
         )}
 
-        <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-          {t('gameOver.puzzleNumber', { number: state.puzzleNumber })}
-        </p>
-
-        {!isOver && <ShareResultButton shareData={shareData} />}
-
-        <DailyStatsPanel puzzleNumber={state.puzzleNumber} />
-
-        <div style={{
-          width: '100%',
-          padding: '16px 12px',
-          borderRadius: 'var(--radius-sm)',
-          background: 'var(--bg-surface-alt)',
-          textAlign: 'center',
-        }}>
-          <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-            {t('gameOver.nextPuzzleIn')}
+        {!isPractice && (
+          <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+            {t('gameOver.puzzleNumber', { number: state.puzzleNumber })}
           </p>
-          <span style={{
-            display: 'block',
-            fontSize: '32px',
-            fontWeight: 900,
-            color: 'var(--text-primary)',
-            fontFamily: 'monospace',
-            letterSpacing: '0.05em',
+        )}
+
+        {!isPractice && !isOver && <ShareResultButton shareData={shareData} />}
+
+        {!isPractice && <DailyStatsPanel puzzleNumber={state.puzzleNumber} />}
+
+        {!isPractice && (
+          <div style={{
+            width: '100%',
+            padding: '16px 12px',
+            borderRadius: 'var(--radius-sm)',
+            background: 'var(--bg-surface-alt)',
+            textAlign: 'center',
           }}>
-            {String(countdown.hours).padStart(2, '0')}:{String(countdown.minutes).padStart(2, '0')}:{String(countdown.seconds).padStart(2, '0')}
-          </span>
-        </div>
+            <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              {t('gameOver.nextPuzzleIn')}
+            </p>
+            <span style={{
+              display: 'block',
+              fontSize: '32px',
+              fontWeight: 900,
+              color: 'var(--text-primary)',
+              fontFamily: 'monospace',
+              letterSpacing: '0.05em',
+            }}>
+              {String(countdown.hours).padStart(2, '0')}:{String(countdown.minutes).padStart(2, '0')}:{String(countdown.seconds).padStart(2, '0')}
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

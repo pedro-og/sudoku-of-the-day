@@ -12,7 +12,8 @@
     "undo": "Annuler",
     "erase": "Effacer",
     "notes": "Notes",
-    "fastFill": "Remplissage Rapide"
+    "fastMode": "Mode Rapide",
+    "tip": "Indice"
   },
   "mistakes": {
     "label": "Erreurs",
@@ -57,5 +58,20 @@
   },
   "timer": {
     "label": "Temps"
+  },
+  "practice": {
+    "button": "Pratiquer!",
+    "overlayTitle": "Mode Pratique",
+    "overlayDescription": "Améliorez vos compétences avec un puzzle plus facile — plus de chiffres remplis pour des parties plus rapides. Pas de limite d'erreurs, expérimentez librement!",
+    "start": "C'est parti",
+    "cancel": "Non",
+    "completeTitle": "Pratique Terminée!",
+    "completeSubtitle": "Bon travail! Prêt pour le défi quotidien?",
+    "backToChallenge": "Retour au Défi",
+    "newPractice": "Nouvelle Pratique",
+    "leaveTitle": "Quitter la Pratique?",
+    "leaveDescription": "Votre progression sur ce puzzle de pratique sera perdue si vous revenez au défi quotidien.",
+    "leaveConfirm": "Oui, retour au défi",
+    "leaveCancel": "Continuer à jouer"
   }
 }

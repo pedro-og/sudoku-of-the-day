@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { getDailyPuzzle } from '../lib/dailyPuzzle';
+import { getDailyPuzzle, getPracticePuzzle } from '../lib/dailyPuzzle';
 import { loadGameState, buildInitialState, pruneOldGames } from '../lib/localGameStorage';
 import { loadStreak, recordCompletion } from '../lib/streakTracker';
 import { recordPlayerStarted } from '../lib/statsApi';
+import { detectCompletions } from '../lib/completionDetector';
 
 import { useGameState } from '../hooks/useGameState';
 import { useGameTimer } from '../hooks/useGameTimer';
@@ -17,46 +18,119 @@ import { StreakDisplay } from './StreakDisplay';
 import { ThemeToggle } from './ThemeToggle';
 import { GameTimer } from './GameTimer';
 import { GameOverlay } from './GameOverlay';
+import { PracticeOverlay } from './PracticeOverlay';
 
-import type { CellValue, StreakData } from '../types';
+import type { CellValue, GameState, StreakData } from '../types';
 interface DailySudokuProps {
   theme: 'light' | 'dark';
   onToggleTheme: () => void;
 }
 
+function createDailyInitialState(): GameState {
+  const { puzzle, solution, dateStr, puzzleNumber } = getDailyPuzzle();
+  pruneOldGames(dateStr);
+
+  const fixed = puzzle.map(row => row.map(cell => cell !== 0));
+  const saved = loadGameState(dateStr, solution, fixed, puzzleNumber);
+  return saved ?? buildInitialState(puzzle, solution, dateStr, puzzleNumber);
+}
+
+function createPracticeInitialState(): GameState {
+  const { puzzle, solution } = getPracticePuzzle();
+  const fixed = puzzle.map(row => row.map(cell => cell !== 0));
+  const notes: GameState['notes'] = Array.from({ length: 9 }, () =>
+    Array.from({ length: 9 }, () => new Set<number>())
+  );
+  const board = puzzle.map(row => [...row]) as GameState['board'];
+  return {
+    board,
+    solution,
+    fixed,
+    notes,
+    mistakes: 0,
+    maxMistakes: 3,
+    selectedCell: null,
+    pencilMode: false,
+    isComplete: false,
+    isGameOver: false,
+    elapsedSeconds: 0,
+    startTime: null,
+    puzzleDate: 'practice',
+    puzzleNumber: 0,
+    mistakeCell: null,
+    mistakeValue: 0,
+    animatingCells: new Set(),
+    previousCompletions: detectCompletions(board),
+    gameMode: 'practice',
+  };
+}
+
 export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
   const { t } = useTranslation();
   const [showOverlay, setShowOverlay] = useState(true);
+  const [showPracticeIntro, setShowPracticeIntro] = useState(false);
+  const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
 
-  const initialState = useMemo(() => {
-    const { puzzle, solution, dateStr, puzzleNumber } = getDailyPuzzle();
-    pruneOldGames(dateStr);
+  const dailyState = useMemo(() => createDailyInitialState(), []);
 
-    const fixed = puzzle.map(row => row.map(cell => cell !== 0));
-    const saved = loadGameState(dateStr, solution, fixed, puzzleNumber);
-    return saved ?? buildInitialState(puzzle, solution, dateStr, puzzleNumber);
-  }, []);
-
-  const { state, selectCell, enterNumber, erase, togglePencil, undo, tick } = useGameState(initialState);
+  const { state, selectCell, enterNumber, erase, togglePencil, undo, tick, reset } = useGameState(dailyState);
   const [streak, setStreak] = useState<StreakData>(() => loadStreak());
   const [fastFillActive, setFastFillActive] = useState(false);
   const [fastFillNumber, setFastFillNumber] = useState<CellValue | null>(null);
+  const [tipActive, setTipActive] = useState(false);
+
+  const isPractice = state.gameMode === 'practice';
+  const [timerResetKey, setTimerResetKey] = useState(0);
+
+  const bumpTimerReset = useCallback(() => {
+    setTimerResetKey(k => k + 1);
+  }, []);
+
+  const handleStartPractice = useCallback(() => {
+    setShowPracticeIntro(false);
+    setShowOverlay(true);
+    setFastFillActive(false);
+    setFastFillNumber(null);
+    setTipActive(false);
+    reset(createPracticeInitialState());
+    bumpTimerReset();
+  }, [reset, bumpTimerReset]);
+
+  const handleBackToDaily = useCallback(() => {
+    setShowOverlay(true);
+    setFastFillActive(false);
+    setFastFillNumber(null);
+    setTipActive(false);
+    reset(createDailyInitialState());
+    bumpTimerReset();
+  }, [reset, bumpTimerReset]);
+
+  const handleNewPractice = useCallback(() => {
+    setShowOverlay(true);
+    setFastFillActive(false);
+    setFastFillNumber(null);
+    setTipActive(false);
+    reset(createPracticeInitialState());
+    bumpTimerReset();
+  }, [reset, bumpTimerReset]);
 
   useEffect(() => {
-    if (state.isComplete) {
+    if (state.isComplete && state.gameMode !== 'practice') {
       recordCompletion(state.puzzleDate);
     }
-  }, [state.isComplete, state.puzzleDate]);
+  }, [state.isComplete, state.puzzleDate, state.gameMode]);
 
   useEffect(() => {
-    if (state.isComplete) {
+    if (state.isComplete && state.gameMode !== 'practice') {
       setStreak(loadStreak());
     }
-  }, [state.isComplete]);
+  }, [state.isComplete, state.gameMode]);
 
   useEffect(() => {
-    recordPlayerStarted(state.puzzleNumber);
-  }, [state.puzzleNumber]);
+    if (state.gameMode !== 'practice') {
+      recordPlayerStarted(state.puzzleNumber);
+    }
+  }, [state.puzzleNumber, state.gameMode]);
 
   const [isHidden, setIsHidden] = useState(false);
 
@@ -69,7 +143,7 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
   }, []);
 
   const timerRunning = !state.isComplete && !state.isGameOver;
-  useGameTimer(timerRunning, tick, state.elapsedSeconds);
+  useGameTimer(timerRunning, tick, state.elapsedSeconds, timerResetKey);
 
   const getNumberWithMostPlaced = () => {
     const counts: Record<number, number> = {};
@@ -163,6 +237,7 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
     if (state.isComplete || state.isGameOver) {
       setFastFillActive(false);
       setFastFillNumber(null);
+      setTipActive(false);
     }
   }, [state.isComplete, state.isGameOver]);
 
@@ -277,23 +352,68 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
             {t('app.title')}
           </h1>
           <span style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '1px' }}>
-            {t('header.puzzle', { number: state.puzzleNumber })}
+            {isPractice ? t('practice.overlayTitle') : t('header.puzzle', { number: state.puzzleNumber })}
           </span>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <StreakDisplay streak={streak} />
+          {!isPractice && <StreakDisplay streak={streak} />}
           <GameTimer elapsedSeconds={state.elapsedSeconds} />
           <ThemeToggle theme={theme} onToggle={onToggleTheme} />
         </div>
       </header>
 
-      <div style={{ width: '100%', maxWidth: 'min(95vw, 480px)', display: 'flex', justifyContent: 'flex-end' }}>
-        <MistakeCounter mistakes={state.mistakes} maxMistakes={state.maxMistakes} />
+      <div style={{
+        width: '100%',
+        maxWidth: 'min(95vw, 480px)',
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        gap: '12px',
+      }}>
+        {!isPractice && (
+          <button
+            onClick={() => setShowPracticeIntro(true)}
+            style={{
+              padding: '5px 12px',
+              background: 'var(--btn-bg)',
+              color: 'var(--accent)',
+              border: 'none',
+              borderRadius: 'var(--radius-sm)',
+              fontSize: '13px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              transition: 'background var(--transition)',
+            }}
+          >
+            {t('practice.button')}
+          </button>
+        )}
+        {isPractice && !gameDisabled && (
+          <button
+            onClick={() => setShowLeaveConfirm(true)}
+            style={{
+              padding: '5px 12px',
+              background: 'var(--btn-bg)',
+              color: 'var(--accent)',
+              border: 'none',
+              borderRadius: 'var(--radius-sm)',
+              fontSize: '13px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              transition: 'background var(--transition)',
+            }}
+          >
+            {t('practice.backToChallenge')}
+          </button>
+        )}
+        {!isPractice && (
+          <MistakeCounter mistakes={state.mistakes} maxMistakes={state.maxMistakes} />
+        )}
       </div>
 
       <div style={{ position: 'relative', width: '100%', maxWidth: 'min(95vw, 480px)' }}>
-        <SudokuGrid state={state} onSelectCell={selectCell} onFastFill={fastFillActive ? handleFastFill : undefined} fastFillNumber={fastFillActive ? fastFillNumber : null} mistakeCell={state.mistakeCell} mistakeValue={state.mistakeValue} />
+        <SudokuGrid state={state} onSelectCell={selectCell} onFastFill={fastFillActive ? handleFastFill : undefined} fastFillNumber={fastFillActive ? fastFillNumber : null} mistakeCell={state.mistakeCell} mistakeValue={state.mistakeValue} tipMode={tipActive} />
         {isHidden && !gameDisabled && (
           <div style={{
             position: 'absolute',
@@ -309,10 +429,12 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
       <GameToolbar
         pencilMode={state.pencilMode}
         fastFillMode={fastFillActive}
+        tipMode={tipActive}
         onUndo={undo}
         onErase={erase}
         onTogglePencil={togglePencil}
         onToggleFastFill={handleToggleFastFill}
+        onToggleTip={isPractice ? () => setTipActive(t => !t) : undefined}
         disabled={gameDisabled}
       />
 
@@ -324,7 +446,103 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
         fastFillNumber={fastFillActive ? fastFillNumber : null}
       />
 
-      {showOverlay && <GameOverlay state={state} streak={streak} onDismiss={() => setShowOverlay(false)} />}
+      {showOverlay && (
+        <GameOverlay
+          state={state}
+          streak={streak}
+          onDismiss={() => setShowOverlay(false)}
+          onBackToDaily={handleBackToDaily}
+          onNewPractice={handleNewPractice}
+        />
+      )}
+
+      {showPracticeIntro && (
+        <PracticeOverlay
+          onStart={handleStartPractice}
+          onCancel={() => setShowPracticeIntro(false)}
+        />
+      )}
+
+      {showLeaveConfirm && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          onClick={(e) => { if (e.target === e.currentTarget) setShowLeaveConfirm(false); }}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'var(--overlay-bg)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 100,
+            padding: '16px',
+            backdropFilter: 'blur(4px)',
+            cursor: 'pointer',
+          }}
+        >
+          <div
+            style={{
+              background: 'var(--modal-bg)',
+              borderRadius: 'var(--radius-lg)',
+              padding: '28px 24px',
+              width: '100%',
+              maxWidth: '380px',
+              boxShadow: 'var(--shadow-md)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '20px',
+              cursor: 'default',
+            }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '40px', marginBottom: '8px' }}>⚠️</div>
+              <h2 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '6px' }}>
+                {t('practice.leaveTitle')}
+              </h2>
+              <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                {t('practice.leaveDescription')}
+              </p>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
+              <button
+                onClick={() => { setShowLeaveConfirm(false); handleBackToDaily(); }}
+                style={{
+                  width: '100%',
+                  padding: '14px',
+                  background: 'var(--accent)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: 'var(--radius-sm)',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                }}
+              >
+                {t('practice.leaveConfirm')}
+              </button>
+              <button
+                onClick={() => setShowLeaveConfirm(false)}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  background: 'transparent',
+                  color: 'var(--text-secondary)',
+                  border: '1px solid var(--cell-border)',
+                  borderRadius: 'var(--radius-sm)',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                {t('practice.leaveCancel')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {!showOverlay && (state.isComplete || state.isGameOver) && (
         <button
@@ -345,7 +563,7 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
             zIndex: 50,
           }}
         >
-          {state.isComplete ? '🎉 ' : '😔 '} {t('complete.showResults')}
+          {isPractice ? '🏋️ ' : state.isComplete ? '🎉 ' : '😔 '} {t('complete.showResults')}
         </button>
       )}
     </div>

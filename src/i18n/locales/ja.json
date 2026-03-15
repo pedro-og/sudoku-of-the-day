@@ -12,7 +12,8 @@
     "undo": "戻す",
     "erase": "消去",
     "notes": "メモ",
-    "fastFill": "高速入力"
+    "fastMode": "高速モード",
+    "tip": "ヒント"
   },
   "mistakes": {
     "label": "ミス",
@@ -57,5 +58,20 @@
   },
   "timer": {
     "label": "時間"
+  },
+  "practice": {
+    "button": "練習!",
+    "overlayTitle": "練習モード",
+    "overlayDescription": "簡単なパズルでスキルを磨きましょう — より多くの数字が埋められているので、ゲームが速くなります。ミスの制限なしで自由に試せます!",
+    "start": "練習する",
+    "cancel": "いいえ",
+    "completeTitle": "練習完了!",
+    "completeSubtitle": "よくできました! デイリーチャレンジの準備はできましたか?",
+    "backToChallenge": "チャレンジに戻る",
+    "newPractice": "新しい練習",
+    "leaveTitle": "練習を終了しますか?",
+    "leaveDescription": "デイリーチャレンジに戻ると、この練習パズルの進捗は失われます。",
+    "leaveConfirm": "はい、チャレンジに戻る",
+    "leaveCancel": "プレイを続ける"
   }
 }

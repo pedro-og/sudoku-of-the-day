@@ -5,11 +5,14 @@ import { useEffect, useRef } from 'react';
  * The timer increments every second while the game is active AND the tab is visible.
  * Pauses automatically when the tab loses focus, resumes when it regains it.
  * onTick receives the new elapsed time in seconds.
+ *
+ * The `resetKey` parameter forces the timer to restart when it changes (e.g. on mode switch).
  */
 export function useGameTimer(
   isRunning: boolean,
   onTick: (elapsed: number) => void,
-  initialElapsed: number
+  initialElapsed: number,
+  resetKey: string | number = '',
 ) {
   const elapsedRef = useRef(initialElapsed);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -59,5 +62,5 @@ export function useGameTimer(
       stopInterval();
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [isRunning]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isRunning, resetKey]); // eslint-disable-line react-hooks/exhaustive-deps
 }

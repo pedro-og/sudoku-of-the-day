@@ -10,9 +10,10 @@ interface SudokuGridProps {
   mistakeValue?: CellValue;
   onFastFill?: (row: number, col: number) => void;
   fastFillNumber?: CellValue | null;
+  tipMode?: boolean;
 }
 
-export const SudokuGrid = React.memo(function SudokuGrid({ state, onSelectCell, mistakeCell, mistakeValue, onFastFill, fastFillNumber }: SudokuGridProps) {
+export const SudokuGrid = React.memo(function SudokuGrid({ state, onSelectCell, mistakeCell, mistakeValue, onFastFill, fastFillNumber, tipMode }: SudokuGridProps) {
   const { board, fixed, notes, selectedCell } = state;
 
   const conflicts = getConflicts(board);
@@ -25,6 +26,31 @@ export const SudokuGrid = React.memo(function SudokuGrid({ state, onSelectCell, 
 
   const isFastFilling = onFastFill && fastFillNumber !== null;
   const highlightVal = isFastFilling ? fastFillNumber : selVal;
+
+  // Tip mode: compute all cells blocked by every instance of highlightVal
+  const tipBlockedCells = React.useMemo(() => {
+    if (!tipMode || !highlightVal) return null;
+    const blocked = new Set<string>();
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+        if (board[r][c] === highlightVal) {
+          // Mark entire row, col, and box
+          const boxR = Math.floor(r / 3) * 3;
+          const boxC = Math.floor(c / 3) * 3;
+          for (let i = 0; i < 9; i++) {
+            blocked.add(`${r},${i}`); // row
+            blocked.add(`${i},${c}`); // col
+          }
+          for (let br = boxR; br < boxR + 3; br++) {
+            for (let bc = boxC; bc < boxC + 3; bc++) {
+              blocked.add(`${br},${bc}`); // box
+            }
+          }
+        }
+      }
+    }
+    return blocked;
+  }, [tipMode, highlightVal, board]);
 
   const handleSelect = useCallback((r: number, c: number) => {
     if (onFastFill) {
@@ -61,6 +87,7 @@ export const SudokuGrid = React.memo(function SudokuGrid({ state, onSelectCell, 
               c === selCol ||
               (r >= selBoxRow && r < selBoxRow + 3 && c >= selBoxCol && c < selBoxCol + 3));
           const isSameNumber = highlightVal !== 0 && val === highlightVal;
+          const isTipBlocked = !!(tipBlockedCells && !isSameNumber && tipBlockedCells.has(`${r},${c}`));
           const isConflict = conflicts.has(`${r},${c}`);
 
           const isMistakeCell = !!(mistakeCell && mistakeCell[0] === r && mistakeCell[1] === c);
@@ -75,6 +102,8 @@ export const SudokuGrid = React.memo(function SudokuGrid({ state, onSelectCell, 
               isFixed={fixed[r][c]}
               isSelected={isSelected}
               isHighlighted={isHighlighted}
+              isTipBlocked={isTipBlocked}
+              tipMode={!!tipBlockedCells}
               isSameNumber={isSameNumber}
               isConflict={isConflict}
               row={r}
