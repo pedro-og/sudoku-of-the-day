@@ -195,7 +195,7 @@ export function useGameState(initialState: GameState) {
   // Auto-clear completion animations
   useEffect(() => {
     if (state.animatingCells.size > 0) {
-      const timer = setTimeout(() => dispatch({ type: 'CLEAR_ANIMATIONS' }), 1050);
+      const timer = setTimeout(() => dispatch({ type: 'CLEAR_ANIMATIONS' }), 650);
       return () => clearTimeout(timer);
     }
   }, [state.animatingCells]);

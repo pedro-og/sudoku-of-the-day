@@ -12,15 +12,25 @@
   min-width: 52px;
 }
 
-.button:hover:not(:disabled) {
-  background: var(--btn-bg-hover);
-}
-
 .button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
+.button:focus {
+  outline: none;
+}
+
+/* Inactive button states */
+.button:not(.active):hover:not(:disabled) {
+  background: var(--btn-bg-hover);
+}
+
+.button:not(.active):active:not(:disabled) {
+  background: var(--btn-bg-hover);
+}
+
+/* Active button - always show active color, even on hover/active */
 .active {
   background: var(--btn-bg-active);
 }

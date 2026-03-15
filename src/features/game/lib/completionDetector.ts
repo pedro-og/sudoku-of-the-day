@@ -86,7 +86,7 @@ export function getCellsToAnimate(
 
   if (current.completedRows) {
     current.completedRows.forEach(row => {
-      if (!previous?.completedRows.has(row)) {
+      if (!previous || !previous.completedRows.has(row)) {
         for (let c = 0; c < 9; c++) {
           toAnimate.add(`${row},${c}`);
         }
@@ -96,7 +96,7 @@ export function getCellsToAnimate(
 
   if (current.completedCols) {
     current.completedCols.forEach(col => {
-      if (!previous?.completedCols.has(col)) {
+      if (!previous || !previous.completedCols.has(col)) {
         for (let r = 0; r < 9; r++) {
           toAnimate.add(`${r},${col}`);
         }
@@ -106,7 +106,7 @@ export function getCellsToAnimate(
 
   if (current.completedBoxes) {
     current.completedBoxes.forEach(boxIndex => {
-      if (!previous?.completedBoxes.has(boxIndex)) {
+      if (!previous || !previous.completedBoxes.has(boxIndex)) {
         const boxRow = Math.floor(boxIndex / 3);
         const boxCol = boxIndex % 3;
         for (let r = boxRow * 3; r < boxRow * 3 + 3; r++) {
@@ -121,7 +121,7 @@ export function getCellsToAnimate(
   // New number completions
   if (current.completedNumbers && board) {
     current.completedNumbers.forEach(num => {
-      if (!previous?.completedNumbers.has(num)) {
+      if (!previous || !previous.completedNumbers.has(num)) {
         for (let r = 0; r < 9; r++) {
           for (let c = 0; c < 9; c++) {
             if (board[r][c] === num) {
@@ -134,7 +134,7 @@ export function getCellsToAnimate(
   }
 
   // Grid complete animation (all cells)
-  if (current.isGridComplete && !previous?.isGridComplete) {
+  if (current.isGridComplete && (!previous || !previous.isGridComplete)) {
     for (let r = 0; r < 9; r++) {
       for (let c = 0; c < 9; c++) {
         toAnimate.add(`${r},${c}`);
