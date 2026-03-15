@@ -1,0 +1,19 @@
+.button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--btn-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--btn-text);
+  transition: background var(--transition);
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: var(--btn-bg-hover);
+}

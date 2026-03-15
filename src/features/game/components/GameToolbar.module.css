@@ -1,0 +1,10 @@
+.toolbar {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  max-width: min(95vw, 480px);
+}
+
+.toolbar > * {
+  flex: 1;
+}

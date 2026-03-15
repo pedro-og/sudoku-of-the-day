@@ -1,0 +1,59 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 6px;
+  width: 100%;
+  max-width: min(95vw, 480px);
+}
+
+.button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--numpad-bg);
+  color: var(--numpad-text);
+  border-radius: var(--radius-sm);
+  padding: 8px 2px;
+  gap: 2px;
+  transition: background var(--transition), opacity var(--transition), box-shadow var(--transition);
+  min-height: 52px;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.button:active:not(:disabled):not([data-depleted]) {
+  background: var(--numpad-bg-hover);
+}
+
+.button[data-depleted] {
+  background: transparent;
+  color: var(--numpad-text-muted);
+  opacity: 0.35;
+  cursor: default;
+}
+
+.button[data-fast-fill] {
+  border-color: var(--accent);
+}
+
+.button[data-fast-fill][data-depleted] {
+  background: var(--numpad-bg);
+  border-color: transparent;
+}
+
+.button[data-animating] {
+  animation: numberComplete 1000ms ease-out forwards;
+}
+
+.number {
+  font-size: clamp(18px, 5vw, 26px);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.remaining {
+  font-size: clamp(9px, 2.2vw, 11px);
+  color: var(--numpad-text-muted);
+  line-height: 1;
+}

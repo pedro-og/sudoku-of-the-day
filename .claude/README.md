@@ -22,23 +22,17 @@ Welcome to Daily Sudoku! This folder contains comprehensive documentation design
 
 ---
 
-### 2. **ARCHITECTURE.md** — Technical Deep Dives 🏗️
-**Purpose:** Detailed technical design decisions and implementation details.
+### 2. **ARCHITECTURE_NEW.md** — Technical Deep Dives 🏗️
+**Purpose:** Updated feature-based architecture (March 2026 refactor) with detailed design decisions.
 
 **Read this to understand:**
+- Feature-based folder structure (src/features/, src/shared/)
 - Why we chose a reducer over Context API
 - Puzzle generation pipeline (seeded PRNG → backtracking → uniqueness check)
-- Conflict detection algorithm
-- Highlight logic (row, column, box, same-number)
-- Undo system (full snapshots)
-- Mistake system (reject + increment)
-- Theme system (CSS variables)
-- localStorage persistence strategy
-- Supabase optional integration
-- Keyboard input routing
-- i18n setup
-- Memoization strategy
-- Type safety philosophy
+- Conflict detection, highlighting, undo system, mistake tracking
+- Theme system (CSS variables), localStorage persistence, Supabase integration
+- Type safety philosophy and discriminated unions
+- Path aliases for clean imports
 
 **Audience:** Developers implementing features, AI assistants writing code, technical architects.
 
@@ -46,7 +40,26 @@ Welcome to Daily Sudoku! This folder contains comprehensive documentation design
 
 ---
 
-### 3. **REACT_BEST_PRACTICES.md** — Senior-Level Standards 🥇
+### 3. **PATTERNS.md** — Code Examples & Patterns 💻
+**Purpose:** Concrete implementation patterns with real code examples from the codebase.
+
+**Read this for:**
+- Reducer pattern (game state management)
+- Hook patterns (useGameState, useTheme, etc.)
+- Component patterns (feature-based structure)
+- Test patterns (Vitest + React Testing Library)
+- localStorage persistence patterns
+- CSS Modules & theming patterns
+- Keyboard input handling
+- Real examples from src/ folder
+
+**Audience:** Developers writing code, code reviewers, newcomers learning patterns.
+
+**Reading time:** 20–25 minutes.
+
+---
+
+### 4. **REACT_BEST_PRACTICES.md** — Senior-Level Standards 🥇
 **Purpose:** Production-grade React patterns and code quality standards.
 
 **Read this before writing any code:**
@@ -59,10 +72,6 @@ Welcome to Daily Sudoku! This folder contains comprehensive documentation design
 - Testing strategy (behavior over implementation)
 - Code style (explicit naming, comments for "why")
 - TypeScript best practices (strict mode, discriminated unions, avoid `any`)
-- Naming conventions (PascalCase for components, camelCase for functions)
-- File structure (mirror names to exports)
-- Common pitfalls (infinite loops, stale closures, missing cleanup)
-- Comprehensive checklist
 
 **Audience:** All developers, code reviewers, AI assistants writing code.
 
@@ -72,22 +81,38 @@ Welcome to Daily Sudoku! This folder contains comprehensive documentation design
 
 ---
 
-### 4. **DEVELOPMENT.md** — Running Locally & Contributing 👨‍💻
+### 5. **TESTING.md** — How to Test 🧪
+**Purpose:** Comprehensive guide to running tests, test types, patterns, and debugging.
+
+**Read this to:**
+- Run tests locally (`npm run test`, `npm run test:run`, `npm run test:coverage`)
+- Understand test types (unit, integration, component, snapshot)
+- Learn testing patterns (AAA, behavior-focused, edge cases, mocking)
+- Debug failed tests (timeouts, mismatches, random failures)
+- Check coverage reports
+- Write new tests (templates, best practices)
+- Pre-commit checklist
+
+**Current test suite:** 102 tests, 90%+ coverage on core logic, CI/CD integrated
+
+**Audience:** All developers, QA engineers, CI/CD maintainers.
+
+**Reading time:** 15–20 minutes for overview; 5–10 minutes per section.
+
+---
+
+### 6. **DEVELOPMENT.md** — Running Locally & Contributing 👨‍💻
 **Purpose:** Practical guide to setting up, running, debugging, and extending the project.
 
 **Read this to:**
 - Set up the project locally (`npm install`, `npm run dev`)
 - Understand the dev server (hot reload at localhost:5173)
 - Learn available npm scripts
-- Get a code walkthrough (puzzle generation, game state, highlighting, persistence, theme, keyboard input)
+- Get a code walkthrough (puzzle generation, game state, highlighting)
 - Add new features step-by-step
 - Debug using browser console, React DevTools, Performance tab
 - Profile performance and identify bottlenecks
-- Run tests (when ready)
-- Build for production
-- Deploy to Vercel
-- Troubleshoot common issues
-- Code review checklist
+- Build for production and deploy
 
 **Audience:** Developers working on features, CI/CD engineers, deployers.
 
@@ -95,7 +120,7 @@ Welcome to Daily Sudoku! This folder contains comprehensive documentation design
 
 ---
 
-### 5. **FEATURES.md** — Current & Roadmap 🗺️
+### 7. **FEATURES.md** — Current & Roadmap 🗺️
 **Purpose:** Catalog of implemented features, planned roadmap, and prioritization.
 
 **Read this to:**
@@ -116,36 +141,39 @@ Welcome to Daily Sudoku! This folder contains comprehensive documentation design
 
 ### For AI Assistants Writing New Code
 1. **Start with CONTEXT.md** — Understand principles
-2. **Skim ARCHITECTURE.md** — Know where code lives and why
-3. **Review REACT_BEST_PRACTICES.md** — Follow patterns
-4. **Reference DEVELOPMENT.md** — Debug & test locally
-5. **Check FEATURES.md** — Ensure alignment with roadmap
+2. **Read ARCHITECTURE_NEW.md** — Know the feature-based structure
+3. **Review PATTERNS.md** — See concrete code examples
+4. **Follow REACT_BEST_PRACTICES.md** — Apply patterns while coding
+5. **Reference TESTING.md** — Add tests alongside code
 
 ### For New Developers Onboarding
 1. **DEVELOPMENT.md** → Get project running locally
 2. **CONTEXT.md** → Understand the big picture
-3. **ARCHITECTURE.md** → Study specific subsystems you'll work on
+3. **ARCHITECTURE_NEW.md** → Learn the feature-based folder structure
 4. **REACT_BEST_PRACTICES.md** → Code standards before your first PR
-5. **Code walkthrough** → Review src/components/DailySudoku.tsx (entry point)
+5. **PATTERNS.md** → Study real code examples from src/
 
 ### For Feature Implementation
 1. **Check FEATURES.md** → Confirm feature is in roadmap
-2. **DEVELOPMENT.md** → Step-by-step "Adding a New Feature" section
-3. **REACT_BEST_PRACTICES.md** → Apply patterns while coding
-4. **Run locally** → `npm run dev`, test in browser
-5. **Code review checklist** → DEVELOPMENT.md end-of-file checklist
+2. **ARCHITECTURE_NEW.md** → Understand where it lives (src/features/x)
+3. **PATTERNS.md** → Find similar implementations to reference
+4. **REACT_BEST_PRACTICES.md** → Apply patterns while coding
+5. **TESTING.md** → Write tests alongside code
+6. **Run locally** → `npm run dev`, test in browser
 
-### For Performance Optimization
-1. **ARCHITECTURE.md** — "Performance Benchmarks" section
-2. **DEVELOPMENT.md** — "Performance Profiling" section
-3. **React DevTools Profiler** — Identify slow renders
-4. **REACT_BEST_PRACTICES.md** — "Performance" section (principles 6)
+### For Writing Tests
+1. **TESTING.md** — Commands, test types, patterns
+2. **PATTERNS.md** — See real test examples from codebase
+3. **Create test file** → Use template from TESTING.md
+4. **Run `npm run test`** — Watch mode development
+5. **Coverage report** → `npm run test:coverage` to identify gaps
 
 ### For Bug Fixes
 1. **DEVELOPMENT.md** — "Debugging Tips" section
-2. **ARCHITECTURE.md** — Understand the subsystem with the bug
-3. **Add a test** — Verify the bug exists, then fix it
-4. **Verify fix** — Ensure no regressions (run full test suite)
+2. **ARCHITECTURE_NEW.md** — Understand the subsystem with the bug
+3. **Write test first** — Verify the bug exists (TESTING.md)
+4. **Fix the code** — Make test pass
+5. **Run full suite** — `npm run test:run` to ensure no regressions
 
 ---
 
@@ -176,14 +204,18 @@ Welcome to Daily Sudoku! This folder contains comprehensive documentation design
 6. **Accessibility** — Keyboard-first, high contrast support planned
 7. **Testable** — Pure functions, reducer pattern, modular
 
-### File Organization
+### File Organization (Post-Refactor)
 ```
-src/lib/          ← Pure business logic (sudokuGenerator, validator, etc.)
-src/hooks/        ← React state management (useGameState, useTheme, etc.)
-src/components/   ← Presentational components (SudokuGrid, NumberPad, etc.)
-src/types/        ← Central type definitions
-src/i18n/         ← Translations
-.claude/          ← This documentation
+src/
+├── features/          ← Feature modules (feature-based architecture)
+│   ├── game/         ← Core Sudoku logic (components, hooks, lib)
+│   ├── daily/        ← Daily puzzle feature
+│   ├── practice/     ← Unlimited practice mode
+│   └── theme/        ← Dark/light theme
+├── shared/           ← Reusable primitives (components, hooks, lib)
+├── types/            ← Central type definitions
+├── i18n/             ← Translations
+.claude/              ← This documentation
 ```
 
 ### Deployment
@@ -288,25 +320,28 @@ describe('sudokuGenerator', () => {
 ## ❓ FAQ
 
 **Q: How do I run the project locally?**
-A: See DEVELOPMENT.md "Quick Start" section.
+A: See DEVELOPMENT.md "Quick Start" section or run `npm run dev`.
 
 **Q: What's the code style?**
-A: See REACT_BEST_PRACTICES.md sections 7–8 (Testing, Code Style).
+A: See REACT_BEST_PRACTICES.md + PATTERNS.md (real examples).
 
 **Q: How do I add a new feature?**
-A: See DEVELOPMENT.md "Adding a New Feature" section with examples.
+A: Check FEATURES.md, read ARCHITECTURE_NEW.md, follow PATTERNS.md examples.
 
-**Q: How do I test my changes?**
-A: See DEVELOPMENT.md "Common Tasks" section for `npm test`.
+**Q: How do I run tests?**
+A: See TESTING.md quick summary: `npm run test` (watch) or `npm run test:run` (once).
 
 **Q: Why is the puzzle the same for everyone?**
-A: See CONTEXT.md "Core Principles" section 1 (Deterministic Everything).
+A: See CONTEXT.md "Core Principles" (Deterministic Everything).
 
 **Q: How do I enable Supabase stats?**
-A: See .env.example, then ARCHITECTURE.md "Supabase Integration" section.
+A: See .env.example, then ARCHITECTURE_NEW.md "Supabase Integration" section.
 
 **Q: What should I read first?**
 A: CONTEXT.md — gives you the 30,000-foot view in 15 minutes.
+
+**Q: Where is the code organized?**
+A: Feature-based: src/features/ (game, daily, practice, theme) + src/shared/. See ARCHITECTURE_NEW.md.
 
 ---
 
@@ -314,12 +349,16 @@ A: CONTEXT.md — gives you the 30,000-foot view in 15 minutes.
 
 Refer to the appropriate documentation file:
 - **"How do I...?"** → DEVELOPMENT.md
-- **"Why did we choose...?"** → ARCHITECTURE.md or FEATURES.md
+- **"How do I test...?"** → TESTING.md
+- **"Why did we choose...?"** → ARCHITECTURE_NEW.md or FEATURES.md
 - **"What's the standard for...?"** → REACT_BEST_PRACTICES.md
+- **"Show me an example"** → PATTERNS.md
 - **"What's the big picture?"** → CONTEXT.md
 - **"Is this feature planned?"** → FEATURES.md
 
 ---
 
-**Last Updated:** 2026-03-06
-**Status:** AI-First, Production-Ready MVP
+**Last Updated:** 2026-03-15
+**Status:** AI-First, Production-Ready, Feature-Based Architecture
+**Test Coverage:** 102 tests, 90%+ on core logic
+**Bundle Size:** 94.17 kB gzip (target: < 100 kB)

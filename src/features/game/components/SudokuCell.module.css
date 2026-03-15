@@ -1,0 +1,108 @@
+.cell {
+  background: var(--cell-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: clamp(16px, 4.5vw, 28px);
+  cursor: pointer;
+  transition: background 100ms ease;
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  color: var(--cell-text-user);
+}
+
+/* Border logic for 3x3 box boundaries */
+.cell[data-box-right] {
+  border-right: 2px solid var(--cell-border-box);
+}
+
+.cell:not([data-box-right]) {
+  border-right: 1px solid var(--cell-border);
+}
+
+.cell[data-box-bottom] {
+  border-bottom: 2px solid var(--cell-border-box);
+}
+
+.cell:not([data-box-bottom]) {
+  border-bottom: 1px solid var(--cell-border);
+}
+
+/* Background states (priority order: conflict > selected > same-number > highlighted > tip-blocked) */
+.cell[data-conflict] {
+  background: var(--cell-bg-conflict);
+  color: var(--cell-text-error);
+}
+
+.cell[data-selected] {
+  background: var(--cell-bg-selected-vivid);
+  color: var(--cell-text-selected-vivid);
+}
+
+.cell[data-same-number]:not([data-selected]) {
+  background: var(--cell-bg-same-num);
+}
+
+.cell[data-highlighted]:not([data-selected]):not([data-same-number]) {
+  background: var(--cell-bg-highlight);
+}
+
+.cell[data-highlighted][data-tip-mode]:not([data-selected]):not([data-same-number]) {
+  background: var(--cell-bg-highlight-strong);
+}
+
+.cell[data-tip-blocked]:not([data-selected]):not([data-same-number]):not([data-highlighted]) {
+  background: var(--cell-bg-highlight);
+}
+
+/* Text colors */
+.cell[data-fixed] {
+  color: var(--cell-text-fixed);
+}
+
+.cell[data-selected][data-fixed] {
+  color: var(--cell-text-selected-vivid);
+}
+
+/* Mistake state */
+.cell[data-mistake] {
+  color: var(--cell-text-mistake);
+  opacity: 0.5;
+  animation: shake 1000ms ease-out;
+}
+
+/* Completion animation */
+.cell[data-animating] {
+  animation: completionFlash 1000ms ease-out forwards;
+}
+
+/* Notes display */
+.notesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  width: 100%;
+  height: 100%;
+  padding: 1px;
+}
+
+.note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(7px, 1.4vw, 10px);
+  color: var(--cell-text-notes);
+  line-height: 1;
+  font-weight: 500;
+  opacity: 0;
+}
+
+.note[data-visible] {
+  opacity: 1;
+}
+
+.note[data-selected] {
+  color: var(--cell-text-selected-vivid);
+}
