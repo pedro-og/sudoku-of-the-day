@@ -10,23 +10,28 @@ interface ShareResultButtonProps {
 
 export function ShareResultButton({ shareData }: ShareResultButtonProps) {
   const { t } = useTranslation();
-  const [status, setStatus] = useState<'idle' | 'copied' | 'failed'>('idle');
+  const [status, setStatus] = useState<'idle' | 'copying' | 'copied' | 'failed'>('idle');
 
   const labels = {
     title: t('share.title'),
     mistake: t('share.mistake'),
     mistakes: t('share.mistakes'),
     time: t('share.time'),
+    streak: t('share.streak'),
+    percentile: t('globalStats.percentile'),
     domain: t('share.domain'),
   };
 
   async function handleShare() {
+    if (status === 'copying') return;
+    setStatus('copying');
     const success = await copyShareText(shareData, labels);
     setStatus(success ? 'copied' : 'failed');
     setTimeout(() => setStatus('idle'), 2500);
   }
 
   const label =
+    status === 'copying' ? t('share.button') :
     status === 'copied' ? t('share.copied') :
     status === 'failed' ? t('share.failed') :
     t('share.button');
@@ -35,9 +40,10 @@ export function ShareResultButton({ shareData }: ShareResultButtonProps) {
     <button
       className={css.button}
       onClick={handleShare}
+      disabled={status === 'copying'}
       data-copied={status === 'copied' || undefined}
     >
-      {status === 'idle' ? '📤 ' : status === 'copied' ? '✅ ' : '❌ '}
+      {status === 'idle' || status === 'copying' ? '📤 ' : status === 'copied' ? '✅ ' : '❌ '}
       {label}
     </button>
   );

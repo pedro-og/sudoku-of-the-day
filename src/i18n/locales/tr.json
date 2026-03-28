@@ -29,8 +29,10 @@
   "complete": {
     "title": "Bulmaca Tamamlandı!",
     "subtitle": "Tebrikler!",
-    "time": "Zaman",
-    "mistakes": "Hatalar",
+    "time": "Süreniz",
+    "avgTime": "Ort. Süre",
+    "mistakes": "Hatalarınız",
+    "solveRate": "Çözme Oranı",
     "streak": "Dizi",
     "showResults": "Sonuçları Göster"
   },
@@ -42,6 +44,7 @@
     "mistake": "Hata",
     "mistakes": "Hatalar",
     "time": "Zaman",
+    "streak": "Seri",
     "domain": "sudoku-of-the-day.com"
   },
   "stats": {
@@ -51,6 +54,27 @@
     "avgTime": "Ortalama Zaman",
     "loading": "İstatistikler yükleniyor...",
     "unavailable": "İstatistikler kullanılamıyor"
+  },
+  "globalStats": {
+    "title": "Nasıl Karşılaştırılıyorsun",
+    "percentile": "Oyuncuların %{{percent}}'inden hızlı",
+    "totalSolvers": "Çözdü",
+    "totalFailures": "Başarısız",
+    "avgSolveTime": "Ort. Çözüm Süresi",
+    "avgFailMistakes": "Ort. Hata Sayısı",
+    "noData": "Henüz yeterli oyuncu yok — ilklerden biri ol!",
+    "streakTitle": "Seri Sıralaması",
+    "streakRank": "Sıralamanız: #{{rank}}",
+    "streakOf": "{{count}} gün seri",
+    "you": "Sen",
+    "noStreaks": "Henüz seri yok — bugün başla!"
+  },
+  "leaderboard": {
+    "speedTab": "Hız",
+    "streakTab": "Seriler",
+    "noSpeed": "Henüz kimse çözmedi — ilk sen ol!",
+    "speedRank": "Sıralamanız: #{{rank}}",
+    "fastestToday": "Sudoku #{{number}}'yu şu ana kadar en hızlı tamamlayan sensin!"
   },
   "theme": {
     "toggleDark": "Koyu mod",

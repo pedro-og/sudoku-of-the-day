@@ -1,4 +1,10 @@
-import { computeDisplayStats } from '../statsApi';
+import {
+  computeDisplayStats,
+  ensurePlayer,
+  recordCompletion,
+  fetchPuzzleStats,
+  fetchStreakLeaderboard,
+} from '../statsApi';
 import type { DailyStats } from '@/types';
 
 describe('computeDisplayStats', () => {
@@ -66,5 +72,41 @@ describe('computeDisplayStats', () => {
     };
     const result = computeDisplayStats(stats);
     expect(result.solvedPercent).toBe('33%');
+  });
+});
+
+// V2 API — graceful degradation when Supabase is not configured
+describe('V2 API graceful degradation', () => {
+  const origUrl = import.meta.env.VITE_SUPABASE_URL;
+  const origKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  beforeEach(() => {
+    import.meta.env.VITE_SUPABASE_URL = '';
+    import.meta.env.VITE_SUPABASE_ANON_KEY = '';
+  });
+
+  afterAll(() => {
+    import.meta.env.VITE_SUPABASE_URL = origUrl;
+    import.meta.env.VITE_SUPABASE_ANON_KEY = origKey;
+  });
+
+  it('ensurePlayer returns void when not configured', async () => {
+    await expect(ensurePlayer('test-uuid')).resolves.toBeUndefined();
+  });
+
+  it('recordCompletion returns void when not configured', async () => {
+    await expect(
+      recordCompletion('test-uuid', 1, 300, 1, true, '2026-03-15')
+    ).resolves.toBeUndefined();
+  });
+
+  it('fetchPuzzleStats returns null when not configured', async () => {
+    const result = await fetchPuzzleStats(1, 300);
+    expect(result).toBeNull();
+  });
+
+  it('fetchStreakLeaderboard returns null when not configured', async () => {
+    const result = await fetchStreakLeaderboard('test-uuid');
+    expect(result).toBeNull();
   });
 });

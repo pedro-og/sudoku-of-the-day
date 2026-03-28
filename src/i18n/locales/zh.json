@@ -29,8 +29,10 @@
   "complete": {
     "title": "谜题完成!",
     "subtitle": "恭喜!",
-    "time": "时间",
-    "mistakes": "错误",
+    "time": "你的时间",
+    "avgTime": "平均时间",
+    "mistakes": "你的错误",
+    "solveRate": "通过率",
     "streak": "连续",
     "showResults": "显示结果"
   },
@@ -42,6 +44,7 @@
     "mistake": "错误",
     "mistakes": "错误",
     "time": "时间",
+    "streak": "连续记录",
     "domain": "sudoku-of-the-day.com"
   },
   "stats": {
@@ -51,6 +54,27 @@
     "avgTime": "平均时间",
     "loading": "加载统计中...",
     "unavailable": "统计数据不可用"
+  },
+  "globalStats": {
+    "title": "你的排名",
+    "percentile": "快于{{percent}}%的玩家",
+    "totalSolvers": "已解决",
+    "totalFailures": "失败",
+    "avgSolveTime": "平均解题���间",
+    "avgFailMistakes": "平均错误数",
+    "noData": "玩家还不够多 — 成为第一批!",
+    "streakTitle": "连续记录排行榜",
+    "streakRank": "你的排名: #{{rank}}",
+    "streakOf": "{{count}} 天连续",
+    "you": "���",
+    "noStreaks": "还没有连续记录 — 今天开始吧!"
+  },
+  "leaderboard": {
+    "speedTab": "速度",
+    "streakTab": "连续记录",
+    "noSpeed": "还没有人完成 — 成为第一个!",
+    "speedRank": "你的排名: #{{rank}}",
+    "fastestToday": "你是目前完成数独 #{{number}} 最快的玩家!"
   },
   "theme": {
     "toggleDark": "深色模式",

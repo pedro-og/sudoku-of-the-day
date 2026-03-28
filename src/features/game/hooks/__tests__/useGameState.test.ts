@@ -49,7 +49,7 @@ function createTestState(overrides: Partial<GameState> = {}): GameState {
     isComplete: false,
     isGameOver: false,
     elapsedSeconds: 0,
-    startTime: null,
+
     puzzleDate: '2026-03-15',
     puzzleNumber: 74,
     mistakeCell: null,
@@ -57,6 +57,7 @@ function createTestState(overrides: Partial<GameState> = {}): GameState {
     animatingCells: new Set(),
     previousCompletions: detectCompletions(board),
     gameMode: 'daily',
+    autoSolved: false,
     ...overrides,
   };
 }
@@ -329,7 +330,7 @@ describe('useGameState', () => {
         isComplete: false,
         isGameOver: false,
         elapsedSeconds: 100,
-        startTime: null,
+    
         puzzleDate: '2026-03-15',
         puzzleNumber: 74,
         mistakeCell: null,
@@ -337,6 +338,7 @@ describe('useGameState', () => {
         animatingCells: new Set(),
         previousCompletions: detectCompletions(board),
         gameMode: 'daily',
+        autoSolved: false,
       };
 
       const { result } = renderHook(() => useGameState(state));

@@ -1,7 +1,8 @@
-import { useCallback, useReducer, useEffect } from 'react';
+import { useCallback, useReducer, useEffect, useRef } from 'react';
 import type { GameState, CellValue } from '@/types';
 import { isBoardComplete, cloneBoard } from '../lib/sudokuValidator';
 import { detectCompletions, getCellsToAnimate } from '../lib/completionDetector';
+
 
 type Action =
   | { type: 'SELECT_CELL'; row: number; col: number }
@@ -12,14 +13,15 @@ type Action =
   | { type: 'TICK'; elapsed: number }
   | { type: 'RESET'; state: GameState }
   | { type: 'CLEAR_MISTAKE' }
-  | { type: 'CLEAR_ANIMATIONS' };
+  | { type: 'CLEAR_ANIMATIONS' }
+  | { type: 'AUTO_SOLVE' };
 
 interface HistoryEntry {
   board: GameState['board'];
   notes: GameState['notes'];
 }
 
-type ReducerState = GameState & { history: HistoryEntry[] };
+type ReducerState = GameState & { history: HistoryEntry[]; solvedCount: number };
 
 function cloneNotes(notes: GameState['notes']): GameState['notes'] {
   return notes.map(row => row.map(cell => new Set(cell)));
@@ -28,7 +30,7 @@ function cloneNotes(notes: GameState['notes']): GameState['notes'] {
 function reducer(state: ReducerState, action: Action): ReducerState {
   switch (action.type) {
     case 'RESET':
-      return { ...action.state, history: [] };
+      return { ...action.state, history: [], solvedCount: 0 };
 
     case 'SELECT_CELL': {
       if (state.isComplete || state.isGameOver) return state;
@@ -58,11 +60,20 @@ function reducer(state: ReducerState, action: Action): ReducerState {
     case 'UNDO': {
       if (state.history.length === 0) return state;
       const prev = state.history[state.history.length - 1];
+      let restoredSolvedCount = 0;
+      for (let r = 0; r < 9; r++) {
+        for (let c = 0; c < 9; c++) {
+          if (!state.fixed[r][c] && prev.board[r][c] !== 0 && prev.board[r][c] === state.solution[r][c]) {
+            restoredSolvedCount++;
+          }
+        }
+      }
       return {
         ...state,
         board: prev.board,
         notes: prev.notes,
         history: state.history.slice(0, -1),
+        solvedCount: restoredSolvedCount,
       };
     }
 
@@ -136,6 +147,7 @@ function reducer(state: ReducerState, action: Action): ReducerState {
         mistakeValue,
         animatingCells: cellsToAnimate,
         previousCompletions: currentCompletions,
+        solvedCount: isCorrect ? state.solvedCount + 1 : state.solvedCount,
       };
     }
 
@@ -144,6 +156,18 @@ function reducer(state: ReducerState, action: Action): ReducerState {
 
     case 'CLEAR_ANIMATIONS':
       return { ...state, animatingCells: new Set() };
+
+    case 'AUTO_SOLVE': {
+      if (state.isComplete || state.isGameOver) return state;
+      const solvedBoard = state.solution.map(row => [...row]) as GameState['board'];
+      return {
+        ...state,
+        board: solvedBoard,
+        isComplete: true,
+        autoSolved: true,
+        notes: state.notes.map(row => row.map(() => new Set<number>())),
+      };
+    }
 
     default:
       return state;
@@ -154,7 +178,13 @@ export function useGameState(initialState: GameState) {
   const [state, dispatch] = useReducer(reducer, {
     ...initialState,
     history: [],
+    solvedCount: 0,
   });
+
+  // Track timestamps of correct cell fills for anti-bot honeypot.
+  // Stored as a ref (not state) — transient metric, doesn't affect rendering.
+  const lastCorrectFillTimeRef = useRef<number | null>(null);
+  const cellIntervalsRef = useRef<number[]>([]);
 
   const selectCell = useCallback((row: number, col: number) => {
     dispatch({ type: 'SELECT_CELL', row, col });
@@ -163,6 +193,21 @@ export function useGameState(initialState: GameState) {
   const enterNumber = useCallback((num: CellValue) => {
     dispatch({ type: 'ENTER_NUMBER', num });
   }, []);
+
+  // Record inter-cell interval whenever a correct fill happens.
+  // solvedCount is maintained by the reducer — no board scan needed.
+  const prevSolvedCountRef = useRef(0);
+  useEffect(() => {
+    if (state.solvedCount > prevSolvedCountRef.current) {
+      const now = performance.now();
+      if (lastCorrectFillTimeRef.current !== null) {
+        const interval = Math.round(now - lastCorrectFillTimeRef.current);
+        cellIntervalsRef.current.push(interval);
+      }
+      lastCorrectFillTimeRef.current = now;
+    }
+    prevSolvedCountRef.current = state.solvedCount;
+  }, [state.solvedCount]);
 
   const erase = useCallback(() => {
     dispatch({ type: 'ERASE' });
@@ -181,7 +226,14 @@ export function useGameState(initialState: GameState) {
   }, []);
 
   const reset = useCallback((newState: GameState) => {
+    lastCorrectFillTimeRef.current = null;
+    cellIntervalsRef.current = [];
+    prevSolvedCountRef.current = 0;
     dispatch({ type: 'RESET', state: newState });
+  }, []);
+
+  const autoSolve = useCallback(() => {
+    dispatch({ type: 'AUTO_SOLVE' });
   }, []);
 
   // Auto-clear mistake visual after animation
@@ -200,5 +252,5 @@ export function useGameState(initialState: GameState) {
     }
   }, [state.animatingCells]);
 
-  return { state, selectCell, enterNumber, erase, togglePencil, undo, tick, reset };
+  return { state, selectCell, enterNumber, erase, togglePencil, undo, tick, reset, autoSolve, cellIntervalsRef };
 }

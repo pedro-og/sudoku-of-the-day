@@ -1,3 +1,7 @@
+.header {
+  text-align: center;
+}
+
 .icon {
   font-size: 40px;
   margin-bottom: 8px;
@@ -15,10 +19,20 @@
   color: var(--text-secondary);
 }
 
+.puzzleNumber {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
 .statsGrid {
   display: grid;
   gap: 12px;
   width: 100%;
+}
+
+.statsGrid1 {
+  grid-template-columns: 1fr;
 }
 
 .statsGrid2 {
@@ -29,9 +43,21 @@
   grid-template-columns: repeat(3, 1fr);
 }
 
-.puzzleNumber {
-  font-size: 13px;
-  color: var(--text-muted);
+.percentileMessage {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  text-align: center;
+}
+
+.fastestMessage {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  text-align: center;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-light);
 }
 
 .countdownBox {

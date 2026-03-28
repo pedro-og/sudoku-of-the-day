@@ -5,6 +5,8 @@ interface ShareTextLabels {
   mistake: string;
   mistakes: string;
   time: string;
+  streak: string;
+  percentile: string;
   domain: string;
 }
 
@@ -14,41 +16,26 @@ function formatTime(seconds: number): string {
   return `${m}:${s}`;
 }
 
-function buildGrid(data: ShareData): string {
-  const rows: string[] = [];
-  for (let r = 0; r < 9; r++) {
-    let row = '';
-    for (let c = 0; c < 9; c++) {
-      const val = data.board[r][c];
-      if (val === 0) {
-        row += '⬜';
-      } else if (val === data.solution[r][c]) {
-        row += '🟩';
-      } else {
-        row += '🟥';
-      }
-    }
-    rows.push(row);
-  }
-  return rows.join('\n');
-}
-
 export function buildShareText(data: ShareData, labels: ShareTextLabels): string {
-  const grid = buildGrid(data);
-  const mistakeLabel = data.mistakes === 1 ? `${labels.mistake}: 1` : `${labels.mistakes}: ${data.mistakes}`;
+  const mistakeLabel = data.mistakes === 1 ? `${labels.mistake}: 1` : `${labels.mistakes}: ${data.mistakes}/3`;
   const time = formatTime(data.elapsedSeconds);
 
-  return [
+  const lines = [
     `${labels.title} #${data.puzzleNumber}`,
     '',
-    grid,
-    '',
-    mistakeLabel,
     `${labels.time}: ${time}`,
-    `🔥 Streak: ${data.streak}`,
-    '',
-    labels.domain,
-  ].join('\n');
+  ];
+
+  if (data.percentile != null) {
+    lines.push(labels.percentile.replace('{{percent}}', String(data.percentile)));
+  }
+
+  lines.push(mistakeLabel);
+  lines.push(`${labels.streak}: ${data.streak}`);
+  lines.push('');
+  lines.push(labels.domain);
+
+  return lines.join('\n');
 }
 
 export async function copyShareText(data: ShareData, labels: ShareTextLabels): Promise<boolean> {
@@ -57,19 +44,6 @@ export async function copyShareText(data: ShareData, labels: ShareTextLabels): P
     await navigator.clipboard.writeText(text);
     return true;
   } catch {
-    try {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.focus();
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-      return true;
-    } catch {
-      return false;
-    }
+    return false;
   }
 }

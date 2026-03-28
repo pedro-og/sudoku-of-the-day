@@ -29,8 +29,10 @@
   "complete": {
     "title": "Puzzle Completo!",
     "subtitle": "Parabéns!",
-    "time": "Tempo",
-    "mistakes": "Erros",
+    "time": "Seu Tempo",
+    "avgTime": "Tempo Médio",
+    "mistakes": "Seus Erros",
+    "solveRate": "Taxa de Acerto",
     "streak": "Sequência",
     "showResults": "Ver Resultados"
   },
@@ -42,6 +44,7 @@
     "mistake": "Erro",
     "mistakes": "Erros",
     "time": "Tempo",
+    "streak": "Sequência",
     "domain": "sudoku-of-the-day.com"
   },
   "stats": {
@@ -51,6 +54,27 @@
     "avgTime": "Tempo Médio",
     "loading": "Carregando estatísticas...",
     "unavailable": "Estatísticas indisponíveis"
+  },
+  "globalStats": {
+    "title": "Como Você se Compara",
+    "percentile": "Mais rápido que {{percent}}% dos jogadores",
+    "totalSolvers": "Resolveram",
+    "totalFailures": "Falharam",
+    "avgSolveTime": "Tempo Médio",
+    "avgFailMistakes": "Média de Erros",
+    "noData": "Poucos jogadores ainda — seja um dos primeiros!",
+    "streakTitle": "Ranking de Sequências",
+    "streakRank": "Sua posição: #{{rank}}",
+    "streakOf": "{{count}} dia(s) seguido(s)",
+    "you": "Você",
+    "noStreaks": "Nenhuma sequência ainda — comece a sua hoje!"
+  },
+  "leaderboard": {
+    "speedTab": "Velocidade",
+    "streakTab": "Sequências",
+    "noSpeed": "Nenhum jogador ainda — seja o primeiro!",
+    "speedRank": "Sua posição: #{{rank}}",
+    "fastestToday": "Você é o mais rápido a completar o Sudoku #{{number}} até o momento!"
   },
   "theme": {
     "toggleDark": "Modo escuro",

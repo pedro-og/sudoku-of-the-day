@@ -1,29 +1,12 @@
 import { buildShareText } from '../shareFormatter';
-import type { Board, FixedCells, ShareData } from '@/types';
-
-function emptyBoard(): Board {
-  return Array.from({ length: 9 }, () => Array(9).fill(0)) as Board;
-}
+import type { ShareData } from '@/types';
 
 function createShareData(overrides: Partial<ShareData> = {}): ShareData {
-  const solution = emptyBoard();
-  // Fill solution with valid values for test
-  for (let r = 0; r < 9; r++) {
-    for (let c = 0; c < 9; c++) {
-      solution[r][c] = ((r * 3 + Math.floor(r / 3) + c) % 9 + 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
-    }
-  }
-  const board = solution.map(row => [...row]) as Board;
-  const fixed: FixedCells = board.map(row => row.map(() => true));
-
   return {
     puzzleNumber: 42,
     mistakes: 0,
     elapsedSeconds: 125,
     streak: 5,
-    board,
-    solution,
-    fixed,
     ...overrides,
   };
 }
@@ -33,6 +16,8 @@ const labels = {
   mistake: 'Mistake',
   mistakes: 'Mistakes',
   time: 'Time',
+  streak: 'Streak',
+  percentile: 'Faster than {{percent}}% of players',
   domain: 'sudoku-of-the-day.com',
 };
 
@@ -59,7 +44,7 @@ describe('buildShareText', () => {
 
   it('uses plural "Mistakes" for multiple mistakes', () => {
     const text = buildShareText(createShareData({ mistakes: 2 }), labels);
-    expect(text).toContain('Mistakes: 2');
+    expect(text).toContain('Mistakes: 2/3');
   });
 
   it('includes streak', () => {
@@ -72,17 +57,13 @@ describe('buildShareText', () => {
     expect(text).toContain('sudoku-of-the-day.com');
   });
 
-  it('uses green emoji for correct cells', () => {
-    const data = createShareData();
-    const text = buildShareText(data, labels);
-    expect(text).toContain('🟩');
+  it('includes percentile when provided', () => {
+    const text = buildShareText(createShareData({ percentile: 85 }), labels);
+    expect(text).toContain('Faster than 85% of players');
   });
 
-  it('uses white emoji for empty cells', () => {
-    const data = createShareData();
-    // Make some cells empty
-    data.board[0][0] = 0;
-    const text = buildShareText(data, labels);
-    expect(text).toContain('⬜');
+  it('omits percentile when not provided', () => {
+    const text = buildShareText(createShareData(), labels);
+    expect(text).not.toContain('Faster than');
   });
 });

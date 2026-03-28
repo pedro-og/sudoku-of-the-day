@@ -1,28 +1,35 @@
-import type { DailyStats } from '@/types';
+import type { DailyStats, PuzzleStatsResponse, StreakLeaderboardResponse, SpeedLeaderboardResponse } from '@/types';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
 const TABLE = 'daily_stats';
+const MIN_PLAY_TIME_SECONDS = 30;
+
+function getUrl(): string {
+  return import.meta.env.VITE_SUPABASE_URL ?? '';
+}
+
+function getKey(): string {
+  return import.meta.env.VITE_SUPABASE_ANON_KEY ?? '';
+}
 
 function isConfigured(): boolean {
-  return Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
+  return Boolean(getUrl() && getKey());
 }
 
 function headers() {
+  const key = getKey();
   return {
     'Content-Type': 'application/json',
-    apikey: SUPABASE_ANON_KEY!,
-    Authorization: `Bearer ${SUPABASE_ANON_KEY!}`,
+    apikey: key,
+    Authorization: `Bearer ${key}`,
     Prefer: 'return=representation',
   };
 }
 
-/** Fetch current stats for a puzzle. Returns null if backend is unavailable. */
 export async function fetchDailyStats(puzzleNumber: number): Promise<DailyStats | null> {
   if (!isConfigured()) return null;
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/${TABLE}?puzzle_number=eq.${puzzleNumber}&select=*`,
+      `${getUrl()}/rest/v1/${TABLE}?puzzle_number=eq.${puzzleNumber}&select=*`,
       { headers: headers() }
     );
     if (!res.ok) return null;
@@ -33,65 +40,139 @@ export async function fetchDailyStats(puzzleNumber: number): Promise<DailyStats 
   }
 }
 
-/**
- * Upsert a "player started" event.
- * Called once when the user first loads today's puzzle.
- * We guard with localStorage to avoid double-counting on page refresh.
- */
 export async function recordPlayerStarted(puzzleNumber: number): Promise<void> {
   if (!isConfigured()) return;
   const key = `daily-sudoku:started:${puzzleNumber}`;
-  if (localStorage.getItem(key)) return; // already recorded
-  try {
-    // Upsert: increment players_started. Uses Postgres RPC or a plain upsert.
-    await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, {
-      method: 'POST',
-      headers: { ...headers(), Prefer: 'resolution=merge-duplicates' },
-      body: JSON.stringify({
-        puzzle_number: puzzleNumber,
-        players_started: 1,
-        players_solved: 0,
-        total_completion_time: 0,
-      }),
-    });
-    // NOTE: For proper atomic increments you'd use a Postgres function (RPC).
-    // This simplified version inserts a row; in production use an RPC like:
-    //   supabase.rpc('increment_started', { p_puzzle: puzzleNumber })
-    localStorage.setItem(key, '1');
-  } catch {
-    // Fail silently — stats are best-effort
-  }
-}
-
-/**
- * Record that this user solved the puzzle.
- * Called once upon successful completion.
- */
-export async function recordPuzzleSolved(
-  puzzleNumber: number,
-  elapsedSeconds: number
-): Promise<void> {
-  if (!isConfigured()) return;
-  const key = `daily-sudoku:solved:${puzzleNumber}`;
   if (localStorage.getItem(key)) return;
   try {
-    await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, {
+    await fetch(`${getUrl()}/rest/v1/rpc/increment_player_started`, {
       method: 'POST',
-      headers: { ...headers(), Prefer: 'resolution=merge-duplicates' },
+      headers: headers(),
+      body: JSON.stringify({ p_puzzle_number: puzzleNumber }),
+    });
+    localStorage.setItem(key, '1');
+  } catch {
+    // NOP
+  }
+}
+
+
+export async function ensurePlayer(playerId: string): Promise<void> {
+  if (!isConfigured()) return;
+  const key = `daily-sudoku:player-ensured`;
+  if (localStorage.getItem(key)) return;
+  try {
+    await fetch(`${getUrl()}/rest/v1/rpc/ensure_player`, {
+      method: 'POST',
+      headers: headers(),
+      body: JSON.stringify({ p_id: playerId }),
+    });
+    localStorage.setItem(key, '1');
+  } catch {
+    // NOP
+  }
+}
+
+export async function recordCompletion(
+  playerId: string,
+  puzzleNumber: number,
+  elapsedSeconds: number,
+  mistakes: number,
+  solved: boolean,
+  puzzleDate: string,
+  cellIntervals: number[]
+): Promise<void> {
+  if (!isConfigured()) return;
+
+  if (elapsedSeconds < MIN_PLAY_TIME_SECONDS) return;
+
+  const key = `daily-sudoku:completion:${puzzleNumber}`;
+  if (localStorage.getItem(key)) return;
+  try {
+    await fetch(`${getUrl()}/rest/v1/rpc/record_completion`, {
+      method: 'POST',
+      headers: headers(),
       body: JSON.stringify({
-        puzzle_number: puzzleNumber,
-        players_started: 0,
-        players_solved: 1,
-        total_completion_time: elapsedSeconds,
+        p_player_id: playerId,
+        p_puzzle_number: puzzleNumber,
+        p_elapsed_seconds: elapsedSeconds,
+        p_mistakes: mistakes,
+        p_solved: solved,
+        p_puzzle_date: puzzleDate,
+        p_cell_intervals: cellIntervals,
       }),
     });
     localStorage.setItem(key, '1');
   } catch {
-    // Fail silently
+    // NOP
   }
 }
 
-/** Derive human-readable stats from raw DB row. */
+export async function fetchPuzzleStats(
+  puzzleNumber: number,
+  elapsedSeconds: number
+): Promise<PuzzleStatsResponse | null> {
+  if (!isConfigured()) return null;
+  try {
+    const res = await fetch(`${getUrl()}/rest/v1/rpc/get_puzzle_stats`, {
+      method: 'POST',
+      headers: headers(),
+      body: JSON.stringify({
+        p_puzzle_number: puzzleNumber,
+        p_elapsed_seconds: elapsedSeconds,
+      }),
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchSpeedLeaderboard(
+  playerId: string,
+  puzzleNumber: number,
+  limit: number = 10
+): Promise<SpeedLeaderboardResponse | null> {
+  if (!isConfigured()) return null;
+  try {
+    const res = await fetch(`${getUrl()}/rest/v1/rpc/get_speed_leaderboard`, {
+      method: 'POST',
+      headers: headers(),
+      body: JSON.stringify({
+        p_player_id: playerId,
+        p_puzzle_number: puzzleNumber,
+        p_limit: limit,
+      }),
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchStreakLeaderboard(
+  playerId: string,
+  limit: number = 10
+): Promise<StreakLeaderboardResponse | null> {
+  if (!isConfigured()) return null;
+  try {
+    const res = await fetch(`${getUrl()}/rest/v1/rpc/get_streak_leaderboard`, {
+      method: 'POST',
+      headers: headers(),
+      body: JSON.stringify({
+        p_player_id: playerId,
+        p_limit: limit,
+      }),
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
 export function computeDisplayStats(stats: DailyStats): {
   playersToday: string;
   solvedPercent: string;

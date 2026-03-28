@@ -29,8 +29,10 @@
   "complete": {
     "title": "パズル完成!",
     "subtitle": "おめでとうございます!",
-    "time": "時間",
-    "mistakes": "ミス",
+    "time": "あなたの時間",
+    "avgTime": "平均時間",
+    "mistakes": "あなたのミス",
+    "solveRate": "正解率",
     "streak": "連続",
     "showResults": "結果を表示"
   },
@@ -42,6 +44,7 @@
     "mistake": "ミス",
     "mistakes": "ミス",
     "time": "時間",
+    "streak": "連続記録",
     "domain": "sudoku-of-the-day.com"
   },
   "stats": {
@@ -51,6 +54,27 @@
     "avgTime": "平均時間",
     "loading": "統計を読み込み中...",
     "unavailable": "統計は利用できません"
+  },
+  "globalStats": {
+    "title": "あなたの順位",
+    "percentile": "プレイヤーの{{percent}}%より速い",
+    "totalSolvers": "クリア",
+    "totalFailures": "失敗",
+    "avgSolveTime": "平均クリア時間",
+    "avgFailMistakes": "平均ミス数",
+    "noData": "まだプレイヤーが少ないです — 最初の一人になろう!",
+    "streakTitle": "連続記録ランキング",
+    "streakRank": "あなたの順位: #{{rank}}",
+    "streakOf": "{{count}} 日連続",
+    "you": "あなた",
+    "noStreaks": "まだ連続記録はありません — 今日から始めよう!"
+  },
+  "leaderboard": {
+    "speedTab": "スピード",
+    "streakTab": "連続記録",
+    "noSpeed": "まだ誰もクリアしていません — 最初の一人になろう!",
+    "speedRank": "あなたの順位: #{{rank}}",
+    "fastestToday": "あなたは数独 #{{number}} を最速でクリアしました!"
   },
   "theme": {
     "toggleDark": "ダークモード",

@@ -28,6 +28,15 @@ Opens browser at `http://localhost:5173`.
 
 **Hot reload:** Edit any file → browser auto-refreshes.
 
+### Access from Mobile (same Wi-Fi)
+```bash
+npm run dev -- --host
+```
+
+This exposes the dev server on your local network. You'll see a `Network: http://192.168.x.x:5173` URL — open it on your phone.
+
+> **Note:** The `--` is required so the `--host` flag is forwarded to Vite (not consumed by npm).
+
 ---
 
 ## Available Scripts

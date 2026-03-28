@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- English (default) -->
+  <url>
+    <loc>https://sudoku-of-the-day.com/</loc>
+    <xhtml:link rel="alternate" hreflang="en"      href="https://sudoku-of-the-day.com/"/>
+    <xhtml:link rel="alternate" hreflang="pt"      href="https://sudoku-of-the-day.com/pt/"/>
+    <xhtml:link rel="alternate" hreflang="es"      href="https://sudoku-of-the-day.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="de"      href="https://sudoku-of-the-day.com/de/"/>
+    <xhtml:link rel="alternate" hreflang="fr"      href="https://sudoku-of-the-day.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="ja"      href="https://sudoku-of-the-day.com/ja/"/>
+    <xhtml:link rel="alternate" hreflang="zh"      href="https://sudoku-of-the-day.com/zh/"/>
+    <xhtml:link rel="alternate" hreflang="tr"      href="https://sudoku-of-the-day.com/tr/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sudoku-of-the-day.com/"/>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Portuguese (Brazil) -->
+  <url>
+    <loc>https://sudoku-of-the-day.com/pt/</loc>
+    <xhtml:link rel="alternate" hreflang="en"      href="https://sudoku-of-the-day.com/"/>
+    <xhtml:link rel="alternate" hreflang="pt"      href="https://sudoku-of-the-day.com/pt/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sudoku-of-the-day.com/"/>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Spanish -->
+  <url>
+    <loc>https://sudoku-of-the-day.com/es/</loc>
+    <xhtml:link rel="alternate" hreflang="en"      href="https://sudoku-of-the-day.com/"/>
+    <xhtml:link rel="alternate" hreflang="es"      href="https://sudoku-of-the-day.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sudoku-of-the-day.com/"/>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- German -->
+  <url>
+    <loc>https://sudoku-of-the-day.com/de/</loc>
+    <xhtml:link rel="alternate" hreflang="en"      href="https://sudoku-of-the-day.com/"/>
+    <xhtml:link rel="alternate" hreflang="de"      href="https://sudoku-of-the-day.com/de/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sudoku-of-the-day.com/"/>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- French -->
+  <url>
+    <loc>https://sudoku-of-the-day.com/fr/</loc>
+    <xhtml:link rel="alternate" hreflang="en"      href="https://sudoku-of-the-day.com/"/>
+    <xhtml:link rel="alternate" hreflang="fr"      href="https://sudoku-of-the-day.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sudoku-of-the-day.com/"/>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Japanese -->
+  <url>
+    <loc>https://sudoku-of-the-day.com/ja/</loc>
+    <xhtml:link rel="alternate" hreflang="en"      href="https://sudoku-of-the-day.com/"/>
+    <xhtml:link rel="alternate" hreflang="ja"      href="https://sudoku-of-the-day.com/ja/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sudoku-of-the-day.com/"/>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Chinese -->
+  <url>
+    <loc>https://sudoku-of-the-day.com/zh/</loc>
+    <xhtml:link rel="alternate" hreflang="en"      href="https://sudoku-of-the-day.com/"/>
+    <xhtml:link rel="alternate" hreflang="zh"      href="https://sudoku-of-the-day.com/zh/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sudoku-of-the-day.com/"/>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Turkish -->
+  <url>
+    <loc>https://sudoku-of-the-day.com/tr/</loc>
+    <xhtml:link rel="alternate" hreflang="en"      href="https://sudoku-of-the-day.com/"/>
+    <xhtml:link rel="alternate" hreflang="tr"      href="https://sudoku-of-the-day.com/tr/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sudoku-of-the-day.com/"/>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>

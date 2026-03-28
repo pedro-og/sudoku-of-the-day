@@ -66,7 +66,6 @@ export function loadGameState(
       isComplete: parsed.isComplete,
       isGameOver: parsed.isGameOver,
       elapsedSeconds: parsed.elapsedSeconds,
-      startTime: null,
       puzzleDate,
       puzzleNumber,
       mistakeCell: null,
@@ -74,6 +73,7 @@ export function loadGameState(
       animatingCells: new Set(),
       previousCompletions: detectCompletions(board),
       gameMode: 'daily',
+      autoSolved: false,
     };
   } catch {
     return null;
@@ -104,7 +104,6 @@ export function buildInitialState(
     isComplete: false,
     isGameOver: false,
     elapsedSeconds: 0,
-    startTime: null,
     puzzleDate,
     puzzleNumber,
     mistakeCell: null,
@@ -112,6 +111,7 @@ export function buildInitialState(
     animatingCells: new Set(),
     previousCompletions: detectCompletions(board),
     gameMode: 'daily',
+    autoSolved: false,
   };
 }
 

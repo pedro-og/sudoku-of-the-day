@@ -29,8 +29,10 @@
   "complete": {
     "title": "Puzzle Complete!",
     "subtitle": "Congratulations!",
-    "time": "Time",
-    "mistakes": "Mistakes",
+    "time": "Your Time",
+    "avgTime": "Avg Time",
+    "mistakes": "Your Mistakes",
+    "solveRate": "Solve Rate",
     "streak": "Streak",
     "showResults": "Show Results"
   },
@@ -42,6 +44,7 @@
     "mistake": "Mistake",
     "mistakes": "Mistakes",
     "time": "Time",
+    "streak": "Streak",
     "domain": "sudoku-of-the-day.com"
   },
   "stats": {
@@ -51,6 +54,27 @@
     "avgTime": "Average Time",
     "loading": "Loading stats...",
     "unavailable": "Stats unavailable"
+  },
+  "globalStats": {
+    "title": "How You Compare",
+    "percentile": "Faster than {{percent}}% of players",
+    "totalSolvers": "Solved",
+    "totalFailures": "Failed",
+    "avgSolveTime": "Avg Solve Time",
+    "avgFailMistakes": "Avg Fail Mistakes",
+    "noData": "Not enough players yet — be one of the first!",
+    "streakTitle": "Streak Leaderboard",
+    "streakRank": "Your rank: #{{rank}}",
+    "streakOf": "{{count}} day streak",
+    "you": "You",
+    "noStreaks": "No streaks yet — start yours today!"
+  },
+  "leaderboard": {
+    "speedTab": "Speed",
+    "streakTab": "Streaks",
+    "noSpeed": "No solvers yet — be the first!",
+    "speedRank": "Your rank: #{{rank}}",
+    "fastestToday": "You're the fastest to complete Sudoku #{{number}} so far!"
   },
   "theme": {
     "toggleDark": "Dark mode",

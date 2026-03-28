@@ -1,0 +1,74 @@
+.container {
+  width: 100%;
+}
+
+.title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.percentileSection {
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.percentileValue {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.percentileLabel {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.barTrack {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  background: var(--bg-surface-alt);
+  border-radius: 4px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.barFill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+  transition: width 600ms ease-out;
+}
+
+.barMarker {
+  position: absolute;
+  top: -4px;
+  width: 3px;
+  height: 16px;
+  background: var(--text-primary);
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: left 600ms ease-out;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.message {
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+}

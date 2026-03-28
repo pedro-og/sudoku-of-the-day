@@ -27,7 +27,6 @@ export interface GameState {
   isComplete: boolean;
   isGameOver: boolean;
   elapsedSeconds: number;
-  startTime: number | null;
   puzzleDate: string; // YYYY-MM-DD in Brazil timezone
   puzzleNumber: number;
   mistakeCell: [number, number] | null;
@@ -35,6 +34,7 @@ export interface GameState {
   animatingCells: Set<string>; // "row,col" format for cells being animated
   previousCompletions: CompletionState;
   gameMode: GameMode;
+  autoSolved: boolean; // true when completed via dev Auto-Solve — excluded from stats
 }
 
 export interface DailyStats {
@@ -55,7 +55,40 @@ export interface ShareData {
   mistakes: number;
   elapsedSeconds: number;
   streak: number;
-  board: Board;
-  solution: Board;
-  fixed: FixedCells;
+  percentile?: number;
+}
+
+export interface PuzzleStatsResponse {
+  total_solvers: number;
+  total_failures: number;
+  percentile: number;
+  avg_solve_time_seconds: number;
+  avg_fail_mistakes: number;
+}
+
+export interface StreakLeaderboardEntry {
+  player_id: string;
+  current_streak: number;
+  longest_streak: number;
+  rank: number;
+}
+
+export interface StreakLeaderboardResponse {
+  player_rank: number;
+  player_streak: number;
+  total_players_with_streaks: number;
+  leaderboard: StreakLeaderboardEntry[];
+}
+
+export interface SpeedLeaderboardEntry {
+  player_id: string;
+  elapsed_seconds: number;
+  rank: number;
+}
+
+export interface SpeedLeaderboardResponse {
+  player_rank: number | null;
+  player_time: number | null;
+  total_solvers: number;
+  leaderboard: SpeedLeaderboardEntry[];
 }

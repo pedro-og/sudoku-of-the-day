@@ -1,11 +1,27 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type RefObject } from 'react';
 import type { GameState } from '@/types';
 import { saveGameState } from '@shared/lib/localGameStorage';
-import { recordCompletion } from '../lib/streakTracker';
-import { recordPuzzleSolved, recordPlayerStarted } from '../lib/statsApi';
+import { recordCompletion as recordStreakCompletion } from '../lib/streakTracker';
+import {
+  recordPlayerStarted,
+  recordCompletion,
+  ensurePlayer,
+} from '../lib/statsApi';
+import { getPlayerId } from '../lib/playerIdentity';
 
-export function useGamePersistence(state: GameState): void {
+export function useGamePersistence(state: GameState, cellIntervalsRef: RefObject<number[]>): void {
   const completionRecordedRef = useRef(false);
+  const gameOverRecordedRef = useRef(false);
+
+  // Keep a ref to the latest state so completion effects always read fresh values,
+  // without triggering re-runs on every state change.
+  const stateRef = useRef(state);
+  stateRef.current = state;
+
+  // Ensure anonymous player exists in DB (once ever)
+  useEffect(() => {
+    ensurePlayer(getPlayerId());
+  }, []);
 
   // Save game state to localStorage on changes (daily mode only)
   useEffect(() => {
@@ -16,12 +32,38 @@ export function useGamePersistence(state: GameState): void {
 
   // Record streak completion and stats (once per completion)
   useEffect(() => {
-    if (state.isComplete && state.gameMode !== 'practice' && !completionRecordedRef.current) {
+    const s = stateRef.current;
+    if (s.isComplete && s.gameMode !== 'practice' && !s.autoSolved && !completionRecordedRef.current) {
       completionRecordedRef.current = true;
-      recordCompletion(state.puzzleDate);
-      recordPuzzleSolved(state.puzzleNumber, state.elapsedSeconds);
+      recordStreakCompletion(s.puzzleDate);
+      recordCompletion(
+        getPlayerId(),
+        s.puzzleNumber,
+        s.elapsedSeconds,
+        s.mistakes,
+        true,
+        s.puzzleDate,
+        cellIntervalsRef.current ?? []
+      );
     }
-  }, [state.isComplete, state.gameMode, state.puzzleDate, state.puzzleNumber, state.elapsedSeconds]);
+  }, [state.isComplete, state.gameMode, state.puzzleDate, state.puzzleNumber, cellIntervalsRef]);
+
+  // Record game over (failure) stats
+  useEffect(() => {
+    const s = stateRef.current;
+    if (s.isGameOver && !s.isComplete && s.gameMode !== 'practice' && !gameOverRecordedRef.current) {
+      gameOverRecordedRef.current = true;
+      recordCompletion(
+        getPlayerId(),
+        s.puzzleNumber,
+        s.elapsedSeconds,
+        s.mistakes,
+        false,
+        s.puzzleDate,
+        cellIntervalsRef.current ?? []
+      );
+    }
+  }, [state.isGameOver, state.isComplete, state.gameMode, state.puzzleDate, state.puzzleNumber, cellIntervalsRef]);
 
   // Record player started (daily mode only)
   useEffect(() => {

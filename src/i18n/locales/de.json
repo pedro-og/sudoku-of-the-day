@@ -29,8 +29,10 @@
   "complete": {
     "title": "Rätsel gelöst!",
     "subtitle": "Glückwunsch!",
-    "time": "Zeit",
-    "mistakes": "Fehler",
+    "time": "Deine Zeit",
+    "avgTime": "Durchschnittszeit",
+    "mistakes": "Deine Fehler",
+    "solveRate": "Lösungsrate",
     "streak": "Serie",
     "showResults": "Ergebnisse anzeigen"
   },
@@ -42,6 +44,7 @@
     "mistake": "Fehler",
     "mistakes": "Fehler",
     "time": "Zeit",
+    "streak": "Serie",
     "domain": "sudoku-of-the-day.com"
   },
   "stats": {
@@ -51,6 +54,27 @@
     "avgTime": "Durchschnittliche Zeit",
     "loading": "Statistiken werden geladen...",
     "unavailable": "Statistiken nicht verfügbar"
+  },
+  "globalStats": {
+    "title": "Dein Vergleich",
+    "percentile": "Schneller als {{percent}}% der Spieler",
+    "totalSolvers": "Gelöst",
+    "totalFailures": "Gescheitert",
+    "avgSolveTime": "Ø Lösungszeit",
+    "avgFailMistakes": "Ø Fehler",
+    "noData": "Noch nicht genug Spieler — sei einer der Ersten!",
+    "streakTitle": "Serien-Rangliste",
+    "streakRank": "Dein Rang: #{{rank}}",
+    "streakOf": "{{count}} Tage Serie",
+    "you": "Du",
+    "noStreaks": "Noch keine Serien — starte deine heute!"
+  },
+  "leaderboard": {
+    "speedTab": "Geschwindigkeit",
+    "streakTab": "Serien",
+    "noSpeed": "Noch kein Spieler — sei der Erste!",
+    "speedRank": "Dein Rang: #{{rank}}",
+    "fastestToday": "Du bist der Schnellste beim Sudoku #{{number}} bisher!"
   },
   "theme": {
     "toggleDark": "Dunkelmodus",

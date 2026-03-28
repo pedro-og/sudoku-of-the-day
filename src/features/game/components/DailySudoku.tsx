@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { createDailyInitialState, createPracticeInitialState } from '../lib/puzzleFactory';
 import { areAllNumbersComplete } from '../lib/boardUtils';
-import { loadStreak } from '@features/daily/lib/streakTracker';
 
 import { useGameState } from '../hooks/useGameState';
 import { useGameTimer } from '../hooks/useGameTimer';
 import { useGamePersistence } from '@features/daily/hooks/useGamePersistence';
+import { useStreak } from '@features/daily/hooks/useStreak';
 import { useFastFill } from '../hooks/useFastFill';
 import { useKeyboardControls } from '../hooks/useKeyboardControls';
 
@@ -21,7 +21,6 @@ import { PracticeOverlay } from '@features/practice/components/PracticeOverlay';
 import { Modal } from '@shared/components/Modal/Modal';
 import { Button } from '@shared/components/Button/Button';
 
-import type { StreakData } from '@/types';
 import css from './DailySudoku.module.css';
 
 interface DailySudokuProps {
@@ -36,16 +35,16 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
   const [tipActive, setTipActive] = useState(false);
 
-  const dailyState = useMemo(() => createDailyInitialState(), []);
-  const { state, selectCell, enterNumber, erase, togglePencil, undo, tick, reset } = useGameState(dailyState);
-  const [streak] = useState<StreakData>(() => loadStreak());
+  const [dailyState] = useState(() => createDailyInitialState());
+  const { state, selectCell, enterNumber, erase, togglePencil, undo, tick, reset, autoSolve, cellIntervalsRef } = useGameState(dailyState);
+  const streak = useStreak();
 
   const isPractice = state.gameMode === 'practice';
   const gameDisabled = state.isComplete || state.isGameOver;
   const [timerResetKey, setTimerResetKey] = useState(0);
 
   // Persistence (save to localStorage, record stats)
-  useGamePersistence(state);
+  useGamePersistence(state, cellIntervalsRef);
 
   // Fast-fill mode
   const {
@@ -126,6 +125,11 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
         )}
         {!isPractice && (
           <MistakeCounter mistakes={state.mistakes} maxMistakes={state.maxMistakes} />
+        )}
+        {import.meta.env.DEV && !gameDisabled && (
+          <Button variant="ghost" size="sm" onClick={autoSolve}>
+            Auto-Solve
+          </Button>
         )}
       </div>
 

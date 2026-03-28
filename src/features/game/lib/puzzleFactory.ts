@@ -31,7 +31,6 @@ export function createPracticeInitialState(): GameState {
     isComplete: false,
     isGameOver: false,
     elapsedSeconds: 0,
-    startTime: null,
     puzzleDate: 'practice',
     puzzleNumber: 0,
     mistakeCell: null,
@@ -39,5 +38,6 @@ export function createPracticeInitialState(): GameState {
     animatingCells: new Set(),
     previousCompletions: detectCompletions(board),
     gameMode: 'practice',
+    autoSolved: false,
   };
 }
