@@ -47,9 +47,9 @@ describe('buildShareText', () => {
     expect(text).toContain('Mistakes: 2/3 🟥');
   });
 
-  it('uses green square for 0 mistakes', () => {
+  it('uses diamond for 0 mistakes', () => {
     const text = buildShareText(createShareData({ mistakes: 0 }), labels);
-    expect(text).toContain('Mistakes: 0/3 🟩');
+    expect(text).toContain('Mistakes: 0/3 💎');
   });
 
   it('includes streak with fire emoji', () => {

@@ -96,6 +96,12 @@
   color: var(--accent);
 }
 
+.youTag {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
 .time {
   font-weight: 700;
   font-size: 15px;

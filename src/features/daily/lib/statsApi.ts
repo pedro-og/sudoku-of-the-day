@@ -57,7 +57,7 @@ export async function recordPlayerStarted(puzzleNumber: number): Promise<void> {
 }
 
 
-export async function ensurePlayer(playerId: string): Promise<void> {
+export async function ensurePlayer(playerId: string, username: string): Promise<void> {
   if (!isConfigured()) return;
   const key = `daily-sudoku:player-ensured`;
   if (localStorage.getItem(key)) return;
@@ -65,7 +65,7 @@ export async function ensurePlayer(playerId: string): Promise<void> {
     await fetch(`${getUrl()}/rest/v1/rpc/ensure_player`, {
       method: 'POST',
       headers: headers(),
-      body: JSON.stringify({ p_id: playerId }),
+      body: JSON.stringify({ p_id: playerId, p_username: username }),
     });
     localStorage.setItem(key, '1');
   } catch {

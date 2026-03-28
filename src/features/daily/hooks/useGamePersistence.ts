@@ -6,7 +6,7 @@ import {
   recordCompletion,
   ensurePlayer,
 } from '../lib/statsApi';
-import { getPlayerId } from '../lib/playerIdentity';
+import { getPlayerId, getUsername } from '../lib/playerIdentity';
 
 export function useGamePersistence(state: GameState, cellIntervalsRef: RefObject<number[]>): void {
   const completionRecordedRef = useRef(false);
@@ -23,7 +23,7 @@ export function useGamePersistence(state: GameState, cellIntervalsRef: RefObject
 
   // Ensure anonymous player exists in DB (once ever)
   useEffect(() => {
-    ensurePlayer(getPlayerId());
+    ensurePlayer(getPlayerId(), getUsername());
   }, []);
 
   // Save game state to localStorage on changes (daily mode only)

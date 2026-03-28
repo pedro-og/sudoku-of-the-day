@@ -42,7 +42,9 @@ export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPrac
     : '—';
   const hasPercentile = state.isComplete && (stats?.total_solvers ?? 0) > 0;
 
-  const currentStreak = data.streakData?.player_streak ?? streak.currentStreak;
+  // Bug #1: Always use local streak — it's updated immediately on completion,
+  // while server data arrives with a 1.5s delay and may be stale.
+  const currentStreak = streak.currentStreak;
 
   const shareData = {
     puzzleNumber: state.puzzleNumber,
@@ -89,19 +91,23 @@ export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPrac
       {/* Daily: comparison stats */}
       {!isPractice && !isOver && (
         <>
+          <div className={css.columnHeaders}>
+            <span className={css.columnHeader}>{t('complete.columnYou')}</span>
+            <span className={css.columnHeader}>{t('complete.columnGlobal')}</span>
+          </div>
           <div className={`${css.statsGrid} ${css.statsGrid2}`}>
-            <StatCard value={formatTime(state.elapsedSeconds)} label={t('complete.time')} />
+            <StatCard value={formatTime(state.elapsedSeconds)} label={t('complete.timeLabel')} />
             {statsLoading ? (
-              <StatCard value="..." label={t('complete.avgTime')} />
+              <StatCard value="..." label={t('complete.timeLabel')} />
             ) : stats && stats.total_solvers > 0 ? (
-              <StatCard value={formatTime(stats.avg_solve_time_seconds)} label={t('complete.avgTime')} />
+              <StatCard value={formatTime(stats.avg_solve_time_seconds)} label={t('complete.timeLabel')} />
             ) : (
-              <StatCard value="—" label={t('complete.avgTime')} />
+              <StatCard value="—" label={t('complete.timeLabel')} />
             )}
           </div>
 
           <div className={`${css.statsGrid} ${css.statsGrid2}`}>
-            <StatCard value={`${state.mistakes}/3`} label={t('complete.mistakes')} />
+            <StatCard value={`${state.mistakes}/3`} label={t('complete.mistakesLabel')} />
             {statsLoading ? (
               <StatCard value="..." label={t('complete.solveRate')} />
             ) : (
@@ -125,13 +131,25 @@ export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPrac
             </p>
           )}
 
-          <ShareResultButton shareData={shareData} />
+          {!statsLoading && <ShareResultButton shareData={shareData} />}
+          {statsLoading && (
+            <button className={css.shareLoading} disabled>
+              {t('stats.loading')}
+            </button>
+          )}
         </>
       )}
 
       {/* Daily game over: just show share */}
       {!isPractice && isOver && (
-        <ShareResultButton shareData={shareData} />
+        <>
+          {!statsLoading && <ShareResultButton shareData={shareData} />}
+          {statsLoading && (
+            <button className={css.shareLoading} disabled>
+              {t('stats.loading')}
+            </button>
+          )}
+        </>
       )}
 
       {/* Leaderboard */}

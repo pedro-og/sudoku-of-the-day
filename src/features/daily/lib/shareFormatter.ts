@@ -18,7 +18,7 @@ function formatTime(seconds: number): string {
 
 export function buildShareText(data: ShareData, labels: ShareTextLabels): string {
   const time = formatTime(data.elapsedSeconds);
-  const mistakeEmoji = data.mistakes === 0 ? '🟩' : '🟥';
+  const mistakeEmoji = data.mistakes === 0 ? '💎' : '🟥';
   const mistakeLabel = data.mistakes === 1
     ? `${labels.mistake}: 1 ${mistakeEmoji}`
     : `${labels.mistakes}: ${data.mistakes}/3 ${mistakeEmoji}`;

@@ -68,6 +68,7 @@ export interface PuzzleStatsResponse {
 
 export interface StreakLeaderboardEntry {
   player_id: string;
+  username: string | null;
   current_streak: number;
   longest_streak: number;
   rank: number;
@@ -82,6 +83,7 @@ export interface StreakLeaderboardResponse {
 
 export interface SpeedLeaderboardEntry {
   player_id: string;
+  username: string | null;
   elapsed_seconds: number;
   rank: number;
 }

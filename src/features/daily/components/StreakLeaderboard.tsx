@@ -51,6 +51,18 @@ export function StreakLeaderboard({ streakData, speedData, loading }: Leaderboar
   );
 }
 
+function PlayerName({ isMe, username, rank, t }: { isMe: boolean; username: string | null; rank: number; t: (key: string) => string }) {
+  const displayName = username || `${t('leaderboard.player')} ${rank}`;
+  if (isMe) {
+    return (
+      <>
+        {displayName} <span className={css.youTag}>({t('globalStats.you')})</span>
+      </>
+    );
+  }
+  return <>{displayName}</>;
+}
+
 function SpeedTab({ data, playerId }: { data: SpeedLeaderboardResponse | null; playerId: string }) {
   const { t } = useTranslation();
 
@@ -78,7 +90,7 @@ function SpeedTab({ data, playerId }: { data: SpeedLeaderboardResponse | null; p
               </span>
               <div className={css.info}>
                 <span className={css.name}>
-                  {isMe ? t('globalStats.you') : `${t('leaderboard.player')} ${entry.rank}`}
+                  <PlayerName isMe={isMe} username={entry.username} rank={entry.rank} t={t} />
                 </span>
               </div>
               <span className={css.time}>{formatTime(entry.elapsed_seconds)}</span>
@@ -134,7 +146,7 @@ function StreakTab({ data, playerId }: { data: StreakLeaderboardResponse | null;
               </span>
               <div className={css.info}>
                 <span className={css.name}>
-                  {isMe ? t('globalStats.you') : `${t('leaderboard.player')} ${entry.rank}`}
+                  <PlayerName isMe={isMe} username={entry.username} rank={entry.rank} t={t} />
                 </span>
               </div>
               <span className={css.time}>
