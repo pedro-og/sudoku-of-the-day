@@ -91,7 +91,7 @@ describe('V2 API graceful degradation', () => {
   });
 
   it('ensurePlayer returns void when not configured', async () => {
-    await expect(ensurePlayer('test-uuid')).resolves.toBeUndefined();
+    await expect(ensurePlayer('test-uuid', 'test-user')).resolves.toBeUndefined();
   });
 
   it('recordCompletion returns void when not configured', async () => {
