@@ -96,7 +96,7 @@ describe('V2 API graceful degradation', () => {
 
   it('recordCompletion returns void when not configured', async () => {
     await expect(
-      recordCompletion('test-uuid', 1, 300, 1, true, '2026-03-15')
+      recordCompletion('test-uuid', 1, 300, 1, true, '2026-03-15', [])
     ).resolves.toBeUndefined();
   });
 
