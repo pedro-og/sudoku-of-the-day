@@ -1,18 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { StreakData } from '@/types';
-import { loadStreak } from '../lib/streakTracker';
+import { loadStreak, recordCompletion } from '../lib/streakTracker';
 
-export function useStreak(isComplete?: boolean): StreakData {
+export function useStreak(isComplete?: boolean, puzzleDate?: string, autoSolved?: boolean): StreakData {
   const [streak, setStreak] = useState<StreakData>(() => loadStreak());
+  const recordedRef = useRef(false);
+  const wasCompleteOnMountRef = useRef(isComplete);
 
   useEffect(() => {
-    if (isComplete) {
-      // Defer to next microtask so useGamePersistence's effect (which writes
-      // the streak to localStorage) runs first before we read it back.
-      const id = setTimeout(() => setStreak(loadStreak()), 0);
-      return () => clearTimeout(id);
+    if (
+      isComplete &&
+      puzzleDate &&
+      !autoSolved &&
+      !recordedRef.current &&
+      !wasCompleteOnMountRef.current
+    ) {
+      recordedRef.current = true;
+      const updated = recordCompletion(puzzleDate);
+      setStreak(updated);
     }
-  }, [isComplete]);
+  }, [isComplete, puzzleDate, autoSolved]);
 
   return streak;
 }

@@ -37,7 +37,7 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
 
   const [dailyState] = useState(() => createDailyInitialState());
   const { state, selectCell, enterNumber, erase, togglePencil, undo, tick, reset, autoSolve, cellIntervalsRef } = useGameState(dailyState);
-  const streak = useStreak(state.isComplete);
+  const streak = useStreak(state.isComplete, state.puzzleDate, state.autoSolved);
 
   const isPractice = state.gameMode === 'practice';
   const gameDisabled = state.isComplete || state.isGameOver;

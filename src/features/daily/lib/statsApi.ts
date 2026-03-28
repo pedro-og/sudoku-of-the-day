@@ -110,38 +110,6 @@ export async function recordCompletion(
   }
 }
 
-/** Skips localStorage guard — used by share button as a fallback */
-export async function forceRecordCompletion(
-  playerId: string,
-  puzzleNumber: number,
-  elapsedSeconds: number,
-  mistakes: number,
-  solved: boolean,
-  puzzleDate: string,
-): Promise<void> {
-  if (!isConfigured()) return;
-  if (elapsedSeconds < MIN_PLAY_TIME_SECONDS) return;
-  try {
-    const res = await fetch(`${getUrl()}/rest/v1/rpc/record_completion`, {
-      method: 'POST',
-      headers: headers(),
-      body: JSON.stringify({
-        p_player_id: playerId,
-        p_puzzle_number: puzzleNumber,
-        p_elapsed_seconds: elapsedSeconds,
-        p_mistakes: mistakes,
-        p_solved: solved,
-        p_puzzle_date: puzzleDate,
-        p_cell_intervals: [],
-      }),
-    });
-    if (res.ok) {
-      localStorage.setItem(`daily-sudoku:completion:${puzzleNumber}`, '1');
-    }
-  } catch {
-    // NOP
-  }
-}
 
 export async function fetchPuzzleStats(
   puzzleNumber: number,

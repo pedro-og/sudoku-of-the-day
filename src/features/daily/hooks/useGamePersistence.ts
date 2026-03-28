@@ -1,7 +1,6 @@
 import { useEffect, useRef, type RefObject } from 'react';
 import type { GameState } from '@/types';
 import { saveGameState } from '@shared/lib/localGameStorage';
-import { recordCompletion as recordStreakCompletion } from '../lib/streakTracker';
 import {
   recordPlayerStarted,
   recordCompletion,
@@ -42,7 +41,6 @@ export function useGamePersistence(state: GameState, cellIntervalsRef: RefObject
     // localStorage was cleared between sessions.
     if (s.isComplete && s.gameMode !== 'practice' && !s.autoSolved && !completionRecordedRef.current && !wasAlreadyCompleteOnMountRef.current) {
       completionRecordedRef.current = true;
-      recordStreakCompletion(s.puzzleDate);
       recordCompletion(
         getPlayerId(),
         s.puzzleNumber,
