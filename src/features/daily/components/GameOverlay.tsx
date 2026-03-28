@@ -42,11 +42,13 @@ export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPrac
     : '—';
   const hasPercentile = state.isComplete && (stats?.total_solvers ?? 0) > 0;
 
+  const currentStreak = data.streakData?.player_streak ?? streak.currentStreak;
+
   const shareData = {
     puzzleNumber: state.puzzleNumber,
     mistakes: state.mistakes,
     elapsedSeconds: state.elapsedSeconds,
-    streak: streak.currentStreak,
+    streak: currentStreak,
     ...(hasPercentile && stats ? { percentile: stats.percentile } : {}),
   };
 
@@ -108,7 +110,7 @@ export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPrac
           </div>
 
           <div className={`${css.statsGrid} ${css.statsGrid1}`}>
-            <StatCard value={`🔥 ${streak.currentStreak}`} label={t('complete.streak')} />
+            <StatCard value={`🔥 ${currentStreak}`} label={t('complete.streak')} />
           </div>
 
           {hasPercentile && stats && stats.percentile === 100 && stats.total_solvers > 1 && state.elapsedSeconds >= 30 && (

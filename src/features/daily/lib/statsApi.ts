@@ -89,7 +89,7 @@ export async function recordCompletion(
   const key = `daily-sudoku:completion:${puzzleNumber}`;
   if (localStorage.getItem(key)) return;
   try {
-    await fetch(`${getUrl()}/rest/v1/rpc/record_completion`, {
+    const res = await fetch(`${getUrl()}/rest/v1/rpc/record_completion`, {
       method: 'POST',
       headers: headers(),
       body: JSON.stringify({
@@ -102,7 +102,9 @@ export async function recordCompletion(
         p_cell_intervals: cellIntervals,
       }),
     });
-    localStorage.setItem(key, '1');
+    if (res.ok) {
+      localStorage.setItem(key, '1');
+    }
   } catch {
     // NOP
   }
