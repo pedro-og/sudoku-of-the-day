@@ -84,6 +84,10 @@
 
 ## Near-Term Roadmap (1–2 Months)
 
+### SEO Content Pages 🔍
+- [ ] `/how-to-play/` — Static page explaining Sudoku rules and strategies. Target: "how to play sudoku" (22k searches/month). Captures new players who become daily users.
+- [ ] `/archive/` + `/puzzle/YYYY-MM-DD/` — Past puzzles browsable by date. Each day becomes an indexed URL. Compounds over time (~365 pages/year). Target: "sudoku [date]" long-tail queries.
+
 ### Test Suite 📝
 - [ ] Unit tests for `sudokuGenerator` — Verify reproducibility and uniqueness
 - [ ] Unit tests for `useGameState` — All reducer actions

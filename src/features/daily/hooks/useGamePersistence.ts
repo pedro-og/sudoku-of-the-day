@@ -13,6 +13,10 @@ export function useGamePersistence(state: GameState, cellIntervalsRef: RefObject
   const completionRecordedRef = useRef(false);
   const gameOverRecordedRef = useRef(false);
 
+  // Track whether the game was already complete when this hook first mounted.
+  // If so, streak was already recorded in a previous session — don't record again.
+  const wasAlreadyCompleteOnMountRef = useRef(state.isComplete);
+
   // Keep a ref to the latest state so completion effects always read fresh values,
   // without triggering re-runs on every state change.
   const stateRef = useRef(state);
@@ -33,7 +37,10 @@ export function useGamePersistence(state: GameState, cellIntervalsRef: RefObject
   // Record streak completion and stats (once per completion)
   useEffect(() => {
     const s = stateRef.current;
-    if (s.isComplete && s.gameMode !== 'practice' && !s.autoSolved && !completionRecordedRef.current) {
+    // Skip if game was already complete when the component mounted (previous session).
+    // Streak was already recorded then — calling again risks resetting it if streak
+    // localStorage was cleared between sessions.
+    if (s.isComplete && s.gameMode !== 'practice' && !s.autoSolved && !completionRecordedRef.current && !wasAlreadyCompleteOnMountRef.current) {
       completionRecordedRef.current = true;
       recordStreakCompletion(s.puzzleDate);
       recordCompletion(

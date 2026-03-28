@@ -72,6 +72,21 @@
     <link rel="alternate" hreflang="tr" href="https://sudoku-of-the-day.com/tr/" />
     <link rel="alternate" hreflang="fr" href="https://sudoku-of-the-day.com/fr/" />
     <link rel="alternate" hreflang="x-default" href="https://sudoku-of-the-day.com/" />
+
+    <!-- Inline script: set canonical + html[lang] from URL path before React mounts.
+         Runs synchronously so Google sees the correct values even with JS rendering. -->
+    <script>
+      (function () {
+        var LANGS = ['pt', 'es', 'ja', 'de', 'zh', 'tr', 'fr'];
+        var BASE = 'https://sudoku-of-the-day.com';
+        var match = window.location.pathname.match(/^\/([a-z]{2})(\/|$)/);
+        var lang = match && LANGS.indexOf(match[1]) !== -1 ? match[1] : 'en';
+        var canonical = BASE + (lang === 'en' ? '' : '/' + lang) + '/';
+        document.documentElement.lang = lang;
+        document.querySelector('link[rel="canonical"]').href = canonical;
+        document.querySelector('meta[property="og:url"]').setAttribute('content', canonical);
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
