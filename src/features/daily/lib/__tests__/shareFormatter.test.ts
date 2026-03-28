@@ -32,24 +32,29 @@ describe('buildShareText', () => {
     expect(text).toContain('Daily Sudoku');
   });
 
-  it('formats time as MM:SS', () => {
+  it('formats time as MM:SS with clock emoji', () => {
     const text = buildShareText(createShareData({ elapsedSeconds: 125 }), labels);
-    expect(text).toContain('02:05');
+    expect(text).toContain('02:05 🕐');
   });
 
-  it('uses singular "Mistake" for 1 mistake', () => {
+  it('uses singular "Mistake" for 1 mistake with red square', () => {
     const text = buildShareText(createShareData({ mistakes: 1 }), labels);
-    expect(text).toContain('Mistake: 1');
+    expect(text).toContain('Mistake: 1 🟥');
   });
 
-  it('uses plural "Mistakes" for multiple mistakes', () => {
+  it('uses plural "Mistakes" for multiple mistakes with red square', () => {
     const text = buildShareText(createShareData({ mistakes: 2 }), labels);
-    expect(text).toContain('Mistakes: 2/3');
+    expect(text).toContain('Mistakes: 2/3 🟥');
   });
 
-  it('includes streak', () => {
+  it('uses green square for 0 mistakes', () => {
+    const text = buildShareText(createShareData({ mistakes: 0 }), labels);
+    expect(text).toContain('Mistakes: 0/3 🟩');
+  });
+
+  it('includes streak with fire emoji', () => {
     const text = buildShareText(createShareData({ streak: 5 }), labels);
-    expect(text).toContain('Streak: 5');
+    expect(text).toContain('Streak: 5 🔥');
   });
 
   it('includes domain', () => {
@@ -57,9 +62,9 @@ describe('buildShareText', () => {
     expect(text).toContain('sudoku-of-the-day.com');
   });
 
-  it('includes percentile when provided', () => {
+  it('includes percentile with bolt emoji when provided', () => {
     const text = buildShareText(createShareData({ percentile: 85 }), labels);
-    expect(text).toContain('Faster than 85% of players');
+    expect(text).toContain('Faster than 85% of players ⚡');
   });
 
   it('omits percentile when not provided', () => {

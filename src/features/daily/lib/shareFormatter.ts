@@ -17,21 +17,24 @@ function formatTime(seconds: number): string {
 }
 
 export function buildShareText(data: ShareData, labels: ShareTextLabels): string {
-  const mistakeLabel = data.mistakes === 1 ? `${labels.mistake}: 1` : `${labels.mistakes}: ${data.mistakes}/3`;
   const time = formatTime(data.elapsedSeconds);
+  const mistakeEmoji = data.mistakes === 0 ? '🟩' : '🟥';
+  const mistakeLabel = data.mistakes === 1
+    ? `${labels.mistake}: 1 ${mistakeEmoji}`
+    : `${labels.mistakes}: ${data.mistakes}/3 ${mistakeEmoji}`;
 
   const lines = [
     `${labels.title} #${data.puzzleNumber}`,
     '',
-    `${labels.time}: ${time}`,
+    `${labels.time}: ${time} 🕐`,
   ];
 
   if (data.percentile != null) {
-    lines.push(labels.percentile.replace('{{percent}}', String(data.percentile)));
+    lines.push(`${labels.percentile.replace('{{percent}}', String(data.percentile))} ⚡`);
   }
 
   lines.push(mistakeLabel);
-  lines.push(`${labels.streak}: ${data.streak}`);
+  lines.push(`${labels.streak}: ${data.streak} 🔥`);
   lines.push('');
   lines.push(labels.domain);
 
