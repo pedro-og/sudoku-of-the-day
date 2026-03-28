@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { copyShareText } from '../lib/shareFormatter';
+import { ensurePlayer, forceRecordCompletion } from '../lib/statsApi';
+import { getPlayerId } from '../lib/playerIdentity';
+import { getBrazilDateString } from '../lib/dailyPuzzle';
 import type { ShareData } from '@/types';
 import css from './ShareResultButton.module.css';
 
@@ -25,6 +28,21 @@ export function ShareResultButton({ shareData }: ShareResultButtonProps) {
   async function handleShare() {
     if (status === 'copying') return;
     setStatus('copying');
+
+    // Fire-and-forget: ensure player exists and record completion on share
+    const playerId = getPlayerId();
+    const puzzleDate = getBrazilDateString();
+    ensurePlayer(playerId).then(() =>
+      forceRecordCompletion(
+        playerId,
+        shareData.puzzleNumber,
+        shareData.elapsedSeconds,
+        shareData.mistakes,
+        true,
+        puzzleDate,
+      )
+    ).catch(() => {});
+
     const success = await copyShareText(shareData, labels);
     setStatus(success ? 'copied' : 'failed');
     setTimeout(() => setStatus('idle'), 2500);
