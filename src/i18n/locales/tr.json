@@ -74,7 +74,8 @@
     "streakTab": "Seriler",
     "noSpeed": "Henüz kimse çözmedi — ilk sen ol!",
     "speedRank": "Sıralamanız: #{{rank}}",
-    "fastestToday": "Sudoku #{{number}}'yu şu ana kadar en hızlı tamamlayan sensin!"
+    "fastestToday": "Sudoku #{{number}}'yu şu ana kadar en hızlı tamamlayan sensin!",
+    "player": "Oyuncu"
   },
   "theme": {
     "toggleDark": "Koyu mod",

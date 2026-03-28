@@ -74,7 +74,8 @@
     "streakTab": "连续记录",
     "noSpeed": "还没有人完成 — 成为第一个!",
     "speedRank": "你的排名: #{{rank}}",
-    "fastestToday": "你是目前完成数独 #{{number}} 最快的玩家!"
+    "fastestToday": "你是目前完成数独 #{{number}} 最快的玩家!",
+    "player": "玩家"
   },
   "theme": {
     "toggleDark": "深色模式",

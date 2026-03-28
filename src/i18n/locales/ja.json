@@ -74,7 +74,8 @@
     "streakTab": "連続記録",
     "noSpeed": "まだ誰もクリアしていません — 最初の一人になろう!",
     "speedRank": "あなたの順位: #{{rank}}",
-    "fastestToday": "あなたは数独 #{{number}} を最速でクリアしました!"
+    "fastestToday": "あなたは数独 #{{number}} を最速でクリアしました!",
+    "player": "プレイヤー"
   },
   "theme": {
     "toggleDark": "ダークモード",

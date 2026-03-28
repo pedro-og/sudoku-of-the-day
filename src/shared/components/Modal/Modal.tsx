@@ -32,6 +32,14 @@ export function Modal({ open, onClose, children, ariaLabel }: ModalProps) {
       }}
     >
       <div className={styles.panel} onClick={(e) => e.stopPropagation()}>
+        <button
+          className={styles.closeButton}
+          onClick={onClose}
+          aria-label="Close"
+          type="button"
+        >
+          ✕
+        </button>
         {children}
       </div>
     </div>

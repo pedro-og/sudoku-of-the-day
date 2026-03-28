@@ -74,7 +74,8 @@
     "streakTab": "Rachas",
     "noSpeed": "Nadie ha resuelto aún — ¡sé el primero!",
     "speedRank": "Tu posición: #{{rank}}",
-    "fastestToday": "¡Eres el más rápido en completar el Sudoku #{{number}} hasta ahora!"
+    "fastestToday": "¡Eres el más rápido en completar el Sudoku #{{number}} hasta ahora!",
+    "player": "Jugador"
   },
   "theme": {
     "toggleDark": "Modo oscuro",

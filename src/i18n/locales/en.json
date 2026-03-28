@@ -74,7 +74,8 @@
     "streakTab": "Streaks",
     "noSpeed": "No solvers yet — be the first!",
     "speedRank": "Your rank: #{{rank}}",
-    "fastestToday": "You're the fastest to complete Sudoku #{{number}} so far!"
+    "fastestToday": "You're the fastest to complete Sudoku #{{number}} so far!",
+    "player": "Player"
   },
   "theme": {
     "toggleDark": "Dark mode",

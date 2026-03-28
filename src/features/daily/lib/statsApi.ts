@@ -135,7 +135,7 @@ export async function fetchPuzzleStats(
 export async function fetchSpeedLeaderboard(
   playerId: string,
   puzzleNumber: number,
-  limit: number = 10
+  limit: number = 5
 ): Promise<SpeedLeaderboardResponse | null> {
   if (!isConfigured()) return null;
   try {
@@ -157,7 +157,7 @@ export async function fetchSpeedLeaderboard(
 
 export async function fetchStreakLeaderboard(
   playerId: string,
-  limit: number = 10
+  limit: number = 5
 ): Promise<StreakLeaderboardResponse | null> {
   if (!isConfigured()) return null;
   try {

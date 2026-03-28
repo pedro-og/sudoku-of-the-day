@@ -12,15 +12,39 @@
 }
 
 .panel {
+  position: relative;
   background: var(--modal-bg);
   border-radius: var(--radius-lg);
   padding: 28px 24px;
   width: 100%;
-  max-width: 380px;
+  max-width: 340px;
+  max-height: 85vh;
+  overflow-y: auto;
   box-shadow: var(--shadow-md);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
   cursor: default;
+}
+
+.closeButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--text-secondary);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s, background 0.15s;
+  z-index: 1;
+}
+
+.closeButton:hover {
+  color: var(--text-primary);
+  background: var(--bg-surface-alt);
 }

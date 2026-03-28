@@ -74,7 +74,8 @@
     "streakTab": "Séries",
     "noSpeed": "Aucun joueur encore — soyez le premier!",
     "speedRank": "Votre rang: #{{rank}}",
-    "fastestToday": "Vous êtes le plus rapide à compléter le Sudoku #{{number}} jusqu'à présent!"
+    "fastestToday": "Vous êtes le plus rapide à compléter le Sudoku #{{number}} jusqu'à présent!",
+    "player": "Joueur"
   },
   "theme": {
     "toggleDark": "Mode sombre",
