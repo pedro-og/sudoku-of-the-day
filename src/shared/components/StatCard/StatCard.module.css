@@ -1,0 +1,21 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-surface-alt);
+  border-radius: var(--radius-sm);
+  padding: 10px 4px;
+}
+
+.value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-align: center;
+}
