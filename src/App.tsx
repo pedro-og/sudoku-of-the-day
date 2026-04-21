@@ -1,29 +1,11 @@
 import { useState } from 'react';
 import { useTheme } from '@features/theme/hooks/useTheme';
 import { DailySudoku } from '@features/game/components/DailySudoku';
-import { AuthProvider, SideMenu, AccountPage, useRoute } from '@features/auth';
+import { AuthProvider, SideMenu } from '@features/auth';
 
 function AppShell() {
   const { theme, toggleTheme } = useTheme();
-  const { route, navigate } = useRoute();
   const [menuOpen, setMenuOpen] = useState(false);
-
-  if (route === 'account') {
-    return (
-      <>
-        <AccountPage
-          onBack={() => navigate('game')}
-          theme={theme}
-          onToggleTheme={toggleTheme}
-        />
-        <SideMenu
-          open={menuOpen}
-          onClose={() => setMenuOpen(false)}
-          onNavigateAccount={() => navigate('account')}
-        />
-      </>
-    );
-  }
 
   return (
     <>
@@ -35,7 +17,8 @@ function AppShell() {
       <SideMenu
         open={menuOpen}
         onClose={() => setMenuOpen(false)}
-        onNavigateAccount={() => navigate('account')}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
     </>
   );
