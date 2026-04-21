@@ -1,15 +1,17 @@
 import type { GameState } from '@/types';
 import { getDailyPuzzle, getPracticePuzzle } from '@features/daily/lib/dailyPuzzle';
-import { loadGameState, buildInitialState, pruneOldGames } from '@shared/lib/localGameStorage';
+import { loadGameState, loadCellIntervals, buildInitialState, pruneOldGames } from '@shared/lib/localGameStorage';
 import { detectCompletions } from './completionDetector';
 
-export function createDailyInitialState(): GameState {
+export function createDailyInitialState(): { state: GameState; cellIntervals: number[] } {
   const { puzzle, solution, dateStr, puzzleNumber } = getDailyPuzzle();
   pruneOldGames(dateStr);
 
   const fixed = puzzle.map(row => row.map(cell => cell !== 0));
   const saved = loadGameState(dateStr, solution, fixed, puzzleNumber);
-  return saved ?? buildInitialState(puzzle, solution, dateStr, puzzleNumber);
+  const cellIntervals = loadCellIntervals(dateStr);
+  const state = saved ?? buildInitialState(puzzle, solution, dateStr, puzzleNumber);
+  return { state, cellIntervals };
 }
 
 export function createPracticeInitialState(): GameState {

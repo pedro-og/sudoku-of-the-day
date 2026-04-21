@@ -14,52 +14,17 @@ interface LeaderboardProps {
   streakData: StreakLeaderboardResponse | null;
   speedData: SpeedLeaderboardResponse | null;
   loading: boolean;
-  localStreak?: number;
-  localElapsedSeconds?: number;
 }
 
-function reconcileStreakData(
-  data: StreakLeaderboardResponse | null,
-  playerId: string,
-  localStreak: number | undefined
-): StreakLeaderboardResponse | null {
-  if (!data || localStreak == null) return data;
-
-  const leaderboard = data.leaderboard.map(e =>
-    e.player_id === playerId && e.current_streak < localStreak
-      ? { ...e, current_streak: localStreak, longest_streak: Math.max(e.longest_streak, localStreak) }
-      : e
-  );
-  const playerStreak = Math.max(data.player_streak, localStreak);
-  return { ...data, leaderboard, player_streak: playerStreak };
-}
-
-function reconcileSpeedData(
-  data: SpeedLeaderboardResponse | null,
-  playerId: string,
-  localElapsed: number | undefined
-): SpeedLeaderboardResponse | null {
-  if (!data || localElapsed == null) return data;
-
-  const hasPlayer = data.leaderboard.some(e => e.player_id === playerId);
-  if (hasPlayer) return data;
-  if (data.player_time != null) return data;
-
-  return { ...data, player_time: localElapsed };
-}
-
-export function StreakLeaderboard({ streakData, speedData, loading, localStreak, localElapsedSeconds }: LeaderboardProps) {
+export function StreakLeaderboard({ streakData, speedData, loading }: LeaderboardProps) {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<Tab>('speed');
   const [playerId] = useState(() => getPlayerId());
 
   if (loading) return <p className={css.message}>{t('stats.loading')}</p>;
 
-  const reconciledStreak = reconcileStreakData(streakData, playerId, localStreak);
-  const reconciledSpeed = reconcileSpeedData(speedData, playerId, localElapsedSeconds);
-
-  const hasStreakData = reconciledStreak && reconciledStreak.leaderboard.length > 0;
-  const hasSpeedData = reconciledSpeed && reconciledSpeed.leaderboard.length > 0;
+  const hasStreakData = streakData && streakData.leaderboard.length > 0;
+  const hasSpeedData = speedData && speedData.leaderboard.length > 0;
 
   if (!hasStreakData && !hasSpeedData) return <p className={css.empty}>{t('globalStats.noStreaks')}</p>;
 
@@ -80,8 +45,8 @@ export function StreakLeaderboard({ streakData, speedData, loading, localStreak,
         </button>
       </div>
 
-      {activeTab === 'speed' && <SpeedTab data={reconciledSpeed} playerId={playerId} />}
-      {activeTab === 'streak' && <StreakTab data={reconciledStreak} playerId={playerId} />}
+      {activeTab === 'speed' && <SpeedTab data={speedData} playerId={playerId} />}
+      {activeTab === 'streak' && <StreakTab data={streakData} playerId={playerId} />}
     </div>
   );
 }
@@ -134,13 +99,17 @@ function SpeedTab({ data, playerId }: { data: SpeedLeaderboardResponse | null; p
         })}
       </ol>
 
-      {!isPlayerInTop && data.player_rank != null && data.player_time != null && (
+      {!isPlayerInTop && data.player_time != null && (
         <>
           <div className={css.separator}>···</div>
           <ol className={css.list}>
             <li className={css.rowHighlight}>
               <span className={css.rankCol}>
-                <span className={css.rankNumber}>{data.player_rank}</span>
+                {data.player_rank != null ? (
+                  <span className={css.rankNumber}>{data.player_rank}</span>
+                ) : (
+                  <span className={css.rankNumber}>—</span>
+                )}
               </span>
               <div className={css.info}>
                 <span className={css.name}>{t('globalStats.you')}</span>

@@ -33,9 +33,9 @@ export function useGamePersistence(
   // Save game state to localStorage on changes (daily mode only)
   useEffect(() => {
     if (state.gameMode !== 'practice') {
-      saveGameState(state);
+      saveGameState(state, cellIntervalsRef.current);
     }
-  }, [state]);
+  }, [state, cellIntervalsRef]);
 
   // Record streak completion and stats (once per completion)
   useEffect(() => {

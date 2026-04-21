@@ -12,6 +12,7 @@ interface PersistedGame {
   isComplete: boolean;
   isGameOver: boolean;
   elapsedSeconds: number;
+  cellIntervals?: number[];
 }
 
 function storageKey(puzzleDate: string): string {
@@ -26,7 +27,7 @@ function deserializeNotes(raw: SerializedNotes): GameState['notes'] {
   return raw.map(row => row.map(cell => new Set(cell)));
 }
 
-export function saveGameState(state: GameState): void {
+export function saveGameState(state: GameState, cellIntervals?: number[]): void {
   const payload: PersistedGame = {
     board: state.board,
     notes: serializeNotes(state.notes),
@@ -34,11 +35,23 @@ export function saveGameState(state: GameState): void {
     isComplete: state.isComplete,
     isGameOver: state.isGameOver,
     elapsedSeconds: state.elapsedSeconds,
+    cellIntervals,
   };
   try {
     localStorage.setItem(storageKey(state.puzzleDate), JSON.stringify(payload));
   } catch {
     /* ignore */
+  }
+}
+
+export function loadCellIntervals(puzzleDate: string): number[] {
+  try {
+    const raw = localStorage.getItem(storageKey(puzzleDate));
+    if (!raw) return [];
+    const parsed: PersistedGame = JSON.parse(raw);
+    return parsed.cellIntervals ?? [];
+  } catch {
+    return [];
   }
 }
 

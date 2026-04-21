@@ -5,15 +5,27 @@ import { isSupabaseConfigured } from '../lib/supabaseClient';
 import { GoogleIcon } from './GoogleIcon';
 import css from './SideMenu.module.css';
 
+const LANGUAGES: { code: string; label: string }[] = [
+  { code: 'en', label: 'English' },
+  { code: 'pt', label: 'Português' },
+  { code: 'es', label: 'Español' },
+  { code: 'fr', label: 'Français' },
+  { code: 'de', label: 'Deutsch' },
+  { code: 'ja', label: '日本語' },
+  { code: 'zh', label: '中文' },
+  { code: 'tr', label: 'Türkçe' },
+];
+
 interface SideMenuProps {
   open: boolean;
   onClose: () => void;
-  onNavigateAccount: () => void;
+  theme: 'light' | 'dark';
+  onToggleTheme: () => void;
 }
 
-export function SideMenu({ open, onClose, onNavigateAccount }: SideMenuProps) {
-  const { t } = useTranslation();
-  const { session, profile, signInWithGoogle, signOut } = useAuth();
+export function SideMenu({ open, onClose, theme, onToggleTheme }: SideMenuProps) {
+  const { t, i18n } = useTranslation();
+  const { session, profile, loading, signInWithGoogle, signOut, updatePreferences } = useAuth();
 
   useEffect(() => {
     if (!open) return;
@@ -25,6 +37,17 @@ export function SideMenu({ open, onClose, onNavigateAccount }: SideMenuProps) {
   if (!open) return null;
 
   const configured = isSupabaseConfigured();
+
+  const handleLanguageChange = async (code: string) => {
+    await i18n.changeLanguage(code);
+    if (session) await updatePreferences({ language: code });
+  };
+
+  const handleThemeToggle = async () => {
+    const next: 'light' | 'dark' = theme === 'light' ? 'dark' : 'light';
+    onToggleTheme();
+    if (session) await updatePreferences({ theme: next });
+  };
 
   return (
     <>
@@ -40,7 +63,11 @@ export function SideMenu({ open, onClose, onNavigateAccount }: SideMenuProps) {
             <p className={css.hint}>{t('menu.authUnavailable')}</p>
           )}
 
-          {configured && !session && (
+          {configured && loading && (
+            <p className={css.hint}>…</p>
+          )}
+
+          {configured && !loading && !session && (
             <>
               <button className={css.signInButton} onClick={() => signInWithGoogle()}>
                 <GoogleIcon />
@@ -50,21 +77,105 @@ export function SideMenu({ open, onClose, onNavigateAccount }: SideMenuProps) {
             </>
           )}
 
-          {configured && session && profile && (
+          {configured && !loading && session && (
             <>
               <div className={css.profile}>
-                <span className={css.profileName}>{profile.username}</span>
+                <span className={css.profileName}>{profile?.username ?? session.user.email}</span>
                 <span className={css.profileEmail}>{session.user.email}</span>
               </div>
-              <button
-                className={css.menuItem}
-                onClick={() => { onNavigateAccount(); onClose(); }}
-              >
-                ⚙️ {t('menu.account')}
-              </button>
-              <button className={css.menuItem} onClick={() => signOut()}>
+
+              {profile && (
+                <div className={css.card}>
+                  <span className={css.cardLabel}>{t('account.streak')}</span>
+                  <span className={css.cardValue}>
+                    🔥 {profile.current_streak} · {t('account.longest')}: {profile.longest_streak}
+                  </span>
+                </div>
+              )}
+
+              {profile?.avg_solve_time_seconds != null && (
+                <div className={css.card}>
+                  <span className={css.cardLabel}>{t('account.avgTime')}</span>
+                  <span className={css.cardValue}>
+                    {String(Math.floor(profile.avg_solve_time_seconds / 60)).padStart(2, '0')}:{String(profile.avg_solve_time_seconds % 60).padStart(2, '0')}
+                  </span>
+                </div>
+              )}
+
+              <div className={css.card}>
+                <div className={css.cardRow}>
+                  <div>
+                    <div className={css.cardLabel}>{t('account.language')}</div>
+                    <div className={css.cardValue}>{LANGUAGES.find(l => l.code === i18n.language)?.label ?? i18n.language}</div>
+                  </div>
+                  <select
+                    className={css.select}
+                    value={i18n.language}
+                    onChange={(e) => handleLanguageChange(e.target.value)}
+                    aria-label={t('account.language')}
+                  >
+                    {LANGUAGES.map(l => (
+                      <option key={l.code} value={l.code}>{l.label}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className={css.card}>
+                <div className={css.cardRow}>
+                  <div>
+                    <div className={css.cardLabel}>{t('account.theme')}</div>
+                    <div className={css.cardValue}>
+                      {theme === 'dark' ? t('account.themeDark') : t('account.themeLight')}
+                    </div>
+                  </div>
+                  <button className={css.themeToggle} onClick={handleThemeToggle}>
+                    {theme === 'dark' ? '☀️' : '🌙'}
+                  </button>
+                </div>
+              </div>
+
+              <button className={css.signOutButton} onClick={() => { signOut(); onClose(); }}>
                 ↪ {t('menu.signOut')}
               </button>
+            </>
+          )}
+
+          {/* Language & theme for non-logged-in users */}
+          {(!configured || (!loading && !session)) && (
+            <>
+              <div className={css.card}>
+                <div className={css.cardRow}>
+                  <div>
+                    <div className={css.cardLabel}>{t('account.language')}</div>
+                    <div className={css.cardValue}>{LANGUAGES.find(l => l.code === i18n.language)?.label ?? i18n.language}</div>
+                  </div>
+                  <select
+                    className={css.select}
+                    value={i18n.language}
+                    onChange={(e) => i18n.changeLanguage(e.target.value)}
+                    aria-label={t('account.language')}
+                  >
+                    {LANGUAGES.map(l => (
+                      <option key={l.code} value={l.code}>{l.label}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className={css.card}>
+                <div className={css.cardRow}>
+                  <div>
+                    <div className={css.cardLabel}>{t('account.theme')}</div>
+                    <div className={css.cardValue}>
+                      {theme === 'dark' ? t('account.themeDark') : t('account.themeLight')}
+                    </div>
+                  </div>
+                  <button className={css.themeToggle} onClick={onToggleTheme}>
+                    {theme === 'dark' ? '☀️' : '🌙'}
+                  </button>
+                </div>
+              </div>
             </>
           )}
         </div>

@@ -174,7 +174,7 @@ function reducer(state: ReducerState, action: Action): ReducerState {
   }
 }
 
-export function useGameState(initialState: GameState) {
+export function useGameState(initialState: GameState, initialCellIntervals: number[] = []) {
   const [state, dispatch] = useReducer(reducer, {
     ...initialState,
     history: [],
@@ -184,7 +184,7 @@ export function useGameState(initialState: GameState) {
   // Track timestamps of correct cell fills for anti-bot honeypot.
   // Stored as a ref (not state) — transient metric, doesn't affect rendering.
   const lastCorrectFillTimeRef = useRef<number | null>(null);
-  const cellIntervalsRef = useRef<number[]>([]);
+  const cellIntervalsRef = useRef<number[]>(initialCellIntervals);
 
   const selectCell = useCallback((row: number, col: number) => {
     dispatch({ type: 'SELECT_CELL', row, col });

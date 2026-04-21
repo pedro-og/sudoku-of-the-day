@@ -38,8 +38,8 @@ export function DailySudoku({ theme, onToggleTheme, onOpenMenu }: DailySudokuPro
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
   const [tipActive, setTipActive] = useState(false);
 
-  const [dailyState] = useState(() => createDailyInitialState());
-  const { state, selectCell, enterNumber, erase, togglePencil, undo, tick, reset, autoSolve, cellIntervalsRef } = useGameState(dailyState);
+  const [{ state: dailyState, cellIntervals: dailyCellIntervals }] = useState(() => createDailyInitialState());
+  const { state, selectCell, enterNumber, erase, togglePencil, undo, tick, reset, autoSolve, cellIntervalsRef } = useGameState(dailyState, dailyCellIntervals);
   const streak = useStreak(state.isComplete, state.puzzleDate, state.autoSolved);
 
   const isPractice = state.gameMode === 'practice';
@@ -94,7 +94,7 @@ export function DailySudoku({ theme, onToggleTheme, onOpenMenu }: DailySudokuPro
 
   const handleBackToDaily = useCallback(() => {
     resetUI();
-    reset(createDailyInitialState());
+    reset(createDailyInitialState().state);
   }, [reset, resetUI]);
 
   const handleNewPractice = useCallback(() => {

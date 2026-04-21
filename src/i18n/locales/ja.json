@@ -102,5 +102,31 @@
     "leaveDescription": "デイリーチャレンジに戻ると、この練習パズルの進捗は失われます。",
     "leaveConfirm": "はい、チャレンジに戻る",
     "leaveCancel": "プレイを続ける"
+  },
+  "menu": {
+    "title": "メニュー",
+    "open": "メニューを開く",
+    "close": "メニューを閉じる",
+    "account": "アカウント",
+    "signInGoogle": "Googleでサインイン",
+    "signInHint": "サインインしてストリークと統計をデバイス間で引き継ぎましょう。",
+    "signOut": "サインアウト",
+    "authUnavailable": "サインインは利用できません — サーバーが設定されていません。"
+  },
+  "account": {
+    "title": "アカウント",
+    "back": "戻る",
+    "signedOut": "サインインしていません。",
+    "username": "表示名",
+    "usernameLocked": "名前は自動的に割り当てられ、変更できません。",
+    "email": "メール",
+    "language": "言語",
+    "theme": "テーマ",
+    "themeLight": "ライト",
+    "themeDark": "ダーク",
+    "themeToggle": "切替",
+    "streak": "現在のストリーク",
+    "longest": "最長",
+    "avgTime": "平均解答時間"
   }
 }

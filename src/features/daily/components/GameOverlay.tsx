@@ -40,11 +40,21 @@ export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPrac
   const solveRate = totalPlayers > 0
     ? `${Math.round(((stats?.total_solvers ?? 0) / totalPlayers) * 100)}%`
     : '—';
-  // Only trust percentile when there are enough solvers to make it meaningful
-  // (stats run before our own completion could land, making a "100%" claim misleading
-  // when the player is the only solver).
+  // Only show percentile when there are at least 2 other solvers (excluding current player)
+  // and percentile is strictly less than 100 — a true "fastest" claim requires the leaderboard
+  // to confirm there is no faster entry above the player.
   const hasMeaningfulPercentile =
-    state.isComplete && (stats?.total_solvers ?? 0) >= 2;
+    state.isComplete &&
+    !statsLoading &&
+    (stats?.total_solvers ?? 0) >= 2 &&
+    stats?.percentile != null &&
+    stats.percentile < 100;
+
+  const isFastest =
+    state.isComplete &&
+    !statsLoading &&
+    (stats?.total_solvers ?? 0) >= 2 &&
+    stats?.percentile === 100;
 
   const currentStreak = streak.currentStreak;
 
@@ -54,6 +64,7 @@ export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPrac
     elapsedSeconds: state.elapsedSeconds,
     streak: currentStreak,
     ...(hasMeaningfulPercentile && stats ? { percentile: stats.percentile } : {}),
+    ...(isFastest ? { percentile: 100 } : {}),
   };
 
   return (
@@ -121,13 +132,13 @@ export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPrac
             <StatCard value={`🔥 ${currentStreak}`} label={t('complete.streak')} />
           </div>
 
-          {hasMeaningfulPercentile && stats && stats.percentile === 100 && state.elapsedSeconds >= 30 && (
+          {isFastest && state.elapsedSeconds >= 30 && (
             <p className={css.fastestMessage}>
               {t('leaderboard.fastestToday', { number: state.puzzleNumber })}
             </p>
           )}
 
-          {hasMeaningfulPercentile && stats && stats.percentile < 100 && (
+          {hasMeaningfulPercentile && stats && (
             <p className={css.percentileMessage}>
               {t('globalStats.percentile', { percent: stats.percentile })}
             </p>
@@ -136,7 +147,7 @@ export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPrac
           {!statsLoading && <ShareResultButton shareData={shareData} />}
           {statsLoading && (
             <button className={css.shareLoading} disabled>
-              {t('stats.loading')}
+              ⏳ {t('stats.loading')}
             </button>
           )}
         </>
@@ -160,8 +171,6 @@ export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPrac
           streakData={data.streakData}
           speedData={data.speedData}
           loading={statsLoading}
-          localStreak={currentStreak}
-          localElapsedSeconds={state.isComplete ? state.elapsedSeconds : undefined}
         />
       )}
 

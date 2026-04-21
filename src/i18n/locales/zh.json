@@ -102,5 +102,31 @@
     "leaveDescription": "如果返回每日挑战，此练习谜题的进度将会丢失。",
     "leaveConfirm": "是的，回到挑战",
     "leaveCancel": "继续游戏"
+  },
+  "menu": {
+    "title": "菜单",
+    "open": "打开菜单",
+    "close": "关闭菜单",
+    "account": "账户",
+    "signInGoogle": "使用 Google 登录",
+    "signInHint": "登录以在所有设备上保留您的连胜和统计数据。",
+    "signOut": "退出登录",
+    "authUnavailable": "登录不可用 — 服务器未配置。"
+  },
+  "account": {
+    "title": "账户",
+    "back": "返回",
+    "signedOut": "您尚未登录。",
+    "username": "显示名称",
+    "usernameLocked": "您的名称是自动分配的，无法更改。",
+    "email": "电子邮件",
+    "language": "语言",
+    "theme": "主题",
+    "themeLight": "浅色",
+    "themeDark": "深色",
+    "themeToggle": "切换",
+    "streak": "当前连胜",
+    "longest": "最长",
+    "avgTime": "平均解题时间"
   }
 }

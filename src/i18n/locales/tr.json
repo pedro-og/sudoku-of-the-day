@@ -102,5 +102,31 @@
     "leaveDescription": "Günlük meydan okumaya dönerseniz bu pratik bulmacadaki ilerlemeniz kaybolacak.",
     "leaveConfirm": "Evet, meydan okumaya dön",
     "leaveCancel": "Oynamaya devam et"
+  },
+  "menu": {
+    "title": "Menü",
+    "open": "Menüyü aç",
+    "close": "Menüyü kapat",
+    "account": "Hesap",
+    "signInGoogle": "Google ile giriş yap",
+    "signInHint": "Serinizi ve istatistiklerinizi tüm cihazlarda taşımak için giriş yapın.",
+    "signOut": "Çıkış yap",
+    "authUnavailable": "Giriş yapılamıyor — sunucu yapılandırılmamış."
+  },
+  "account": {
+    "title": "Hesap",
+    "back": "Geri",
+    "signedOut": "Giriş yapmadınız.",
+    "username": "Görünen ad",
+    "usernameLocked": "Adınız otomatik atanır ve değiştirilemez.",
+    "email": "E-posta",
+    "language": "Dil",
+    "theme": "Tema",
+    "themeLight": "Açık",
+    "themeDark": "Koyu",
+    "themeToggle": "Değiştir",
+    "streak": "Mevcut seri",
+    "longest": "En uzun",
+    "avgTime": "Ort. çözüm süresi"
   }
 }

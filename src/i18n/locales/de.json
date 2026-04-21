@@ -102,5 +102,31 @@
     "leaveDescription": "Dein Fortschritt bei diesem Übungspuzzle geht verloren, wenn du zur täglichen Herausforderung zurückkehrst.",
     "leaveConfirm": "Ja, zurück zur Herausforderung",
     "leaveCancel": "Weiterspielen"
+  },
+  "menu": {
+    "title": "Menü",
+    "open": "Menü öffnen",
+    "close": "Menü schließen",
+    "account": "Konto",
+    "signInGoogle": "Mit Google anmelden",
+    "signInHint": "Melde dich an, um deine Serie und Statistiken geräteübergreifend zu behalten.",
+    "signOut": "Abmelden",
+    "authUnavailable": "Anmeldung nicht verfügbar — Server ist nicht konfiguriert."
+  },
+  "account": {
+    "title": "Konto",
+    "back": "Zurück",
+    "signedOut": "Du bist nicht angemeldet.",
+    "username": "Anzeigename",
+    "usernameLocked": "Dein Name wird automatisch vergeben und kann nicht geändert werden.",
+    "email": "E-Mail",
+    "language": "Sprache",
+    "theme": "Design",
+    "themeLight": "Hell",
+    "themeDark": "Dunkel",
+    "themeToggle": "Wechseln",
+    "streak": "Aktuelle Serie",
+    "longest": "Längste",
+    "avgTime": "Ø Lösungszeit"
   }
 }
