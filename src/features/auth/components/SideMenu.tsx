@@ -25,7 +25,7 @@ interface SideMenuProps {
 
 export function SideMenu({ open, onClose, theme, onToggleTheme }: SideMenuProps) {
   const { t, i18n } = useTranslation();
-  const { session, profile, loading, signInWithGoogle, signOut, updatePreferences } = useAuth();
+  const { session, profile, loading, signInWithGoogle, signOut, updatePreferences, refreshProfile } = useAuth();
 
   useEffect(() => {
     if (!open) return;
@@ -33,6 +33,10 @@ export function SideMenu({ open, onClose, theme, onToggleTheme }: SideMenuProps)
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, [open, onClose]);
+
+  useEffect(() => {
+    if (open && session) refreshProfile();
+  }, [open, session, refreshProfile]);
 
   if (!open) return null;
 
@@ -85,12 +89,20 @@ export function SideMenu({ open, onClose, theme, onToggleTheme }: SideMenuProps)
               </div>
 
               {profile && (
-                <div className={css.card}>
-                  <span className={css.cardLabel}>{t('account.streak')}</span>
-                  <span className={css.cardValue}>
-                    🔥 {profile.current_streak} · {t('account.longest')}: {profile.longest_streak}
-                  </span>
-                </div>
+                <>
+                  <div className={css.card}>
+                    <span className={css.cardLabel}>{t('account.streak')}</span>
+                    <span className={css.cardValue}>
+                      🔥 {profile.current_streak}
+                    </span>
+                  </div>
+                  <div className={css.card}>
+                    <span className={css.cardLabel}>{t('account.longest')}</span>
+                    <span className={css.cardValue}>
+                      {profile.longest_streak}
+                    </span>
+                  </div>
+                </>
               )}
 
               {profile?.avg_solve_time_seconds != null && (
