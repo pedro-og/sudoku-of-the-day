@@ -35,7 +35,7 @@ describe('SideMenu — closed', () => {
     mockUseAuth.mockReturnValue(defaultAuth());
     mockIsConfigured.mockReturnValue(true);
     const { container } = render(
-      <SideMenu open={false} onClose={vi.fn()} onNavigateAccount={vi.fn()} />
+      <SideMenu open={false} onClose={vi.fn()} theme="light" onToggleTheme={vi.fn()} />
     );
     expect(container).toBeEmptyDOMElement();
   });
@@ -48,12 +48,12 @@ describe('SideMenu — not configured', () => {
   });
 
   it('shows the unavailable message', () => {
-    render(<SideMenu open onClose={vi.fn()} onNavigateAccount={vi.fn()} />);
+    render(<SideMenu open onClose={vi.fn()} theme="light" onToggleTheme={vi.fn()} />);
     expect(screen.getByText('menu.authUnavailable')).toBeInTheDocument();
   });
 
   it('does not show the Google sign-in button', () => {
-    render(<SideMenu open onClose={vi.fn()} onNavigateAccount={vi.fn()} />);
+    render(<SideMenu open onClose={vi.fn()} theme="light" onToggleTheme={vi.fn()} />);
     expect(screen.queryByText('menu.signInGoogle')).not.toBeInTheDocument();
   });
 });
@@ -65,14 +65,14 @@ describe('SideMenu — configured, not signed in', () => {
   });
 
   it('shows the Google sign-in button', () => {
-    render(<SideMenu open onClose={vi.fn()} onNavigateAccount={vi.fn()} />);
+    render(<SideMenu open onClose={vi.fn()} theme="light" onToggleTheme={vi.fn()} />);
     expect(screen.getByText('menu.signInGoogle')).toBeInTheDocument();
   });
 
   it('calls signInWithGoogle when button clicked', () => {
     const auth = defaultAuth();
     mockUseAuth.mockReturnValue(auth);
-    render(<SideMenu open onClose={vi.fn()} onNavigateAccount={vi.fn()} />);
+    render(<SideMenu open onClose={vi.fn()} theme="light" onToggleTheme={vi.fn()} />);
     fireEvent.click(screen.getByText('menu.signInGoogle'));
     expect(auth.signInWithGoogle).toHaveBeenCalled();
   });
@@ -96,12 +96,12 @@ describe('SideMenu — signed in', () => {
   });
 
   it('shows the username', () => {
-    render(<SideMenu open onClose={vi.fn()} onNavigateAccount={vi.fn()} />);
+    render(<SideMenu open onClose={vi.fn()} theme="light" onToggleTheme={vi.fn()} />);
     expect(screen.getByText('Storm Blade')).toBeInTheDocument();
   });
 
   it('shows the email', () => {
-    render(<SideMenu open onClose={vi.fn()} onNavigateAccount={vi.fn()} />);
+    render(<SideMenu open onClose={vi.fn()} theme="light" onToggleTheme={vi.fn()} />);
     expect(screen.getByText('test@example.com')).toBeInTheDocument();
   });
 
@@ -109,7 +109,7 @@ describe('SideMenu — signed in', () => {
     const auth = defaultAuth({ session, profile });
     mockUseAuth.mockReturnValue(auth);
     const onClose = vi.fn();
-    render(<SideMenu open onClose={onClose} onNavigateAccount={vi.fn()} />);
+    render(<SideMenu open onClose={onClose} theme="light" onToggleTheme={vi.fn()} />);
     fireEvent.click(screen.getByText(/menu\.signOut/));
     expect(auth.signOut).toHaveBeenCalled();
     expect(onClose).toHaveBeenCalled();
@@ -117,21 +117,21 @@ describe('SideMenu — signed in', () => {
 
   it('calls onClose when the close button is clicked', () => {
     const onClose = vi.fn();
-    render(<SideMenu open onClose={onClose} onNavigateAccount={vi.fn()} />);
+    render(<SideMenu open onClose={onClose} theme="light" onToggleTheme={vi.fn()} />);
     fireEvent.click(screen.getByLabelText('menu.close'));
     expect(onClose).toHaveBeenCalled();
   });
 
   it('calls onClose when Escape is pressed', () => {
     const onClose = vi.fn();
-    render(<SideMenu open onClose={onClose} onNavigateAccount={vi.fn()} />);
+    render(<SideMenu open onClose={onClose} theme="light" onToggleTheme={vi.fn()} />);
     fireEvent.keyDown(document, { key: 'Escape' });
     expect(onClose).toHaveBeenCalled();
   });
 
   it('calls onClose when backdrop is clicked', () => {
     const onClose = vi.fn();
-    render(<SideMenu open onClose={onClose} onNavigateAccount={vi.fn()} />);
+    render(<SideMenu open onClose={onClose} theme="light" onToggleTheme={vi.fn()} />);
     // The backdrop is the first child
     const backdrop = document.querySelector('[class*="backdrop"]') as HTMLElement;
     fireEvent.click(backdrop);
