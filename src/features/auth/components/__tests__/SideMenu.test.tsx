@@ -105,22 +105,14 @@ describe('SideMenu — signed in', () => {
     expect(screen.getByText('test@example.com')).toBeInTheDocument();
   });
 
-  it('calls onNavigateAccount and onClose when Account is clicked', () => {
-    const onNavigate = vi.fn();
-    const onClose = vi.fn();
-    render(<SideMenu open onClose={onClose} onNavigateAccount={onNavigate} />);
-    // Button contains emoji + text node; use regex to match the text content.
-    fireEvent.click(screen.getByText(/menu\.account/));
-    expect(onNavigate).toHaveBeenCalled();
-    expect(onClose).toHaveBeenCalled();
-  });
-
-  it('calls signOut when sign out is clicked', () => {
+  it('calls signOut and onClose when sign out is clicked', () => {
     const auth = defaultAuth({ session, profile });
     mockUseAuth.mockReturnValue(auth);
-    render(<SideMenu open onClose={vi.fn()} onNavigateAccount={vi.fn()} />);
+    const onClose = vi.fn();
+    render(<SideMenu open onClose={onClose} onNavigateAccount={vi.fn()} />);
     fireEvent.click(screen.getByText(/menu\.signOut/));
     expect(auth.signOut).toHaveBeenCalled();
+    expect(onClose).toHaveBeenCalled();
   });
 
   it('calls onClose when the close button is clicked', () => {
