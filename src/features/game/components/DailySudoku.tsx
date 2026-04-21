@@ -50,6 +50,7 @@ export function DailySudoku({ theme, onToggleTheme, onOpenMenu }: DailySudokuPro
   const isPractice = state.gameMode === 'practice';
   const gameDisabled = state.isComplete || state.isGameOver;
   const [timerResetKey, setTimerResetKey] = useState(0);
+  const bumpTimerReset = useCallback(() => setTimerResetKey(k => k + 1), []);
 
   // Persistence (save to localStorage, record stats)
   useGamePersistence(state, cellIntervalsRef, refreshProfile, hydratedFromServer);
@@ -117,7 +118,6 @@ export function DailySudoku({ theme, onToggleTheme, onOpenMenu }: DailySudokuPro
   });
 
   // Timer
-  const bumpTimerReset = useCallback(() => setTimerResetKey(k => k + 1), []);
   const timerRunning = !state.isComplete && !state.isGameOver;
   useGameTimer(timerRunning, tick, state.elapsedSeconds, timerResetKey);
 
