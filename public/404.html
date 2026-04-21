@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      // GitHub Pages SPA redirect: preserve path + hash for client-side routing
+      var url = window.location.href;
+      var origin = window.location.origin;
+      sessionStorage.setItem('spa-redirect', url);
+      window.location.replace(origin + '/');
+    </script>
+  </head>
+  <body></body>
+</html>
