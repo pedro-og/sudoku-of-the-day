@@ -40,10 +40,12 @@ export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPrac
   const solveRate = totalPlayers > 0
     ? `${Math.round(((stats?.total_solvers ?? 0) / totalPlayers) * 100)}%`
     : '—';
-  const hasPercentile = state.isComplete && (stats?.total_solvers ?? 0) > 0;
+  // Only trust percentile when there are enough solvers to make it meaningful
+  // (stats run before our own completion could land, making a "100%" claim misleading
+  // when the player is the only solver).
+  const hasMeaningfulPercentile =
+    state.isComplete && (stats?.total_solvers ?? 0) >= 2;
 
-  // Bug #1: Always use local streak — it's updated immediately on completion,
-  // while server data arrives with a 1.5s delay and may be stale.
   const currentStreak = streak.currentStreak;
 
   const shareData = {
@@ -51,7 +53,7 @@ export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPrac
     mistakes: state.mistakes,
     elapsedSeconds: state.elapsedSeconds,
     streak: currentStreak,
-    ...(hasPercentile && stats ? { percentile: stats.percentile } : {}),
+    ...(hasMeaningfulPercentile && stats ? { percentile: stats.percentile } : {}),
   };
 
   return (
@@ -119,13 +121,13 @@ export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPrac
             <StatCard value={`🔥 ${currentStreak}`} label={t('complete.streak')} />
           </div>
 
-          {hasPercentile && stats && stats.percentile === 100 && stats.total_solvers > 1 && state.elapsedSeconds >= 30 && (
+          {hasMeaningfulPercentile && stats && stats.percentile === 100 && state.elapsedSeconds >= 30 && (
             <p className={css.fastestMessage}>
               {t('leaderboard.fastestToday', { number: state.puzzleNumber })}
             </p>
           )}
 
-          {hasPercentile && stats && (stats.percentile < 100 || stats.total_solvers <= 1) && (
+          {hasMeaningfulPercentile && stats && stats.percentile < 100 && (
             <p className={css.percentileMessage}>
               {t('globalStats.percentile', { percent: stats.percentile })}
             </p>
@@ -158,6 +160,8 @@ export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPrac
           streakData={data.streakData}
           speedData={data.speedData}
           loading={statsLoading}
+          localStreak={currentStreak}
+          localElapsedSeconds={state.isComplete ? state.elapsedSeconds : undefined}
         />
       )}
 

@@ -8,6 +8,7 @@ import { useGameState } from '../hooks/useGameState';
 import { useGameTimer } from '../hooks/useGameTimer';
 import { useGamePersistence } from '@features/daily/hooks/useGamePersistence';
 import { useStreak } from '@features/daily/hooks/useStreak';
+import { useAuth } from '@features/auth/context/AuthContext';
 import { useFastFill } from '../hooks/useFastFill';
 import { useKeyboardControls } from '../hooks/useKeyboardControls';
 
@@ -26,10 +27,12 @@ import css from './DailySudoku.module.css';
 interface DailySudokuProps {
   theme: 'light' | 'dark';
   onToggleTheme: () => void;
+  onOpenMenu?: () => void;
 }
 
-export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
+export function DailySudoku({ theme, onToggleTheme, onOpenMenu }: DailySudokuProps) {
   const { t } = useTranslation();
+  const { refreshProfile } = useAuth();
   const [showOverlay, setShowOverlay] = useState(true);
   const [showPracticeIntro, setShowPracticeIntro] = useState(false);
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
@@ -44,7 +47,7 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
   const [timerResetKey, setTimerResetKey] = useState(0);
 
   // Persistence (save to localStorage, record stats)
-  useGamePersistence(state, cellIntervalsRef);
+  useGamePersistence(state, cellIntervalsRef, refreshProfile);
 
   // Fast-fill mode
   const {
@@ -110,6 +113,7 @@ export function DailySudoku({ theme, onToggleTheme }: DailySudokuProps) {
         streak={streak}
         theme={theme}
         onToggleTheme={onToggleTheme}
+        onOpenMenu={onOpenMenu}
       />
 
       <div className={css.actionBar}>

@@ -6,9 +6,13 @@ import {
   recordCompletion,
   ensurePlayer,
 } from '../lib/statsApi';
-import { getPlayerId, getUsername } from '../lib/playerIdentity';
+import { getPlayerId } from '../lib/playerIdentity';
 
-export function useGamePersistence(state: GameState, cellIntervalsRef: RefObject<number[]>): void {
+export function useGamePersistence(
+  state: GameState,
+  cellIntervalsRef: RefObject<number[]>,
+  onRecordedCompletion?: () => void
+): void {
   const completionRecordedRef = useRef(false);
   const gameOverRecordedRef = useRef(false);
 
@@ -23,7 +27,7 @@ export function useGamePersistence(state: GameState, cellIntervalsRef: RefObject
 
   // Ensure anonymous player exists in DB (once ever)
   useEffect(() => {
-    ensurePlayer(getPlayerId(), getUsername());
+    ensurePlayer(getPlayerId());
   }, []);
 
   // Save game state to localStorage on changes (daily mode only)
@@ -49,9 +53,9 @@ export function useGamePersistence(state: GameState, cellIntervalsRef: RefObject
         true,
         s.puzzleDate,
         cellIntervalsRef.current ?? []
-      );
+      ).then(() => onRecordedCompletion?.());
     }
-  }, [state.isComplete, state.gameMode, state.puzzleDate, state.puzzleNumber, cellIntervalsRef]);
+  }, [state.isComplete, state.gameMode, state.puzzleDate, state.puzzleNumber, cellIntervalsRef, onRecordedCompletion]);
 
   // Record game over (failure) stats
   useEffect(() => {

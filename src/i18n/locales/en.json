@@ -102,5 +102,31 @@
     "leaveDescription": "Your progress on this practice puzzle will be lost if you go back to the daily challenge.",
     "leaveConfirm": "Yes, back to challenge",
     "leaveCancel": "Keep playing"
+  },
+  "menu": {
+    "title": "Menu",
+    "open": "Open menu",
+    "close": "Close menu",
+    "account": "Account",
+    "signInGoogle": "Sign in with Google",
+    "signInHint": "Sign in to carry your streak and stats across devices.",
+    "signOut": "Sign out",
+    "authUnavailable": "Sign-in is not available — server is not configured."
+  },
+  "account": {
+    "title": "Account",
+    "back": "Back",
+    "signedOut": "You are not signed in.",
+    "username": "Display name",
+    "usernameLocked": "Your name is assigned automatically and can't be changed.",
+    "email": "Email",
+    "language": "Language",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeToggle": "Toggle",
+    "streak": "Current streak",
+    "longest": "Longest",
+    "avgTime": "Avg solve time"
   }
 }

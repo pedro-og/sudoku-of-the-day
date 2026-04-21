@@ -1,4 +1,5 @@
 import type { DailyStats, PuzzleStatsResponse, StreakLeaderboardResponse, SpeedLeaderboardResponse } from '@/types';
+import { setAnonymousUsername } from './playerIdentity';
 
 const TABLE = 'daily_stats';
 const MIN_PLAY_TIME_SECONDS = 30;
@@ -57,20 +58,30 @@ export async function recordPlayerStarted(puzzleNumber: number): Promise<void> {
 }
 
 
-export async function ensurePlayer(playerId: string, username: string): Promise<void> {
+export async function ensurePlayer(playerId: string): Promise<void> {
   if (!isConfigured()) return;
   const key = `daily-sudoku:player-ensured`;
   if (localStorage.getItem(key)) return;
   try {
-    await fetch(`${getUrl()}/rest/v1/rpc/ensure_player`, {
+    const res = await fetch(`${getUrl()}/rest/v1/rpc/ensure_player`, {
       method: 'POST',
       headers: headers(),
-      body: JSON.stringify({ p_id: playerId, p_username: username }),
+      body: JSON.stringify({ p_id: playerId }),
     });
-    localStorage.setItem(key, '1');
+    if (res.ok) {
+      const row = await res.json();
+      if (row?.username) setAnonymousUsername(row.username);
+      localStorage.setItem(key, '1');
+    }
   } catch {
     // NOP
   }
+}
+
+const completionPromises = new Map<number, Promise<void>>();
+
+export function getCompletionPromise(puzzleNumber: number): Promise<void> | null {
+  return completionPromises.get(puzzleNumber) ?? null;
 }
 
 export async function recordCompletion(
@@ -88,26 +99,32 @@ export async function recordCompletion(
 
   const key = `daily-sudoku:completion:${puzzleNumber}`;
   if (localStorage.getItem(key)) return;
-  try {
-    const res = await fetch(`${getUrl()}/rest/v1/rpc/record_completion`, {
-      method: 'POST',
-      headers: headers(),
-      body: JSON.stringify({
-        p_player_id: playerId,
-        p_puzzle_number: puzzleNumber,
-        p_elapsed_seconds: elapsedSeconds,
-        p_mistakes: mistakes,
-        p_solved: solved,
-        p_puzzle_date: puzzleDate,
-        p_cell_intervals: cellIntervals,
-      }),
-    });
-    if (res.ok) {
-      localStorage.setItem(key, '1');
+
+  const promise = (async () => {
+    try {
+      const res = await fetch(`${getUrl()}/rest/v1/rpc/record_completion`, {
+        method: 'POST',
+        headers: headers(),
+        body: JSON.stringify({
+          p_player_id: playerId,
+          p_puzzle_number: puzzleNumber,
+          p_elapsed_seconds: elapsedSeconds,
+          p_mistakes: mistakes,
+          p_solved: solved,
+          p_puzzle_date: puzzleDate,
+          p_cell_intervals: cellIntervals,
+        }),
+      });
+      if (res.ok) {
+        localStorage.setItem(key, '1');
+      }
+    } catch {
+      // NOP
     }
-  } catch {
-    // NOP
-  }
+  })();
+
+  completionPromises.set(puzzleNumber, promise);
+  return promise;
 }
 
 

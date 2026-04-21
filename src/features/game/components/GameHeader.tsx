@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { StreakDisplay } from '@features/daily/components/StreakDisplay';
 import { GameTimer } from './GameTimer';
 import { ThemeToggle } from '@features/theme/components/ThemeToggle';
+import { HamburgerButton } from '@features/auth';
 import type { StreakData } from '@/types';
 import css from './GameHeader.module.css';
 
@@ -12,10 +13,11 @@ interface GameHeaderProps {
   streak: StreakData;
   theme: 'light' | 'dark';
   onToggleTheme: () => void;
+  onOpenMenu?: () => void;
 }
 
 export function GameHeader({
-  puzzleNumber, isPractice, elapsedSeconds, streak, theme, onToggleTheme,
+  puzzleNumber, isPractice, elapsedSeconds, streak, theme, onToggleTheme, onOpenMenu,
 }: GameHeaderProps) {
   const { t } = useTranslation();
 
@@ -31,6 +33,7 @@ export function GameHeader({
         {!isPractice && <StreakDisplay streak={streak} />}
         <GameTimer elapsedSeconds={elapsedSeconds} />
         <ThemeToggle theme={theme} onToggle={onToggleTheme} />
+        {onOpenMenu && <HamburgerButton onClick={onOpenMenu} />}
       </div>
     </header>
   );

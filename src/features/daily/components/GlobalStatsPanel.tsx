@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { fetchPuzzleStats, fetchStreakLeaderboard, fetchSpeedLeaderboard } from '../lib/statsApi';
+import { fetchPuzzleStats, fetchStreakLeaderboard, fetchSpeedLeaderboard, getCompletionPromise } from '../lib/statsApi';
 import { getPlayerId } from '../lib/playerIdentity';
 import type { PuzzleStatsResponse, StreakLeaderboardResponse, SpeedLeaderboardResponse } from '@/types';
 
@@ -21,17 +21,31 @@ export function useOverlayData(puzzleNumber: number, elapsedSeconds: number): Us
   const [playerId] = useState(() => getPlayerId());
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      Promise.all([
-        fetchPuzzleStats(puzzleNumber, elapsedRef.current),
-        fetchStreakLeaderboard(playerId),
-        fetchSpeedLeaderboard(playerId, puzzleNumber),
-      ]).then(([stats, streakData, speedData]) => {
+    let cancelled = false;
+
+    async function load() {
+      const completion = getCompletionPromise(puzzleNumber);
+      if (completion) {
+        await completion;
+      } else {
+        await new Promise(r => setTimeout(r, 1500));
+      }
+      if (cancelled) return;
+      try {
+        const [stats, streakData, speedData] = await Promise.all([
+          fetchPuzzleStats(puzzleNumber, elapsedRef.current),
+          fetchStreakLeaderboard(playerId),
+          fetchSpeedLeaderboard(playerId, puzzleNumber),
+        ]);
+        if (cancelled) return;
         setData({ stats, streakData, speedData });
-        setLoading(false);
-      }).catch(() => setLoading(false));
-    }, 1500);
-    return () => clearTimeout(timer);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    load();
+    return () => { cancelled = true; };
   }, [puzzleNumber, playerId]);
 
   return { data, loading };

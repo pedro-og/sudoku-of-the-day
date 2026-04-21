@@ -102,5 +102,31 @@
     "leaveDescription": "Seu progresso neste puzzle de prática será perdido se você voltar ao desafio diário.",
     "leaveConfirm": "Sim, voltar ao desafio",
     "leaveCancel": "Continuar jogando"
+  },
+  "menu": {
+    "title": "Menu",
+    "open": "Abrir menu",
+    "close": "Fechar menu",
+    "account": "Conta",
+    "signInGoogle": "Entrar com Google",
+    "signInHint": "Entre para manter sua sequência e estatísticas em todos os dispositivos.",
+    "signOut": "Sair",
+    "authUnavailable": "Login indisponível — servidor não configurado."
+  },
+  "account": {
+    "title": "Conta",
+    "back": "Voltar",
+    "signedOut": "Você não está conectado.",
+    "username": "Nome de exibição",
+    "usernameLocked": "Seu nome é atribuído automaticamente e não pode ser alterado.",
+    "email": "E-mail",
+    "language": "Idioma",
+    "theme": "Tema",
+    "themeLight": "Claro",
+    "themeDark": "Escuro",
+    "themeToggle": "Alternar",
+    "streak": "Sequência atual",
+    "longest": "Maior sequência",
+    "avgTime": "Tempo médio"
   }
 }
