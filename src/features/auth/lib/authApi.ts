@@ -51,7 +51,14 @@ export async function linkAnonymousPlayer(anonId: string | null): Promise<Player
   if (!supabase) return null;
   const { data, error } = await supabase.rpc('link_anonymous_player', { p_anon_id: anonId });
   if (error || !data) return null;
-  return data as PlayerProfile;
+  const profile = data as PlayerProfile;
+  // link_anonymous_player doesn't compute avg_solve_time_seconds; fetch via get_me
+  // so the menu renders the full profile (name, streak, avg time) correctly.
+  if (profile.avg_solve_time_seconds == null) {
+    const full = await getMe();
+    if (full) return full;
+  }
+  return profile;
 }
 
 export async function getMe(): Promise<PlayerProfile | null> {

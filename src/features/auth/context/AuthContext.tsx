@@ -79,11 +79,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let mounted = true;
 
     (async () => {
-      const current = await getSession();
-      if (!mounted) return;
-      setSession(current);
-      await loadProfile(current);
-      if (mounted) setLoading(false);
+      try {
+        const current = await getSession();
+        if (!mounted) return;
+        setSession(current);
+        await loadProfile(current);
+      } finally {
+        if (mounted) setLoading(false);
+      }
     })();
 
     const supabase = getSupabase();
