@@ -49,7 +49,7 @@
     "mistakes": "错误",
     "time": "时间",
     "streak": "连续记录",
-    "domain": "sudoku-of-the-day.com"
+    "domain": "https://sudoku-of-the-day.com"
   },
   "stats": {
     "title": "今日全球统计",

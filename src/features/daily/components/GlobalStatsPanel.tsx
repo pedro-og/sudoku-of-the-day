@@ -24,12 +24,16 @@ export function useOverlayData(puzzleNumber: number, elapsedSeconds: number): Us
     let cancelled = false;
 
     async function load() {
-      const completion = getCompletionPromise(puzzleNumber);
-      if (completion) {
-        await completion;
-      } else {
-        await new Promise(r => setTimeout(r, 1500));
+      // Wait for recordCompletion's promise to register, then await it. The overlay
+      // can mount before the completion-recording effect runs, so poll briefly.
+      let completion = getCompletionPromise(puzzleNumber);
+      const deadline = Date.now() + 3000;
+      while (!completion && Date.now() < deadline) {
+        await new Promise(r => setTimeout(r, 100));
+        if (cancelled) return;
+        completion = getCompletionPromise(puzzleNumber);
       }
+      if (completion) await completion;
       if (cancelled) return;
       try {
         const [stats, streakData, speedData] = await Promise.all([

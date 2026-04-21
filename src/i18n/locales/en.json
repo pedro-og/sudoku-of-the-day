@@ -49,7 +49,7 @@
     "mistakes": "Mistakes",
     "time": "Time",
     "streak": "Streak",
-    "domain": "sudoku-of-the-day.com"
+    "domain": "https://sudoku-of-the-day.com"
   },
   "stats": {
     "title": "Today's Global Stats",
