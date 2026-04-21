@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { createDailyInitialState, createPracticeInitialState } from '../lib/puzzleFactory';
@@ -9,6 +9,10 @@ import { useGameTimer } from '../hooks/useGameTimer';
 import { useGamePersistence } from '@features/daily/hooks/useGamePersistence';
 import { useStreak } from '@features/daily/hooks/useStreak';
 import { useAuth } from '@features/auth/context/AuthContext';
+import { getMyCompletion } from '@features/auth/lib/authApi';
+import { detectCompletions } from '../lib/completionDetector';
+import { clearGameState } from '@shared/lib/localGameStorage';
+import { getBrazilDateString } from '@features/daily/lib/dailyPuzzle';
 import { useFastFill } from '../hooks/useFastFill';
 import { useKeyboardControls } from '../hooks/useKeyboardControls';
 
@@ -32,7 +36,8 @@ interface DailySudokuProps {
 
 export function DailySudoku({ theme, onToggleTheme, onOpenMenu }: DailySudokuProps) {
   const { t } = useTranslation();
-  const { refreshProfile } = useAuth();
+  const { refreshProfile, profile, session } = useAuth();
+  const [hydratedFromServer, setHydratedFromServer] = useState(false);
   const [showOverlay, setShowOverlay] = useState(true);
   const [showPracticeIntro, setShowPracticeIntro] = useState(false);
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
@@ -47,7 +52,53 @@ export function DailySudoku({ theme, onToggleTheme, onOpenMenu }: DailySudokuPro
   const [timerResetKey, setTimerResetKey] = useState(0);
 
   // Persistence (save to localStorage, record stats)
-  useGamePersistence(state, cellIntervalsRef, refreshProfile);
+  useGamePersistence(state, cellIntervalsRef, refreshProfile, hydratedFromServer);
+
+  // Hydrate from server completion when logged-in profile shows today's puzzle was already completed.
+  const stateRef = useRef(state);
+  stateRef.current = state;
+  useEffect(() => {
+    const s = stateRef.current;
+    if (s.gameMode !== 'daily' || s.isComplete) return;
+    const today = getBrazilDateString();
+    if (s.puzzleDate !== today) return;
+    if (!session || !profile || profile.last_completed_date !== today) return;
+
+    let cancelled = false;
+    (async () => {
+      const completion = await getMyCompletion(s.puzzleNumber);
+      if (cancelled || !completion || !completion.solved) return;
+      clearGameState(s.puzzleDate);
+      const solvedBoard = s.solution.map(row => [...row]) as typeof s.board;
+      setHydratedFromServer(true);
+      reset({
+        ...s,
+        board: solvedBoard,
+        mistakes: completion.mistakes,
+        elapsedSeconds: completion.elapsed_seconds,
+        isComplete: true,
+        isGameOver: false,
+        selectedCell: null,
+        pencilMode: false,
+        mistakeCell: null,
+        mistakeValue: 0,
+        animatingCells: new Set(),
+        previousCompletions: detectCompletions(solvedBoard),
+        autoSolved: false,
+      });
+    })();
+    return () => { cancelled = true; };
+  }, [session, profile?.last_completed_date, reset]);
+
+  // On logout, revert server-hydrated completed view to fresh daily state.
+  useEffect(() => {
+    if (!session && hydratedFromServer) {
+      setHydratedFromServer(false);
+      setShowOverlay(true);
+      bumpTimerReset();
+      reset(createDailyInitialState().state);
+    }
+  }, [session, hydratedFromServer, reset, bumpTimerReset]);
 
   // Fast-fill mode
   const {

@@ -44,6 +44,14 @@ export function saveGameState(state: GameState, cellIntervals?: number[]): void 
   }
 }
 
+export function clearGameState(puzzleDate: string): void {
+  try {
+    localStorage.removeItem(storageKey(puzzleDate));
+  } catch {
+    /* ignore */
+  }
+}
+
 export function loadCellIntervals(puzzleDate: string): number[] {
   try {
     const raw = localStorage.getItem(storageKey(puzzleDate));

@@ -12,8 +12,8 @@
   right: 0;
   height: 100%;
   width: min(340px, 85vw);
-  background: var(--bg-surface, #fff);
-  color: var(--text-primary, #111);
+  background: var(--bg-surface);
+  color: var(--text-primary);
   box-shadow: -4px 0 18px rgba(0, 0, 0, 0.12);
   z-index: 101;
   display: flex;
@@ -26,7 +26,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.25rem;
-  border-bottom: 1px solid var(--border-muted, #e5e7eb);
+  border-bottom: 1px solid var(--cell-border);
 }
 
 .title {
@@ -59,7 +59,7 @@
   gap: 0.25rem;
   padding: 0.75rem;
   border-radius: 8px;
-  background: var(--bg-muted, #f4f6fb);
+  background: var(--bg-surface-alt);
 }
 
 .profileName {
@@ -68,7 +68,7 @@
 
 .profileEmail {
   font-size: 0.85rem;
-  color: var(--text-muted, #555);
+  color: var(--text-secondary);
   text-decoration: none;
   pointer-events: none;
   -webkit-user-select: text;
@@ -91,7 +91,7 @@
 }
 
 .menuItem:hover {
-  background: var(--bg-muted, #f4f6fb);
+  background: var(--bg-surface-alt);
 }
 
 .signInButton {
@@ -101,37 +101,37 @@
   gap: 0.5rem;
   padding: 0.65rem 1rem;
   border-radius: 8px;
-  border: 1px solid var(--border-muted, #e5e7eb);
-  background: var(--bg-surface, #fff);
-  color: var(--text-primary, #111);
+  border: 1px solid var(--cell-border);
+  background: var(--bg-surface);
+  color: var(--text-primary);
   font-weight: 600;
   cursor: pointer;
   width: 100%;
 }
 
 .signInButton:hover {
-  background: var(--bg-muted, #f4f6fb);
+  background: var(--bg-surface-alt);
 }
 
 .hint {
   font-size: 0.8rem;
-  color: var(--text-muted, #555);
+  color: var(--text-secondary);
   line-height: 1.4;
 }
 
 .card {
-  border: 1px solid var(--border-muted, #e5e7eb);
+  border: 1px solid var(--cell-border);
   border-radius: 10px;
   padding: 0.75rem 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  background: var(--bg-surface, #fff);
+  background: var(--bg-surface-alt);
 }
 
 .cardLabel {
   font-size: 0.8rem;
-  color: var(--text-muted, #555);
+  color: var(--text-secondary);
 }
 
 .cardValue {
@@ -149,8 +149,8 @@
 .select {
   padding: 0.4rem 0.6rem;
   border-radius: 8px;
-  border: 1px solid var(--border-muted, #e5e7eb);
-  background: var(--bg-muted, #f4f6fb);
+  border: 1px solid var(--cell-border);
+  background: var(--bg-surface-alt);
   color: inherit;
   font: inherit;
   font-size: 0.85rem;
@@ -158,8 +158,8 @@
 }
 
 .themeToggle {
-  background: var(--bg-muted, #f4f6fb);
-  border: 1px solid var(--border-muted, #e5e7eb);
+  background: var(--bg-surface-alt);
+  border: 1px solid var(--cell-border);
   border-radius: 8px;
   padding: 0.4rem 0.65rem;
   cursor: pointer;
@@ -174,8 +174,8 @@
   padding: 0.75rem;
   border-radius: 8px;
   background: none;
-  border: 1px solid var(--border-muted, #e5e7eb);
-  color: var(--text-muted, #555);
+  border: 1px solid var(--cell-border);
+  color: var(--text-secondary);
   text-align: left;
   font: inherit;
   cursor: pointer;
@@ -184,12 +184,12 @@
 }
 
 .signOutButton:hover {
-  background: var(--bg-muted, #f4f6fb);
+  background: var(--bg-surface-alt);
 }
 
 .hamburger {
   background: none;
-  border: 1px solid var(--border-muted, #e5e7eb);
+  border: 1px solid var(--cell-border);
   border-radius: 8px;
   padding: 0.4rem 0.55rem;
   cursor: pointer;

@@ -11,7 +11,8 @@ import { getPlayerId } from '../lib/playerIdentity';
 export function useGamePersistence(
   state: GameState,
   cellIntervalsRef: RefObject<number[]>,
-  onRecordedCompletion?: () => void
+  onRecordedCompletion?: () => void,
+  skipPersistence?: boolean
 ): void {
   const completionRecordedRef = useRef(false);
   const gameOverRecordedRef = useRef(false);
@@ -32,10 +33,10 @@ export function useGamePersistence(
 
   // Save game state to localStorage on changes (daily mode only)
   useEffect(() => {
-    if (state.gameMode !== 'practice') {
+    if (state.gameMode !== 'practice' && !skipPersistence) {
       saveGameState(state, cellIntervalsRef.current);
     }
-  }, [state, cellIntervalsRef]);
+  }, [state, cellIntervalsRef, skipPersistence]);
 
   // Record streak completion and stats (once per completion)
   useEffect(() => {
@@ -43,7 +44,7 @@ export function useGamePersistence(
     // Skip if game was already complete when the component mounted (previous session).
     // Streak was already recorded then — calling again risks resetting it if streak
     // localStorage was cleared between sessions.
-    if (s.isComplete && s.gameMode !== 'practice' && !s.autoSolved && !completionRecordedRef.current && !wasAlreadyCompleteOnMountRef.current) {
+    if (s.isComplete && s.gameMode !== 'practice' && !s.autoSolved && !completionRecordedRef.current && !wasAlreadyCompleteOnMountRef.current && !skipPersistence) {
       completionRecordedRef.current = true;
       recordCompletion(
         getPlayerId(),
@@ -76,8 +77,8 @@ export function useGamePersistence(
 
   // Record player started (daily mode only)
   useEffect(() => {
-    if (state.gameMode !== 'practice') {
+    if (state.gameMode !== 'practice' && !skipPersistence) {
       recordPlayerStarted(state.puzzleNumber);
     }
-  }, [state.puzzleNumber, state.gameMode]);
+  }, [state.puzzleNumber, state.gameMode, skipPersistence]);
 }

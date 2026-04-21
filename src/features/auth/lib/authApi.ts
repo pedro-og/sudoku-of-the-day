@@ -69,6 +69,21 @@ export async function getMe(): Promise<PlayerProfile | null> {
   return data as PlayerProfile;
 }
 
+export interface MyCompletion {
+  puzzle_number: number;
+  elapsed_seconds: number;
+  mistakes: number;
+  solved: boolean;
+}
+
+export async function getMyCompletion(puzzleNumber: number): Promise<MyCompletion | null> {
+  const supabase = getSupabase();
+  if (!supabase) return null;
+  const { data, error } = await supabase.rpc('get_my_completion', { p_puzzle_number: puzzleNumber });
+  if (error || !data) return null;
+  return data as MyCompletion;
+}
+
 export async function setPreferences(prefs: {
   language?: string;
   theme?: 'light' | 'dark';
