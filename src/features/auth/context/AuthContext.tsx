@@ -83,17 +83,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const current = await getSession();
         if (!mounted) return;
         setSession(current);
-        await loadProfile(current);
-      } finally {
+        // Don't block loading on profile RPC — it can hang on mobile Safari
+        // after the tab returns from background. Session presence is enough
+        // to render the menu; profile populates asynchronously.
+        if (mounted) setLoading(false);
+        loadProfile(current).catch(() => {});
+      } catch {
         if (mounted) setLoading(false);
       }
     })();
 
     const supabase = getSupabase();
-    const { data: listener } = supabase!.auth.onAuthStateChange(async (_event, newSession) => {
+    const { data: listener } = supabase!.auth.onAuthStateChange((_event, newSession) => {
       if (!mounted) return;
       setSession(newSession);
-      await loadProfile(newSession);
+      loadProfile(newSession).catch(() => {});
     });
 
     return () => {
