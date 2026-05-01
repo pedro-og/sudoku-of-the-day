@@ -21,7 +21,8 @@ export interface GameState {
   fixed: FixedCells;
   notes: Notes;
   mistakes: number;
-  maxMistakes: 3;
+  maxMistakes: number;
+  extraChanceUsed: boolean;
   selectedCell: [number, number] | null;
   pencilMode: boolean;
   isComplete: boolean;
@@ -55,7 +56,6 @@ export interface ShareData {
   mistakes: number;
   elapsedSeconds: number;
   streak: number;
-  percentile?: number;
 }
 
 export interface PuzzleStatsResponse {

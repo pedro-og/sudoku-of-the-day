@@ -14,7 +14,8 @@ type Action =
   | { type: 'RESET'; state: GameState }
   | { type: 'CLEAR_MISTAKE' }
   | { type: 'CLEAR_ANIMATIONS' }
-  | { type: 'AUTO_SOLVE' };
+  | { type: 'AUTO_SOLVE' }
+  | { type: 'GRANT_EXTRA_CHANCE' };
 
 interface HistoryEntry {
   board: GameState['board'];
@@ -129,7 +130,7 @@ function reducer(state: ReducerState, action: Action): ReducerState {
         }
       }
 
-      const isGameOver = state.gameMode !== 'practice' && newMistakes >= 3;
+      const isGameOver = state.gameMode !== 'practice' && newMistakes >= state.maxMistakes;
       const isComplete = !isGameOver && isBoardComplete(newBoard, state.solution);
 
       const currentCompletions = detectCompletions(newBoard);
@@ -156,6 +157,16 @@ function reducer(state: ReducerState, action: Action): ReducerState {
 
     case 'CLEAR_ANIMATIONS':
       return { ...state, animatingCells: new Set() };
+
+    case 'GRANT_EXTRA_CHANCE': {
+      if (!state.isGameOver || state.extraChanceUsed || state.gameMode === 'practice') return state;
+      return {
+        ...state,
+        isGameOver: false,
+        maxMistakes: state.maxMistakes + 1,
+        extraChanceUsed: true,
+      };
+    }
 
     case 'AUTO_SOLVE': {
       if (state.isComplete || state.isGameOver) return state;
@@ -236,6 +247,10 @@ export function useGameState(initialState: GameState, initialCellIntervals: numb
     dispatch({ type: 'AUTO_SOLVE' });
   }, []);
 
+  const grantExtraChance = useCallback(() => {
+    dispatch({ type: 'GRANT_EXTRA_CHANCE' });
+  }, []);
+
   // Auto-clear mistake visual after animation
   useEffect(() => {
     if (state.mistakeCell) {
@@ -252,5 +267,5 @@ export function useGameState(initialState: GameState, initialCellIntervals: numb
     }
   }, [state.animatingCells]);
 
-  return { state, selectCell, enterNumber, erase, togglePencil, undo, tick, reset, autoSolve, cellIntervalsRef };
+  return { state, selectCell, enterNumber, erase, togglePencil, undo, tick, reset, autoSolve, grantExtraChance, cellIntervalsRef };
 }

@@ -17,7 +17,6 @@ const labels = {
   mistakes: 'Mistakes',
   time: 'Time',
   streak: 'Streak',
-  percentile: 'Faster than {{percent}}% of players',
   domain: 'sudoku-of-the-day.com',
 };
 
@@ -62,13 +61,9 @@ describe('buildShareText', () => {
     expect(text).toContain('sudoku-of-the-day.com');
   });
 
-  it('includes percentile with bolt emoji when provided', () => {
-    const text = buildShareText(createShareData({ percentile: 85 }), labels);
-    expect(text).toContain('Faster than 85% of players ⚡');
-  });
-
-  it('omits percentile when not provided', () => {
+  it('never includes percentile in share text', () => {
     const text = buildShareText(createShareData(), labels);
     expect(text).not.toContain('Faster than');
+    expect(text).not.toContain('⚡');
   });
 });

@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { ShareResultButton } from './ShareResultButton';
+import { ExtraChanceButton } from './ExtraChanceButton';
 import { useOverlayData } from './GlobalStatsPanel';
 import { StreakLeaderboard } from './StreakLeaderboard';
 import { Modal } from '@shared/components/Modal/Modal';
@@ -16,14 +17,28 @@ interface GameOverlayProps {
   onDismiss: () => void;
   onBackToDaily?: () => void;
   onNewPractice?: () => void;
+  onExtraChance?: () => void;
 }
 
 
-export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPractice }: GameOverlayProps) {
+export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPractice, onExtraChance }: GameOverlayProps) {
   const { t } = useTranslation();
   const countdown = useCountdown('America/Sao_Paulo');
   const { data, loading: statsLoading } = useOverlayData(state.puzzleNumber, state.elapsedSeconds);
   const stats = data.stats;
+  const speedData = data.speedData;
+
+  // Compute percentile from the speed leaderboard rank: % of OTHER solvers the
+  // player beat. With N solvers and rank R, the player is faster than (N - R)
+  // others out of (N - 1) peers. Server-side percentile is wrong (divides by N
+  // instead of N-1, so rank 1 of 3 reports 67% instead of 100%).
+  const computedPercentile: number | null = (() => {
+    if (!speedData || speedData.player_rank == null) return null;
+    const total = speedData.total_solvers;
+    const rank = speedData.player_rank;
+    if (total < 2) return null;
+    return Math.round(((total - rank) / (total - 1)) * 100);
+  })();
 
   if (!state.isComplete && !state.isGameOver) return null;
 
@@ -40,21 +55,16 @@ export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPrac
   const solveRate = totalPlayers > 0
     ? `${Math.round(((stats?.total_solvers ?? 0) / totalPlayers) * 100)}%`
     : '—';
-  // Only show percentile when there are at least 2 other solvers (excluding current player)
-  // and percentile is strictly less than 100 — a true "fastest" claim requires the leaderboard
-  // to confirm there is no faster entry above the player.
   const hasMeaningfulPercentile =
     state.isComplete &&
     !statsLoading &&
-    (stats?.total_solvers ?? 0) >= 2 &&
-    stats?.percentile != null &&
-    stats.percentile < 100;
+    computedPercentile != null &&
+    computedPercentile < 100;
 
   const isFastest =
     state.isComplete &&
     !statsLoading &&
-    (stats?.total_solvers ?? 0) >= 2 &&
-    stats?.percentile === 100;
+    computedPercentile === 100;
 
   const currentStreak = streak.currentStreak;
 
@@ -63,8 +73,6 @@ export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPrac
     mistakes: state.mistakes,
     elapsedSeconds: state.elapsedSeconds,
     streak: currentStreak,
-    ...(hasMeaningfulPercentile && stats ? { percentile: stats.percentile } : {}),
-    ...(isFastest ? { percentile: 100 } : {}),
   };
 
   return (
@@ -138,9 +146,9 @@ export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPrac
             </p>
           )}
 
-          {hasMeaningfulPercentile && stats && (
+          {hasMeaningfulPercentile && (
             <p className={css.percentileMessage}>
-              {t('globalStats.percentile', { percent: stats.percentile })}
+              {t('globalStats.percentile', { percent: computedPercentile })}
             </p>
           )}
 
@@ -153,10 +161,18 @@ export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPrac
         </>
       )}
 
-      {/* Daily game over: just show share */}
+      {/* Daily game over: extra chance (if available) + muted share */}
       {!isPractice && isOver && (
         <>
-          {!statsLoading && <ShareResultButton shareData={shareData} />}
+          {!state.extraChanceUsed && onExtraChance && (
+            <ExtraChanceButton onRewarded={onExtraChance} />
+          )}
+          {!statsLoading && (
+            <ShareResultButton
+              shareData={shareData}
+              variant={state.extraChanceUsed ? 'primary' : 'muted'}
+            />
+          )}
           {statsLoading && (
             <button className={css.shareLoading} disabled>
               {t('stats.loading')}

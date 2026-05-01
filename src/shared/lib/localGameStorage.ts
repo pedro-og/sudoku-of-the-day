@@ -9,6 +9,8 @@ interface PersistedGame {
   board: Board;
   notes: SerializedNotes;
   mistakes: number;
+  maxMistakes?: number;
+  extraChanceUsed?: boolean;
   isComplete: boolean;
   isGameOver: boolean;
   elapsedSeconds: number;
@@ -32,6 +34,8 @@ export function saveGameState(state: GameState, cellIntervals?: number[]): void 
     board: state.board,
     notes: serializeNotes(state.notes),
     mistakes: state.mistakes,
+    maxMistakes: state.maxMistakes,
+    extraChanceUsed: state.extraChanceUsed,
     isComplete: state.isComplete,
     isGameOver: state.isGameOver,
     elapsedSeconds: state.elapsedSeconds,
@@ -81,7 +85,8 @@ export function loadGameState(
       fixed,
       notes: deserializeNotes(parsed.notes),
       mistakes: parsed.mistakes,
-      maxMistakes: 3,
+      maxMistakes: parsed.maxMistakes ?? 3,
+      extraChanceUsed: parsed.extraChanceUsed ?? false,
       selectedCell: null,
       pencilMode: false,
       isComplete: parsed.isComplete,
@@ -120,6 +125,7 @@ export function buildInitialState(
     notes,
     mistakes: 0,
     maxMistakes: 3,
+    extraChanceUsed: false,
     selectedCell: null,
     pencilMode: false,
     isComplete: false,

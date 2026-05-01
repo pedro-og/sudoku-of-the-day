@@ -26,6 +26,11 @@
     "puzzleNumber": "Puzzle #{{number}}",
     "nextPuzzleIn": "Próximo puzzle em"
   },
+  "extraChance": {
+    "button": "Assista a um anúncio para 1 chance extra",
+    "loading": "Carregando anúncio…",
+    "adBadge": "AD"
+  },
   "complete": {
     "title": "Puzzle Completo!",
     "subtitle": "Parabéns!",

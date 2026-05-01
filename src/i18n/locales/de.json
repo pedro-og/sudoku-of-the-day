@@ -26,6 +26,11 @@
     "puzzleNumber": "Rätsel #{{number}}",
     "nextPuzzleIn": "Nächstes Rätsel in"
   },
+  "extraChance": {
+    "button": "Watch ad for 1 extra chance",
+    "loading": "Loading ad…",
+    "adBadge": "AD"
+  },
   "complete": {
     "title": "Rätsel gelöst!",
     "subtitle": "Glückwunsch!",

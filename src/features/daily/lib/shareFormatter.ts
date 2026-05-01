@@ -6,7 +6,6 @@ interface ShareTextLabels {
   mistakes: string;
   time: string;
   streak: string;
-  percentile: string;
   domain: string;
 }
 
@@ -28,10 +27,6 @@ export function buildShareText(data: ShareData, labels: ShareTextLabels): string
     '',
     `${labels.time}: ${time} 🕐`,
   ];
-
-  if (data.percentile != null) {
-    lines.push(`${labels.percentile.replace('{{percent}}', String(data.percentile))} ⚡`);
-  }
 
   lines.push(mistakeLabel);
   lines.push(`${labels.streak}: ${data.streak} 🔥`);

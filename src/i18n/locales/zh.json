@@ -26,6 +26,11 @@
     "puzzleNumber": "谜题 #{{number}}",
     "nextPuzzleIn": "下一个谜题在"
   },
+  "extraChance": {
+    "button": "Watch ad for 1 extra chance",
+    "loading": "Loading ad…",
+    "adBadge": "AD"
+  },
   "complete": {
     "title": "谜题完成!",
     "subtitle": "恭喜!",

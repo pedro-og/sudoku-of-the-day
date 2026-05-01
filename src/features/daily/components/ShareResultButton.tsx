@@ -6,9 +6,10 @@ import css from './ShareResultButton.module.css';
 
 interface ShareResultButtonProps {
   shareData: ShareData;
+  variant?: 'primary' | 'muted';
 }
 
-export function ShareResultButton({ shareData }: ShareResultButtonProps) {
+export function ShareResultButton({ shareData, variant = 'primary' }: ShareResultButtonProps) {
   const { t } = useTranslation();
   const [status, setStatus] = useState<'idle' | 'copying' | 'copied' | 'failed'>('idle');
 
@@ -18,7 +19,6 @@ export function ShareResultButton({ shareData }: ShareResultButtonProps) {
     mistakes: t('share.mistakes'),
     time: t('share.time'),
     streak: t('share.streak'),
-    percentile: t('globalStats.percentile'),
     domain: t('share.domain'),
   };
 
@@ -43,6 +43,7 @@ export function ShareResultButton({ shareData }: ShareResultButtonProps) {
       onClick={handleShare}
       disabled={status === 'copying'}
       data-copied={status === 'copied' || undefined}
+      data-muted={variant === 'muted' || undefined}
     >
       {status === 'idle' || status === 'copying' ? '📤 ' : status === 'copied' ? '✅ ' : '❌ '}
       {label}

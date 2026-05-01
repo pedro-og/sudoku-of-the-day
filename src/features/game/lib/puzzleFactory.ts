@@ -28,6 +28,7 @@ export function createPracticeInitialState(): GameState {
     notes,
     mistakes: 0,
     maxMistakes: 3,
+    extraChanceUsed: false,
     selectedCell: null,
     pencilMode: false,
     isComplete: false,

@@ -14,3 +14,14 @@
 .button[data-copied] {
   background: #22c55e;
 }
+
+.button[data-muted] {
+  background: var(--surface-2, #e5e7eb);
+  color: var(--text-2, #4b5563);
+  box-shadow: none;
+  font-weight: 600;
+}
+
+.button[data-muted]:hover:not(:disabled) {
+  background: var(--surface-3, #d1d5db);
+}

@@ -44,6 +44,7 @@ function createTestState(overrides: Partial<GameState> = {}): GameState {
     notes,
     mistakes: 0,
     maxMistakes: 3,
+    extraChanceUsed: false,
     selectedCell: null,
     pencilMode: false,
     isComplete: false,
@@ -325,6 +326,7 @@ describe('useGameState', () => {
         notes,
         mistakes: 0,
         maxMistakes: 3,
+        extraChanceUsed: false,
         selectedCell: null,
         pencilMode: false,
         isComplete: false,
@@ -347,6 +349,67 @@ describe('useGameState', () => {
       act(() => result.current.enterNumber(solution[0][0]));
 
       expect(result.current.state.isComplete).toBe(true);
+    });
+  });
+
+  describe('GRANT_EXTRA_CHANCE', () => {
+    function findWrongNumber(state: GameState, r: number, c: number): CellValue {
+      const correct = state.solution[r][c];
+      return ((correct % 9) + 1) as CellValue;
+    }
+
+    it('clears game over and bumps maxMistakes from 3 to 4', () => {
+      const { result } = renderHook(() =>
+        useGameState(createTestState({ isGameOver: true, mistakes: 3 }))
+      );
+      act(() => result.current.grantExtraChance());
+      expect(result.current.state.isGameOver).toBe(false);
+      expect(result.current.state.maxMistakes).toBe(4);
+      expect(result.current.state.extraChanceUsed).toBe(true);
+    });
+
+    it('is a no-op when game is not over', () => {
+      const { result } = renderHook(() => useGameState(createTestState()));
+      act(() => result.current.grantExtraChance());
+      expect(result.current.state.maxMistakes).toBe(3);
+      expect(result.current.state.extraChanceUsed).toBe(false);
+    });
+
+    it('cannot be used twice — second call is a no-op', () => {
+      const { result } = renderHook(() =>
+        useGameState(createTestState({ isGameOver: true, mistakes: 3 }))
+      );
+      act(() => result.current.grantExtraChance());
+      act(() => result.current.grantExtraChance());
+      expect(result.current.state.maxMistakes).toBe(4);
+    });
+
+    it('after extra chance, the 4th mistake permanently ends the game', () => {
+      const state = createTestState({ isGameOver: true, mistakes: 3 });
+      const { result } = renderHook(() => useGameState(state));
+      act(() => result.current.grantExtraChance());
+      expect(result.current.state.isGameOver).toBe(false);
+
+      // Make a 4th mistake
+      act(() => result.current.selectCell(0, 0));
+      const wrong = findWrongNumber(state, 0, 0);
+      act(() => result.current.enterNumber(wrong));
+
+      expect(result.current.state.mistakes).toBe(4);
+      expect(result.current.state.isGameOver).toBe(true);
+      // Granting again should be blocked (already used).
+      act(() => result.current.grantExtraChance());
+      expect(result.current.state.isGameOver).toBe(true);
+      expect(result.current.state.maxMistakes).toBe(4);
+    });
+
+    it('does nothing in practice mode', () => {
+      const { result } = renderHook(() =>
+        useGameState(createTestState({ gameMode: 'practice', isGameOver: true, mistakes: 3 }))
+      );
+      act(() => result.current.grantExtraChance());
+      expect(result.current.state.extraChanceUsed).toBe(false);
+      expect(result.current.state.maxMistakes).toBe(3);
     });
   });
 });
