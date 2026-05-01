@@ -2,28 +2,31 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { showRewardedAd, isAdSenseAvailable } from '../adsService';
 
 describe('adsService', () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
-
   afterEach(() => {
-    vi.useRealTimers();
     delete (window as unknown as { adBreak?: unknown }).adBreak;
+    vi.unstubAllEnvs();
   });
 
-  describe('mock fallback (no AdSense loaded)', () => {
+  describe('disabled (default — VITE_ADS_ENABLED not "true")', () => {
     it('isAdSenseAvailable returns false when adBreak is undefined', () => {
       expect(isAdSenseAvailable()).toBe(false);
     });
 
-    it('resolves to "rewarded" after the mock delay', async () => {
-      const promise = showRewardedAd();
-      vi.advanceTimersByTime(2500);
-      await expect(promise).resolves.toBe('rewarded');
+    it('resolves immediately to "rewarded" without ads', async () => {
+      await expect(showRewardedAd()).resolves.toBe('rewarded');
+    });
+
+    it('resolves immediately even if AdSense script is loaded but ads disabled', async () => {
+      (window as unknown as { adBreak: () => void }).adBreak = () => {};
+      await expect(showRewardedAd()).resolves.toBe('rewarded');
     });
   });
 
-  describe('with AdSense loaded', () => {
+  describe('enabled (VITE_ADS_ENABLED=true) with AdSense loaded', () => {
+    beforeEach(() => {
+      vi.stubEnv('VITE_ADS_ENABLED', 'true');
+    });
+
     it('isAdSenseAvailable returns true when adBreak is a function', () => {
       (window as unknown as { adBreak: () => void }).adBreak = () => {};
       expect(isAdSenseAvailable()).toBe(true);
@@ -55,6 +58,16 @@ describe('adsService', () => {
         p.adViewed?.();
         p.adDismissed?.();
       };
+      await expect(showRewardedAd()).resolves.toBe('rewarded');
+    });
+  });
+
+  describe('enabled but AdSense script not loaded', () => {
+    beforeEach(() => {
+      vi.stubEnv('VITE_ADS_ENABLED', 'true');
+    });
+
+    it('falls back to immediate reward', async () => {
       await expect(showRewardedAd()).resolves.toBe('rewarded');
     });
   });

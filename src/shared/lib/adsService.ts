@@ -29,17 +29,22 @@ declare global {
   }
 }
 
-const MOCK_DELAY_MS = 2500;
-
 export function isAdSenseAvailable(): boolean {
   return typeof window !== 'undefined' && typeof window.adBreak === 'function';
 }
 
+// Master switch. While AdSense is in review there are no ads to serve, so
+// adBreak() exists but never calls back — the promise would hang forever.
+// Set VITE_ADS_ENABLED=true once AdSense approval is granted and a rewarded
+// ad unit is configured.
+function adsEnabled(): boolean {
+  return import.meta.env.VITE_ADS_ENABLED === 'true';
+}
+
 export function showRewardedAd(placementName: string = 'extra-chance'): Promise<AdResult> {
-  if (!isAdSenseAvailable()) {
-    return new Promise(resolve => {
-      setTimeout(() => resolve('rewarded'), MOCK_DELAY_MS);
-    });
+  if (!adsEnabled() || !isAdSenseAvailable()) {
+    // Reward immediately — no ad, no waiting.
+    return Promise.resolve('rewarded');
   }
 
   return new Promise(resolve => {
