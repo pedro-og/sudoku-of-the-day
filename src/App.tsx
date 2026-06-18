@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTheme } from '@features/theme/hooks/useTheme';
 import { DailySudoku } from '@features/game/components/DailySudoku';
 import { AuthProvider, SideMenu } from '@features/auth';
+import { SeoContent } from '@shared/components/SeoContent/SeoContent';
 
 function AppShell() {
   const { theme, toggleTheme } = useTheme();
@@ -20,6 +21,7 @@ function AppShell() {
         theme={theme}
         onToggleTheme={toggleTheme}
       />
+      <SeoContent />
     </>
   );
 }

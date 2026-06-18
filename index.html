@@ -115,5 +115,60 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Static content for search engine crawlers that don't execute JavaScript. -->
+    <noscript>
+      <main style="max-width:720px;margin:0 auto;padding:24px 16px;font-family:sans-serif;color:#1a1a2e;line-height:1.6">
+        <h1>Sudoku of the Day — Free Daily Sudoku Puzzle</h1>
+        <p>One Sudoku puzzle every day, the same for everyone worldwide. No account needed. Track your streak and share your result.</p>
+
+        <h2>How to Play Sudoku</h2>
+        <ol>
+          <li>Click or tap a cell to select it.</li>
+          <li>Type a number from 1 to 9 to fill it in.</li>
+          <li>Use Notes mode (pencil button) to jot candidate numbers.</li>
+          <li>Press Backspace or Erase to remove a number.</li>
+          <li>Fill every cell so each row, column, and 3×3 box contains the digits 1–9 exactly once.</li>
+        </ol>
+
+        <h2>Sudoku Rules</h2>
+        <ul>
+          <li>Every row must contain the digits 1–9 with no repetition.</li>
+          <li>Every column must contain the digits 1–9 with no repetition.</li>
+          <li>Each of the nine 3×3 boxes must contain the digits 1–9 with no repetition.</li>
+          <li>You have a maximum of 3 mistakes before the game ends.</li>
+        </ul>
+
+        <h2>What Makes This Sudoku Different?</h2>
+        <p>The daily puzzle is seeded by today's date in Brazil's time zone (America/São_Paulo). This guarantees that every player worldwide sees the exact same puzzle on the same day. The puzzle resets at midnight Brazil time.</p>
+        <p>Your progress, streak, and solve time are stored entirely in your browser. There is no server tracking your moves; the game is local-first and works offline.</p>
+
+        <h2>Frequently Asked Questions</h2>
+        <dl>
+          <dt>Is today's puzzle the same for everyone?</dt>
+          <dd>Yes. The seed is the current date in Brazil's time zone, giving every player the same 9×9 grid on the same calendar day.</dd>
+          <dt>Do I need to create an account?</dt>
+          <dd>No. The game works entirely without an account. Sign in with Google only if you want to sync your streak across devices.</dd>
+          <dt>When does the new puzzle appear?</dt>
+          <dd>A fresh puzzle appears every day at midnight Brazil time (UTC-3). A countdown timer is shown once you finish the current puzzle.</dd>
+          <dt>What happens if I make 3 mistakes?</dt>
+          <dd>The game ends after 3 mistakes. You can watch a short ad to earn one extra chance, or wait for tomorrow's puzzle.</dd>
+        </dl>
+
+        <h2>Sudoku Strategy Tips</h2>
+        <ul>
+          <li>Start with the digits that appear most often in the given clues — they leave fewer open positions.</li>
+          <li>Use pencil marks to track candidates in empty cells before committing.</li>
+          <li>Scan rows, columns, and 3×3 boxes for hidden singles: cells where only one digit can go.</li>
+          <li>Fast-fill mode lets you lock a digit and click all remaining positions in one sweep.</li>
+          <li>Practice mode offers easier puzzles with no mistake limit — great for beginners.</li>
+        </ul>
+
+        <h2>Available Languages</h2>
+        <p>Available in English, Português, Español, Deutsch, Français, 日本語, 中文, and Türkçe.</p>
+
+        <p>Enable JavaScript to play the full interactive game.</p>
+      </main>
+    </noscript>
   </body>
 </html>
