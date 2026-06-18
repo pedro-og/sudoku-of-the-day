@@ -162,5 +162,43 @@
     "streak": "Mevcut seri",
     "longest": "En uzun",
     "avgTime": "Ort. çözüm süresi"
+  },
+  "coins": {
+    "title": "Sudokoin",
+    "challengeComplete": "Bulmaca tamamlandı",
+    "speedBonus": "Hız bonusu",
+    "perfect": "Hatasız",
+    "almostPerfect": "Neredeyse kusursuz",
+    "streakMilestone": "{{count}} günlük seri",
+    "perfectWeek": "Mükemmel hafta (her gün oynandı)"
+  },
+  "shop": {
+    "title": "Mağaza",
+    "close": "Kapat",
+    "owned": "Sahip: {{count}}",
+    "maxLabel": "Maks",
+    "maxOwned": "Zaten maksimuma sahipsin.",
+    "insufficient": "Yeterli Sudokoin yok.",
+    "purchaseFailed": "Satın alma başarısız. Tekrar dene.",
+    "streakFreeze": "Seri Dondurma",
+    "streakFreezeDesc": "Bir günü kaçırırsan serini korur. Maks 2.",
+    "undoToken": "Ücretsiz Geri Al",
+    "undoTokenDesc": "Günlük bulmacada bir hatayı geri alır."
+  },
+  "week": {
+    "mon": "Pzt",
+    "tue": "Sal",
+    "wed": "Çar",
+    "thu": "Per",
+    "fri": "Cum",
+    "sat": "Cmt",
+    "sun": "Paz",
+    "streakTotal": "{{count}} günlük seri",
+    "status": {
+      "done": "Oynandı",
+      "frozen": "Seri donduruldu",
+      "missed": "Kaçırıldı",
+      "future": "Yakında"
+    }
   }
 }

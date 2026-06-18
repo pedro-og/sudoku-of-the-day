@@ -9,7 +9,11 @@ import { useGameTimer } from '../hooks/useGameTimer';
 import { useGamePersistence } from '@features/daily/hooks/useGamePersistence';
 import { useStreak } from '@features/daily/hooks/useStreak';
 import { useAuth } from '@features/auth/context/AuthContext';
-import { getMyCompletion } from '@features/auth/lib/authApi';
+import { getMyCompletion, getWeekCalendar } from '@features/auth/lib/authApi';
+import { useWallet } from '@features/economy/hooks/useWallet';
+import { getWeekStatuses } from '@features/economy/lib/weekCalendar';
+import { getPlayerId } from '@features/daily/lib/playerIdentity';
+import type { RewardBreakdown, WeekDayStatus } from '@/types';
 import { detectCompletions } from '../lib/completionDetector';
 import { clearGameState } from '@shared/lib/localGameStorage';
 import { getBrazilDateString } from '@features/daily/lib/dailyPuzzle';
@@ -32,19 +36,23 @@ interface DailySudokuProps {
   theme: 'light' | 'dark';
   onToggleTheme: () => void;
   onOpenMenu?: () => void;
+  onOpenShop?: () => void;
 }
 
-export function DailySudoku({ theme, onToggleTheme, onOpenMenu }: DailySudokuProps) {
+export function DailySudoku({ theme, onToggleTheme, onOpenMenu, onOpenShop }: DailySudokuProps) {
   const { t } = useTranslation();
   const { refreshProfile, profile, session } = useAuth();
+  const { wallet, useUndoToken } = useWallet();
   const [hydratedFromServer, setHydratedFromServer] = useState(false);
   const [showOverlay, setShowOverlay] = useState(true);
   const [showPracticeIntro, setShowPracticeIntro] = useState(false);
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
   const [tipActive, setTipActive] = useState(false);
+  const [rewardBreakdown, setRewardBreakdown] = useState<RewardBreakdown | null>(null);
+  const [weekStatuses, setWeekStatuses] = useState<WeekDayStatus[] | undefined>(undefined);
 
   const [{ state: dailyState, cellIntervals: dailyCellIntervals }] = useState(() => createDailyInitialState());
-  const { state, selectCell, enterNumber, erase, togglePencil, undo, tick, reset, autoSolve, grantExtraChance, cellIntervalsRef } = useGameState(dailyState, dailyCellIntervals);
+  const { state, selectCell, enterNumber, erase, togglePencil, undo, tick, reset, autoSolve, grantExtraChance, undoMistake, cellIntervalsRef } = useGameState(dailyState, dailyCellIntervals);
   const streak = useStreak(state.isComplete, state.puzzleDate, state.autoSolved);
 
   const isPractice = state.gameMode === 'practice';
@@ -52,8 +60,38 @@ export function DailySudoku({ theme, onToggleTheme, onOpenMenu }: DailySudokuPro
   const [timerResetKey, setTimerResetKey] = useState(0);
   const bumpTimerReset = useCallback(() => setTimerResetKey(k => k + 1), []);
 
-  // Persistence (save to localStorage, record stats)
-  useGamePersistence(state, cellIntervalsRef, refreshProfile, hydratedFromServer);
+  const handleCoinsAwarded = useCallback((breakdown: RewardBreakdown) => {
+    setRewardBreakdown(breakdown);
+  }, []);
+
+  // Persistence (save to localStorage, record stats, credit coins)
+  useGamePersistence(state, cellIntervalsRef, refreshProfile, hydratedFromServer, handleCoinsAwarded, Boolean(session));
+
+  // Load the Mon→Sun week calendar when the daily puzzle is completed.
+  useEffect(() => {
+    if (state.gameMode !== 'daily' || !state.isComplete) return;
+    let cancelled = false;
+    (async () => {
+      const cal = await getWeekCalendar(getPlayerId(), state.puzzleDate);
+      if (cancelled || !cal) {
+        // Fallback (anonymous / offline): mark just today as done.
+        if (!cancelled) {
+          setWeekStatuses(getWeekStatuses({
+            todayStr: state.puzzleDate,
+            completedDates: new Set([state.puzzleDate]),
+            frozenDates: new Set(),
+          }));
+        }
+        return;
+      }
+      setWeekStatuses(getWeekStatuses({
+        todayStr: state.puzzleDate,
+        completedDates: new Set(cal.completed),
+        frozenDates: new Set(cal.frozen),
+      }));
+    })();
+    return () => { cancelled = true; };
+  }, [state.isComplete, state.gameMode, state.puzzleDate]);
 
   // Hydrate from server completion when logged-in profile shows today's puzzle was already completed.
   const stateRef = useRef(state);
@@ -163,6 +201,8 @@ export function DailySudoku({ theme, onToggleTheme, onOpenMenu }: DailySudokuPro
         elapsedSeconds={state.elapsedSeconds}
         streak={streak}
         theme={theme}
+        coinBalance={wallet.balance}
+        onOpenShop={onOpenShop}
         onToggleTheme={onToggleTheme}
         onOpenMenu={onOpenMenu}
       />
@@ -180,6 +220,18 @@ export function DailySudoku({ theme, onToggleTheme, onOpenMenu }: DailySudokuPro
         )}
         {!isPractice && (
           <MistakeCounter mistakes={state.mistakes} maxMistakes={state.maxMistakes} />
+        )}
+        {!isPractice && !gameDisabled && state.mistakes > 0 && wallet.undoTokens > 0 && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={async () => {
+              const ok = await useUndoToken();
+              if (ok) undoMistake();
+            }}
+          >
+            ↩️ {t('shop.undoToken')} ({wallet.undoTokens})
+          </Button>
         )}
         {import.meta.env.DEV && !gameDisabled && (
           <Button variant="ghost" size="sm" onClick={autoSolve}>
@@ -227,6 +279,8 @@ export function DailySudoku({ theme, onToggleTheme, onOpenMenu }: DailySudokuPro
         <GameOverlay
           state={state}
           streak={streak}
+          rewardBreakdown={rewardBreakdown}
+          weekStatuses={weekStatuses}
           onDismiss={() => setShowOverlay(false)}
           onBackToDaily={handleBackToDaily}
           onNewPractice={handleNewPractice}

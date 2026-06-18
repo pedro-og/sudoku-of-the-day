@@ -162,5 +162,43 @@
     "streak": "Série actuelle",
     "longest": "La plus longue",
     "avgTime": "Temps moyen"
+  },
+  "coins": {
+    "title": "Sudokoins",
+    "challengeComplete": "Défi terminé",
+    "speedBonus": "Bonus de vitesse",
+    "perfect": "Sans faute",
+    "almostPerfect": "Presque parfait",
+    "streakMilestone": "Série de {{count}} jours",
+    "perfectWeek": "Semaine parfaite (tous les jours)"
+  },
+  "shop": {
+    "title": "Boutique",
+    "close": "Fermer",
+    "owned": "Possédé : {{count}}",
+    "maxLabel": "Max",
+    "maxOwned": "Vous avez déjà le maximum.",
+    "insufficient": "Sudokoins insuffisants.",
+    "purchaseFailed": "Échec de l'achat. Réessayez.",
+    "streakFreeze": "Gel de Série",
+    "streakFreezeDesc": "Protège votre série si vous manquez un jour. Max 2.",
+    "undoToken": "Annulation Gratuite",
+    "undoTokenDesc": "Annule une erreur pendant le défi du jour."
+  },
+  "week": {
+    "mon": "Lun",
+    "tue": "Mar",
+    "wed": "Mer",
+    "thu": "Jeu",
+    "fri": "Ven",
+    "sat": "Sam",
+    "sun": "Dim",
+    "streakTotal": "Série de {{count}} jours",
+    "status": {
+      "done": "Joué",
+      "frozen": "Série gelée",
+      "missed": "Manqué",
+      "future": "À venir"
+    }
   }
 }

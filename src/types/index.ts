@@ -51,6 +51,29 @@ export interface StreakData {
   longestStreak: number;
 }
 
+// ---- Economy (Sudokoins, shop, weekly calendar) ----
+
+/** One line in the reward breakdown. `key` maps to an i18n label. */
+export interface RewardLine {
+  key: string;
+  amount: number;
+  meta?: { streak?: number };
+}
+
+export interface RewardBreakdown {
+  lines: RewardLine[];
+  total: number;
+}
+
+/** Player's coin balance + consumable inventory. */
+export interface Wallet {
+  balance: number;
+  streakFreezes: number;
+  undoTokens: number;
+}
+
+export type WeekDayStatus = 'done' | 'frozen' | 'missed' | 'future';
+
 export interface ShareData {
   puzzleNumber: number;
   mistakes: number;

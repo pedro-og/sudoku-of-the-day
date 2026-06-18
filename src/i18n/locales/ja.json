@@ -162,5 +162,43 @@
     "streak": "現在のストリーク",
     "longest": "最長",
     "avgTime": "平均解答時間"
+  },
+  "coins": {
+    "title": "スドコイン",
+    "challengeComplete": "チャレンジ達成",
+    "speedBonus": "スピードボーナス",
+    "perfect": "ミスなし",
+    "almostPerfect": "ほぼ完璧",
+    "streakMilestone": "{{count}}日連続",
+    "perfectWeek": "完璧な一週間（毎日プレイ）"
+  },
+  "shop": {
+    "title": "ショップ",
+    "close": "閉じる",
+    "owned": "所持: {{count}}",
+    "maxLabel": "最大",
+    "maxOwned": "すでに最大数を所持しています。",
+    "insufficient": "スドコインが足りません。",
+    "purchaseFailed": "購入に失敗しました。もう一度お試しください。",
+    "streakFreeze": "連続記録の保護",
+    "streakFreezeDesc": "1日逃しても連続記録を守ります。最大2個。",
+    "undoToken": "無料の取り消し",
+    "undoTokenDesc": "デイリーパズル中のミスを1回取り消します。"
+  },
+  "week": {
+    "mon": "月",
+    "tue": "火",
+    "wed": "水",
+    "thu": "木",
+    "fri": "金",
+    "sat": "土",
+    "sun": "日",
+    "streakTotal": "{{count}}日連続",
+    "status": {
+      "done": "プレイ済み",
+      "frozen": "連続記録を凍結",
+      "missed": "未達成",
+      "future": "これから"
+    }
   }
 }

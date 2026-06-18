@@ -78,9 +78,17 @@ export async function ensurePlayer(playerId: string): Promise<void> {
   }
 }
 
-const completionPromises = new Map<number, Promise<void>>();
+/** Server-computed reward result returned by record_completion (migration 014). */
+export interface CompletionResult {
+  breakdown: import('@/types').RewardBreakdown | null;
+  new_balance: number;
+  streak: number;
+  freeze_consumed?: boolean;
+}
 
-export function getCompletionPromise(puzzleNumber: number): Promise<void> | null {
+const completionPromises = new Map<number, Promise<CompletionResult | null>>();
+
+export function getCompletionPromise(puzzleNumber: number): Promise<CompletionResult | null> | null {
   return completionPromises.get(puzzleNumber) ?? null;
 }
 
@@ -92,15 +100,15 @@ export async function recordCompletion(
   solved: boolean,
   puzzleDate: string,
   cellIntervals: number[]
-): Promise<void> {
-  if (!isConfigured()) return;
+): Promise<CompletionResult | null> {
+  if (!isConfigured()) return null;
 
-  if (elapsedSeconds < MIN_PLAY_TIME_SECONDS) return;
+  if (elapsedSeconds < MIN_PLAY_TIME_SECONDS) return null;
 
   const key = `daily-sudoku:completion:${puzzleNumber}`;
-  if (localStorage.getItem(key)) return;
+  if (localStorage.getItem(key)) return null;
 
-  const promise = (async () => {
+  const promise = (async (): Promise<CompletionResult | null> => {
     try {
       const res = await fetch(`${getUrl()}/rest/v1/rpc/record_completion`, {
         method: 'POST',
@@ -117,10 +125,13 @@ export async function recordCompletion(
       });
       if (res.ok) {
         localStorage.setItem(key, '1');
+        const data = await res.json().catch(() => null);
+        return (data as CompletionResult) ?? null;
       }
     } catch {
       // NOP
     }
+    return null;
   })();
 
   completionPromises.set(puzzleNumber, promise);

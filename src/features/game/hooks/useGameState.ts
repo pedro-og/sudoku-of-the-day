@@ -15,7 +15,8 @@ type Action =
   | { type: 'CLEAR_MISTAKE' }
   | { type: 'CLEAR_ANIMATIONS' }
   | { type: 'AUTO_SOLVE' }
-  | { type: 'GRANT_EXTRA_CHANCE' };
+  | { type: 'GRANT_EXTRA_CHANCE' }
+  | { type: 'UNDO_MISTAKE' };
 
 interface HistoryEntry {
   board: GameState['board'];
@@ -168,6 +169,15 @@ function reducer(state: ReducerState, action: Action): ReducerState {
       };
     }
 
+    case 'UNDO_MISTAKE': {
+      // Free undo-error consumable: cancels one counted mistake. Only meaningful
+      // in daily mode while still playing and at least one mistake was made.
+      if (state.gameMode === 'practice' || state.isComplete || state.isGameOver || state.mistakes <= 0) {
+        return state;
+      }
+      return { ...state, mistakes: state.mistakes - 1 };
+    }
+
     case 'AUTO_SOLVE': {
       if (state.isComplete || state.isGameOver) return state;
       const solvedBoard = state.solution.map(row => [...row]) as GameState['board'];
@@ -251,6 +261,10 @@ export function useGameState(initialState: GameState, initialCellIntervals: numb
     dispatch({ type: 'GRANT_EXTRA_CHANCE' });
   }, []);
 
+  const undoMistake = useCallback(() => {
+    dispatch({ type: 'UNDO_MISTAKE' });
+  }, []);
+
   // Auto-clear mistake visual after animation
   useEffect(() => {
     if (state.mistakeCell) {
@@ -267,5 +281,5 @@ export function useGameState(initialState: GameState, initialCellIntervals: numb
     }
   }, [state.animatingCells]);
 
-  return { state, selectCell, enterNumber, erase, togglePencil, undo, tick, reset, autoSolve, grantExtraChance, cellIntervalsRef };
+  return { state, selectCell, enterNumber, erase, togglePencil, undo, tick, reset, autoSolve, grantExtraChance, undoMistake, cellIntervalsRef };
 }

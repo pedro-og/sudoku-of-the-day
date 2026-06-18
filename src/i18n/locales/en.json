@@ -162,5 +162,43 @@
     "streak": "Current streak",
     "longest": "Longest",
     "avgTime": "Avg solve time"
+  },
+  "coins": {
+    "title": "Sudokoins",
+    "challengeComplete": "Challenge complete",
+    "speedBonus": "Speed bonus",
+    "perfect": "Flawless (no mistakes)",
+    "almostPerfect": "Almost flawless",
+    "streakMilestone": "{{count}}-day streak",
+    "perfectWeek": "Perfect week (every day played)"
+  },
+  "shop": {
+    "title": "Shop",
+    "close": "Close",
+    "owned": "Owned: {{count}}",
+    "maxLabel": "Max",
+    "maxOwned": "You already own the maximum.",
+    "insufficient": "Not enough Sudokoins.",
+    "purchaseFailed": "Purchase failed. Try again.",
+    "streakFreeze": "Streak Freeze",
+    "streakFreezeDesc": "Protects your streak if you miss a day. Max 2.",
+    "undoToken": "Free Undo",
+    "undoTokenDesc": "Cancels one mistake during a daily puzzle."
+  },
+  "week": {
+    "mon": "Mon",
+    "tue": "Tue",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat",
+    "sun": "Sun",
+    "streakTotal": "{{count}}-day streak",
+    "status": {
+      "done": "Played",
+      "frozen": "Streak frozen",
+      "missed": "Missed",
+      "future": "Upcoming"
+    }
   }
 }

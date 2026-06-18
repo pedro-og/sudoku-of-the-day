@@ -162,5 +162,43 @@
     "streak": "Racha actual",
     "longest": "Más larga",
     "avgTime": "Tiempo promedio"
+  },
+  "coins": {
+    "title": "Sudokoins",
+    "challengeComplete": "Desafío completado",
+    "speedBonus": "Bonus de velocidad",
+    "perfect": "Sin errores",
+    "almostPerfect": "Casi perfecto",
+    "streakMilestone": "Racha de {{count}} días",
+    "perfectWeek": "Semana perfecta (todos los días)"
+  },
+  "shop": {
+    "title": "Tienda",
+    "close": "Cerrar",
+    "owned": "Tienes: {{count}}",
+    "maxLabel": "Máx",
+    "maxOwned": "Ya tienes el máximo.",
+    "insufficient": "Sudokoins insuficientes.",
+    "purchaseFailed": "Error en la compra. Inténtalo de nuevo.",
+    "streakFreeze": "Congelar Racha",
+    "streakFreezeDesc": "Protege tu racha si fallas un día. Máx 2.",
+    "undoToken": "Deshacer Gratis",
+    "undoTokenDesc": "Cancela un error durante el reto diario."
+  },
+  "week": {
+    "mon": "Lun",
+    "tue": "Mar",
+    "wed": "Mié",
+    "thu": "Jue",
+    "fri": "Vie",
+    "sat": "Sáb",
+    "sun": "Dom",
+    "streakTotal": "Racha de {{count}} días",
+    "status": {
+      "done": "Jugado",
+      "frozen": "Racha congelada",
+      "missed": "Fallado",
+      "future": "Próximo"
+    }
   }
 }

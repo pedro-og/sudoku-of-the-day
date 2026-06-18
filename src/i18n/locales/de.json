@@ -162,5 +162,43 @@
     "streak": "Aktuelle Serie",
     "longest": "Längste",
     "avgTime": "Ø Lösungszeit"
+  },
+  "coins": {
+    "title": "Sudokoins",
+    "challengeComplete": "Rätsel gelöst",
+    "speedBonus": "Geschwindigkeitsbonus",
+    "perfect": "Fehlerfrei",
+    "almostPerfect": "Fast fehlerfrei",
+    "streakMilestone": "{{count}}-Tage-Serie",
+    "perfectWeek": "Perfekte Woche (jeden Tag gespielt)"
+  },
+  "shop": {
+    "title": "Shop",
+    "close": "Schließen",
+    "owned": "Besitz: {{count}}",
+    "maxLabel": "Max",
+    "maxOwned": "Du hast bereits das Maximum.",
+    "insufficient": "Nicht genug Sudokoins.",
+    "purchaseFailed": "Kauf fehlgeschlagen. Erneut versuchen.",
+    "streakFreeze": "Serien-Schutz",
+    "streakFreezeDesc": "Schützt deine Serie, wenn du einen Tag verpasst. Max 2.",
+    "undoToken": "Gratis-Rückgängig",
+    "undoTokenDesc": "Macht einen Fehler im Tagesrätsel rückgängig."
+  },
+  "week": {
+    "mon": "Mo",
+    "tue": "Di",
+    "wed": "Mi",
+    "thu": "Do",
+    "fri": "Fr",
+    "sat": "Sa",
+    "sun": "So",
+    "streakTotal": "{{count}}-Tage-Serie",
+    "status": {
+      "done": "Gespielt",
+      "frozen": "Serie eingefroren",
+      "missed": "Verpasst",
+      "future": "Demnächst"
+    }
   }
 }

@@ -10,6 +10,9 @@ export interface PlayerProfile {
   preferences: { language?: string; theme?: 'light' | 'dark' };
   auth_user_id: string | null;
   avg_solve_time_seconds: number | null;
+  sudokoins: number;
+  streak_freezes: number;
+  undo_tokens: number;
 }
 
 export async function signInWithGoogle(): Promise<void> {
@@ -91,4 +94,42 @@ export async function setPreferences(prefs: {
   const supabase = getSupabase();
   if (!supabase) return;
   await supabase.rpc('set_preferences', { p_prefs: prefs });
+}
+
+export interface PurchaseResult {
+  ok: boolean;
+  error?: 'insufficient' | 'maxOwned';
+  sudokoins?: number;
+  streak_freezes?: number;
+  undo_tokens?: number;
+}
+
+export async function purchaseItem(playerId: string, item: 'streakFreeze' | 'undoToken'): Promise<PurchaseResult | null> {
+  const supabase = getSupabase();
+  if (!supabase) return null;
+  const { data, error } = await supabase.rpc('purchase_item', { p_player_id: playerId, p_item: item });
+  if (error || !data) return null;
+  return data as PurchaseResult;
+}
+
+export async function consumeUndoToken(playerId: string): Promise<boolean> {
+  const supabase = getSupabase();
+  if (!supabase) return false;
+  const { data, error } = await supabase.rpc('consume_undo_token', { p_player_id: playerId });
+  if (error || !data) return false;
+  return (data as { ok: boolean }).ok;
+}
+
+export interface WeekCalendarResponse {
+  week_start: string;
+  completed: string[];
+  frozen: string[];
+}
+
+export async function getWeekCalendar(playerId: string, today: string): Promise<WeekCalendarResponse | null> {
+  const supabase = getSupabase();
+  if (!supabase) return null;
+  const { data, error } = await supabase.rpc('get_week_calendar', { p_player_id: playerId, p_today: today });
+  if (error || !data) return null;
+  return data as WeekCalendarResponse;
 }

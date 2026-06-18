@@ -94,10 +94,10 @@ describe('V2 API graceful degradation', () => {
     await expect(ensurePlayer('test-uuid')).resolves.toBeUndefined();
   });
 
-  it('recordCompletion returns void when not configured', async () => {
+  it('recordCompletion returns null when not configured', async () => {
     await expect(
       recordCompletion('test-uuid', 1, 300, 1, true, '2026-03-15', [])
-    ).resolves.toBeUndefined();
+    ).resolves.toBeNull();
   });
 
   it('fetchPuzzleStats returns null when not configured', async () => {

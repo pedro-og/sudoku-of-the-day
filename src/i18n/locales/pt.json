@@ -162,5 +162,43 @@
     "streak": "Sequência atual",
     "longest": "Maior sequência",
     "avgTime": "Tempo médio"
+  },
+  "coins": {
+    "title": "Sudokoins",
+    "challengeComplete": "Desafio completo",
+    "speedBonus": "Bônus de velocidade",
+    "perfect": "Execução perfeita (sem erros)",
+    "almostPerfect": "Quase perfeito",
+    "streakMilestone": "{{count}} dias de ofensiva",
+    "perfectWeek": "Semana perfeita (todos os dias)"
+  },
+  "shop": {
+    "title": "Loja",
+    "close": "Fechar",
+    "owned": "Você tem: {{count}}",
+    "maxLabel": "Máx",
+    "maxOwned": "Você já tem o máximo.",
+    "insufficient": "Sudokoins insuficientes.",
+    "purchaseFailed": "Falha na compra. Tente de novo.",
+    "streakFreeze": "Bloqueio de Ofensiva",
+    "streakFreezeDesc": "Protege sua ofensiva se você perder um dia. Máx 2.",
+    "undoToken": "Desfazer Grátis",
+    "undoTokenDesc": "Anula um erro durante o desafio diário."
+  },
+  "week": {
+    "mon": "Seg",
+    "tue": "Ter",
+    "wed": "Qua",
+    "thu": "Qui",
+    "fri": "Sex",
+    "sat": "Sáb",
+    "sun": "Dom",
+    "streakTotal": "{{count}} dias de ofensiva",
+    "status": {
+      "done": "Jogou",
+      "frozen": "Ofensiva congelada",
+      "missed": "Perdeu",
+      "future": "Em breve"
+    }
   }
 }

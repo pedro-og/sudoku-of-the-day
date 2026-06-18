@@ -162,5 +162,43 @@
     "streak": "当前连胜",
     "longest": "最长",
     "avgTime": "平均解题时间"
+  },
+  "coins": {
+    "title": "数独币",
+    "challengeComplete": "挑战完成",
+    "speedBonus": "速度奖励",
+    "perfect": "零失误",
+    "almostPerfect": "近乎完美",
+    "streakMilestone": "连续{{count}}天",
+    "perfectWeek": "完美一周（每天都玩）"
+  },
+  "shop": {
+    "title": "商店",
+    "close": "关闭",
+    "owned": "拥有：{{count}}",
+    "maxLabel": "已满",
+    "maxOwned": "你已拥有最大数量。",
+    "insufficient": "数独币不足。",
+    "purchaseFailed": "购买失败，请重试。",
+    "streakFreeze": "连胜冻结",
+    "streakFreezeDesc": "漏过一天也能保住连胜。最多2个。",
+    "undoToken": "免费撤销",
+    "undoTokenDesc": "在每日谜题中撤销一次失误。"
+  },
+  "week": {
+    "mon": "一",
+    "tue": "二",
+    "wed": "三",
+    "thu": "四",
+    "fri": "五",
+    "sat": "六",
+    "sun": "日",
+    "streakTotal": "连续{{count}}天",
+    "status": {
+      "done": "已完成",
+      "frozen": "连胜已冻结",
+      "missed": "错过",
+      "future": "即将到来"
+    }
   }
 }

@@ -8,12 +8,16 @@ import { Button } from '@shared/components/Button/Button';
 import { StatCard } from '@shared/components/StatCard/StatCard';
 import { formatTime } from '@shared/lib/formatTime';
 import { useCountdown } from '@shared/hooks/useCountdown';
-import type { GameState, StreakData } from '@/types';
+import { WeekStrip } from '@features/economy/components/WeekStrip';
+import { CoinBreakdown } from '@features/economy/components/CoinBreakdown';
+import type { GameState, StreakData, RewardBreakdown, WeekDayStatus } from '@/types';
 import css from './GameOverlay.module.css';
 
 interface GameOverlayProps {
   state: GameState;
   streak: StreakData;
+  rewardBreakdown?: RewardBreakdown | null;
+  weekStatuses?: WeekDayStatus[];
   onDismiss: () => void;
   onBackToDaily?: () => void;
   onNewPractice?: () => void;
@@ -21,7 +25,7 @@ interface GameOverlayProps {
 }
 
 
-export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPractice, onExtraChance }: GameOverlayProps) {
+export function GameOverlay({ state, streak, rewardBreakdown, weekStatuses, onDismiss, onBackToDaily, onNewPractice, onExtraChance }: GameOverlayProps) {
   const { t } = useTranslation();
   const countdown = useCountdown('America/Sao_Paulo');
   const { data, loading: statsLoading } = useOverlayData(state.puzzleNumber, state.elapsedSeconds);
@@ -136,9 +140,15 @@ export function GameOverlay({ state, streak, onDismiss, onBackToDaily, onNewPrac
             )}
           </div>
 
-          <div className={`${css.statsGrid} ${css.statsGrid1}`}>
-            <StatCard value={`🔥 ${currentStreak}`} label={t('complete.streak')} />
-          </div>
+          {weekStatuses && weekStatuses.length === 7 ? (
+            <WeekStrip statuses={weekStatuses} streak={currentStreak} />
+          ) : (
+            <div className={`${css.statsGrid} ${css.statsGrid1}`}>
+              <StatCard value={`🔥 ${currentStreak}`} label={t('complete.streak')} />
+            </div>
+          )}
+
+          {rewardBreakdown && <CoinBreakdown breakdown={rewardBreakdown} />}
 
           {isFastest && state.elapsedSeconds >= 30 && (
             <p className={css.fastestMessage}>

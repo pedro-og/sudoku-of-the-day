@@ -7,12 +7,18 @@ import {
   ensurePlayer,
 } from '../lib/statsApi';
 import { getPlayerId } from '../lib/playerIdentity';
+import { addCoins } from '@features/economy/lib/wallet';
+import { calculateRewards } from '@features/economy/lib/coinEconomy';
+import { loadStreak } from '../lib/streakTracker';
+import type { RewardBreakdown } from '@/types';
 
 export function useGamePersistence(
   state: GameState,
   cellIntervalsRef: RefObject<number[]>,
   onRecordedCompletion?: () => void,
-  skipPersistence?: boolean
+  skipPersistence?: boolean,
+  onCoinsAwarded?: (breakdown: RewardBreakdown, newBalance: number | null) => void,
+  isLoggedIn?: boolean,
 ): void {
   const completionRecordedRef = useRef(false);
   const gameOverRecordedRef = useRef(false);
@@ -54,9 +60,28 @@ export function useGamePersistence(
         true,
         s.puzzleDate,
         cellIntervalsRef.current ?? []
-      ).then(() => onRecordedCompletion?.());
+      ).then((result) => {
+        onRecordedCompletion?.();
+        if (isLoggedIn) {
+          // Server is the source of truth: it returns the authoritative breakdown.
+          if (result?.breakdown) onCoinsAwarded?.(result.breakdown, result.new_balance);
+        } else {
+          // Anonymous: compute the breakdown client-side off the local streak and
+          // credit the local wallet. (Perfect-week is evaluated server-side only;
+          // anonymous players get the rest.)
+          const streak = loadStreak().currentStreak;
+          const breakdown = calculateRewards({
+            elapsedSeconds: s.elapsedSeconds,
+            mistakes: s.mistakes,
+            streak,
+            perfectWeek: false,
+          });
+          const updated = addCoins(breakdown.total);
+          onCoinsAwarded?.(breakdown, updated.balance);
+        }
+      });
     }
-  }, [state.isComplete, state.gameMode, state.puzzleDate, state.puzzleNumber, cellIntervalsRef, onRecordedCompletion]);
+  }, [state.isComplete, state.gameMode, state.puzzleDate, state.puzzleNumber, cellIntervalsRef, onRecordedCompletion, onCoinsAwarded, isLoggedIn]);
 
   // Record game over (failure) stats
   useEffect(() => {

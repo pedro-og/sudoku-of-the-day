@@ -31,3 +31,6 @@ dist-ssr
 # Claude skills
 .claude/skills/
 .agents/
+
+# Supabase CLI local metadata
+supabase/.temp/
