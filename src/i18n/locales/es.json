@@ -200,5 +200,9 @@
       "missed": "Fallado",
       "future": "Próximo"
     }
+  },
+  "perfectStreak": {
+    "label": "Racha perfecta",
+    "best": "Récord: {{count}}"
   }
 }

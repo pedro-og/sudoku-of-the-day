@@ -1,0 +1,42 @@
+.card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.flame {
+  flex-shrink: 0;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.value {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0284c7;
+  line-height: 1.1;
+}
+
+[data-theme='dark'] .value {
+  color: #38bdf8;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.record {
+  font-size: 11px;
+  color: var(--text-muted);
+}

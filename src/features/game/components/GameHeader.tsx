@@ -1,26 +1,20 @@
 import { useTranslation } from 'react-i18next';
-import { StreakDisplay } from '@features/daily/components/StreakDisplay';
 import { GameTimer } from './GameTimer';
 import { ThemeToggle } from '@features/theme/components/ThemeToggle';
 import { HamburgerButton } from '@features/auth';
-import { CoinBalance } from '@features/economy/components/CoinBalance';
-import type { StreakData } from '@/types';
 import css from './GameHeader.module.css';
 
 interface GameHeaderProps {
   puzzleNumber: number;
   isPractice: boolean;
   elapsedSeconds: number;
-  streak: StreakData;
   theme: 'light' | 'dark';
-  coinBalance: number;
-  onOpenShop?: () => void;
   onToggleTheme: () => void;
   onOpenMenu?: () => void;
 }
 
 export function GameHeader({
-  puzzleNumber, isPractice, elapsedSeconds, streak, theme, coinBalance, onOpenShop, onToggleTheme, onOpenMenu,
+  puzzleNumber, isPractice, elapsedSeconds, theme, onToggleTheme, onOpenMenu,
 }: GameHeaderProps) {
   const { t } = useTranslation();
 
@@ -33,8 +27,6 @@ export function GameHeader({
         </span>
       </div>
       <div className={css.controls}>
-        {!isPractice && <CoinBalance balance={coinBalance} onClick={onOpenShop} />}
-        {!isPractice && <StreakDisplay streak={streak} />}
         <GameTimer elapsedSeconds={elapsedSeconds} />
         <ThemeToggle theme={theme} onToggle={onToggleTheme} />
         {onOpenMenu && <HamburgerButton onClick={onOpenMenu} />}

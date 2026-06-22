@@ -83,6 +83,8 @@ export interface CompletionResult {
   breakdown: import('@/types').RewardBreakdown | null;
   new_balance: number;
   streak: number;
+  perfect_streak: number;
+  longest_perfect_streak: number;
   freeze_consumed?: boolean;
 }
 

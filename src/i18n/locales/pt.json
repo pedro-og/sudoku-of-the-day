@@ -200,5 +200,9 @@
       "missed": "Perdeu",
       "future": "Em breve"
     }
+  },
+  "perfectStreak": {
+    "label": "Ofensiva perfeita",
+    "best": "Recorde: {{count}}"
   }
 }

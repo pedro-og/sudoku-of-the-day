@@ -83,10 +83,11 @@ export function useGamePersistence(
     }
   }, [state.isComplete, state.gameMode, state.puzzleDate, state.puzzleNumber, cellIntervalsRef, onRecordedCompletion, onCoinsAwarded, isLoggedIn]);
 
-  // Record game over (failure) stats
+  // Record game over (failure) stats. A loss still advances the 🔥 participation
+  // streak server-side, so refresh the profile to surface the new streak.
   useEffect(() => {
     const s = stateRef.current;
-    if (s.isGameOver && !s.isComplete && s.gameMode !== 'practice' && !gameOverRecordedRef.current) {
+    if (s.isGameOver && !s.isComplete && s.gameMode !== 'practice' && !gameOverRecordedRef.current && !skipPersistence) {
       gameOverRecordedRef.current = true;
       recordCompletion(
         getPlayerId(),
@@ -96,9 +97,11 @@ export function useGamePersistence(
         false,
         s.puzzleDate,
         cellIntervalsRef.current ?? []
-      );
+      ).then(() => {
+        onRecordedCompletion?.();
+      });
     }
-  }, [state.isGameOver, state.isComplete, state.gameMode, state.puzzleDate, state.puzzleNumber, cellIntervalsRef]);
+  }, [state.isGameOver, state.isComplete, state.gameMode, state.puzzleDate, state.puzzleNumber, cellIntervalsRef, onRecordedCompletion, skipPersistence]);
 
   // Record player started (daily mode only)
   useEffect(() => {

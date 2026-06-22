@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { ShareResultButton } from './ShareResultButton';
 import { ExtraChanceButton } from './ExtraChanceButton';
+import { PerfectStreakCard } from './PerfectStreakCard';
 import { useOverlayData } from './GlobalStatsPanel';
 import { StreakLeaderboard } from './StreakLeaderboard';
 import { Modal } from '@shared/components/Modal/Modal';
@@ -146,6 +147,13 @@ export function GameOverlay({ state, streak, rewardBreakdown, weekStatuses, onDi
             <div className={`${css.statsGrid} ${css.statsGrid1}`}>
               <StatCard value={`🔥 ${currentStreak}`} label={t('complete.streak')} />
             </div>
+          )}
+
+          {streak.perfectStreak > 0 && (
+            <PerfectStreakCard
+              perfectStreak={streak.perfectStreak}
+              longestPerfectStreak={streak.longestPerfectStreak}
+            />
           )}
 
           {rewardBreakdown && <CoinBreakdown breakdown={rewardBreakdown} />}

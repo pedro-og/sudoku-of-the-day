@@ -6,6 +6,8 @@ export interface PlayerProfile {
   username: string;
   current_streak: number;
   longest_streak: number;
+  perfect_streak: number;
+  longest_perfect_streak: number;
   last_completed_date: string | null;
   preferences: { language?: string; theme?: 'light' | 'dark' };
   auth_user_id: string | null;

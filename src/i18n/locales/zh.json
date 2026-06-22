@@ -200,5 +200,9 @@
       "missed": "错过",
       "future": "即将到来"
     }
+  },
+  "perfectStreak": {
+    "label": "完美连胜",
+    "best": "最高纪录：{{count}}"
   }
 }

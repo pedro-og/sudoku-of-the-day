@@ -200,5 +200,9 @@
       "missed": "Missed",
       "future": "Upcoming"
     }
+  },
+  "perfectStreak": {
+    "label": "Perfect streak",
+    "best": "Best: {{count}}"
   }
 }

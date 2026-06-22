@@ -25,6 +25,8 @@ import { SudokuGrid } from './SudokuGrid';
 import { NumberPad } from './NumberPad';
 import { GameToolbar } from './GameToolbar';
 import { MistakeCounter } from '@features/daily/components/MistakeCounter';
+import { StreakDisplay } from '@features/daily/components/StreakDisplay';
+import { CoinBalance } from '@features/economy/components/CoinBalance';
 import { GameOverlay } from '@features/daily/components/GameOverlay';
 import { PracticeOverlay } from '@features/practice/components/PracticeOverlay';
 import { Modal } from '@shared/components/Modal/Modal';
@@ -53,7 +55,7 @@ export function DailySudoku({ theme, onToggleTheme, onOpenMenu, onOpenShop }: Da
 
   const [{ state: dailyState, cellIntervals: dailyCellIntervals }] = useState(() => createDailyInitialState());
   const { state, selectCell, enterNumber, erase, togglePencil, undo, tick, reset, autoSolve, grantExtraChance, undoMistake, cellIntervalsRef } = useGameState(dailyState, dailyCellIntervals);
-  const streak = useStreak(state.isComplete, state.puzzleDate, state.autoSolved);
+  const streak = useStreak(state.isComplete, state.puzzleDate, state.autoSolved, state.isGameOver);
 
   const isPractice = state.gameMode === 'practice';
   const gameDisabled = state.isComplete || state.isGameOver;
@@ -84,9 +86,10 @@ export function DailySudoku({ theme, onToggleTheme, onOpenMenu, onOpenShop }: Da
         }
         return;
       }
+      // Always include today — server write may not have committed yet (race condition).
       setWeekStatuses(getWeekStatuses({
         todayStr: state.puzzleDate,
-        completedDates: new Set(cal.completed),
+        completedDates: new Set([...cal.completed, state.puzzleDate]),
         frozenDates: new Set(cal.frozen),
       }));
     })();
@@ -199,10 +202,7 @@ export function DailySudoku({ theme, onToggleTheme, onOpenMenu, onOpenShop }: Da
         puzzleNumber={state.puzzleNumber}
         isPractice={isPractice}
         elapsedSeconds={state.elapsedSeconds}
-        streak={streak}
         theme={theme}
-        coinBalance={wallet.balance}
-        onOpenShop={onOpenShop}
         onToggleTheme={onToggleTheme}
         onOpenMenu={onOpenMenu}
       />
@@ -218,9 +218,13 @@ export function DailySudoku({ theme, onToggleTheme, onOpenMenu, onOpenShop }: Da
             {t('practice.backToChallenge')}
           </Button>
         )}
-        {!isPractice && (
-          <MistakeCounter mistakes={state.mistakes} maxMistakes={state.maxMistakes} />
-        )}
+        <div className={css.actionBarRight}>
+          {!isPractice && <CoinBalance balance={wallet.balance} onClick={onOpenShop} />}
+          {!isPractice && <StreakDisplay streak={streak} />}
+          {!isPractice && (
+            <MistakeCounter mistakes={state.mistakes} maxMistakes={state.maxMistakes} />
+          )}
+        </div>
         {!isPractice && !gameDisabled && state.mistakes > 0 && wallet.undoTokens > 0 && (
           <Button
             variant="ghost"

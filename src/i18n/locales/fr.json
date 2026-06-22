@@ -200,5 +200,9 @@
       "missed": "Manqué",
       "future": "À venir"
     }
+  },
+  "perfectStreak": {
+    "label": "Série parfaite",
+    "best": "Record : {{count}}"
   }
 }

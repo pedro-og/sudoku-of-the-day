@@ -46,9 +46,12 @@ export interface DailyStats {
 }
 
 export interface StreakData {
-  currentStreak: number;
-  lastCompletedDate: string | null; // YYYY-MM-DD
+  currentStreak: number;             // 🔥 participation streak (advances on win OR loss)
+  lastCompletedDate: string | null;  // YYYY-MM-DD — last *solved* day (drives 🔵 + perfect-week)
   longestStreak: number;
+  perfectStreak: number;             // 🔵 consecutive unbeaten wins (results screen only)
+  longestPerfectStreak: number;
+  lastPlayedDate: string | null;     // YYYY-MM-DD — last day played (win or loss), drives 🔥
 }
 
 // ---- Economy (Sudokoins, shop, weekly calendar) ----
